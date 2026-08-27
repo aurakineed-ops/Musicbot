@@ -5,4 +5,4 @@ nixPkgs = ["python310", "ffmpeg", "gcc"]
 cmds = ["pip install --upgrade pip", "pip install -r requirements.txt"]
 
 [start]
-cmd = "python3 -m Aaliya Music Bot"
+cmd = "python3 -m SIMPLE_MUSIC"
