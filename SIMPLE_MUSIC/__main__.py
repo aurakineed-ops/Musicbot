@@ -15,6 +15,8 @@
 import asyncio
 import importlib
 import os
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pyrogram import idle
 from pyrogram.types import BotCommand
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -26,6 +28,25 @@ from SIMPLE_MUSIC.core.call import SIMPLE
 from SIMPLE_MUSIC.misc import sudo
 from SIMPLE_MUSIC.plugins import ALL_MODULES
 from SIMPLE_MUSIC.utils.database import get_banned_users, get_gbanned
+
+
+class _HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running")
+
+    def log_message(self, format, *args):
+        pass
+
+
+def _run_health_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), _HealthHandler)
+    server.serve_forever()
+
+
+threading.Thread(target=_run_health_server, daemon=True).start()
 
 COMMANDS = [
     BotCommand("start", "❖ sᴛᴀʀᴛ ʙᴏᴛ • ᴛᴏ sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ"),
@@ -90,10 +111,9 @@ async def init():
         )
 
     except NoActiveGroupCall:
-        LOGGER("SIMPLE_MUSIC").error(
-            "𝗣𝗹𝐙 𝗦𝗧𝗔𝗥𝗧 𝗬𝗢𝗨𝗥 𝗟𝗢𝗚 𝗚𝗥𝗢𝗨𝗣 𝗩𝗢𝗜𝗖𝗘𝗖𝗛𝗔𝗧\\𝗖𝗛𝗔𝗡𝗡𝗘𝗟\n\n𝗔𝗔𝗟𝗜𝗬𝗔 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗦𝗧𝗢𝗣........"
+        LOGGER("SIMPLE_MUSIC").warning(
+            "𝗡𝗼 𝗮𝗰𝘁𝗶𝘃𝗲 𝘃𝗼𝗶𝗰𝗲 𝗰𝗵𝗮𝘁 𝗶𝗻 𝗹𝗼𝗴 𝗴𝗿𝗼𝘂𝗽 — 𝘀𝘁𝗮𝗿𝘁 𝗮 𝗩𝗖 𝘁𝗵𝗲𝗿𝗲 𝗶𝗳 𝘆𝗼𝘂 𝘄𝗮𝗻𝘁 𝘁𝗲𝘀𝘁 𝘀𝘁𝗿𝗲𝗮𝗺𝗶𝗻𝗴. 𝗕𝗼𝘁 𝘄𝗶𝗹𝗹 𝗰𝗼𝗻𝘁𝗶𝗻𝘂𝗲 𝗿𝘂𝗻𝗻𝗶𝗻𝗴."
         )
-        exit()
 
     except:
         pass
@@ -101,7 +121,7 @@ async def init():
     await SIMPLE.decorators()
 
     LOGGER("SIMPLE_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗔𝗔𝗟𝗜𝗬𝗔 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧\n╚═════ஜ۩۞۩ஜ════╝"
+        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗔𝗔𝗟𝗜𝗬𝗔 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧\n╚═════ஜ۩۞۩ஜ════╗"
     )
 
     await idle()
