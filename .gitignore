@@ -1,6 +1,4 @@
 # Private runtime configuration and credentials
-.env
-.env.*
 !.env.example
 *.session
 *.session-journal
