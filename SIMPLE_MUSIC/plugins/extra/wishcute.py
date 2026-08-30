@@ -90,10 +90,15 @@ async def cute(_, message):
     mm = random.randint(1, 100)
     CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 
-    await app.send_document(
-        chat_id=message.chat.id,
-        document=CUTIE,
-        caption=CUTE,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-    )
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=CUTIE,
+            caption=CUTE,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            CUTE,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )

@@ -237,13 +237,18 @@ async def sexy(_, message):
     mention = user_name
     mm = random.randint(1, 100)
     SEXO = f" <emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm}% sexy!"
-    await app.send_document (
-        chat_id=message.chat.id,
-        document=SEMXY,
-        caption=SEXO,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-)
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=SEMXY,
+            caption=SEXO,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            SEXO,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
 
 #########gay
 @app.on_message(filters.command("gay"))
@@ -290,13 +295,18 @@ async def gay(_, message):
     mention = user_name
     mm = random.randint(1, 100)
     GAYE = f" <emoji id='5361964771509808811'>🍷</emoji> {mention} ɪꜱ {mm}% ɢᴀʏ!"
-    await app.send_document (
-        chat_id=message.chat.id,
-        document=GAY,
-        caption=GAYE,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-)
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=GAY,
+            caption=GAYE,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            GAYE,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
 
 ########### LESBIAN
 @app.on_message(filters.command("lesbian"))
@@ -343,13 +353,18 @@ async def lesbian(_, message):
     mention = user_name
     mm = random.randint(1, 100)
     LEZBIAN = f" <emoji id='5283077114319347060'>💜</emoji> {mention} ɪꜱ {mm}% ʟᴇꜱʙɪᴀɴ!"
-    await app.send_document (
-        chat_id=message.chat.id,
-        document=LESBIAN,
-        caption=LEZBIAN,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-)
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=LESBIAN,
+            caption=LEZBIAN,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            LEZBIAN,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
 
 ########### BOOBS
 
@@ -397,13 +412,18 @@ async def boob(_, message):
     mention = user_name
     mm = random.randint(1, 100)
     BALL = f" <emoji id='5415722218569089767'>🍒</emoji> {mention}ꜱ ʙᴏᴏʙꜱ ꜱɪᴢᴇ ɪᴢ {mm} ! "
-    await app.send_document (
-        chat_id=message.chat.id,
-        document=BIGBALL,
-        caption=BALL,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-)
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=BIGBALL,
+            caption=BALL,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            BALL,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
 
 ######### COCK
 
@@ -451,10 +471,15 @@ async def cock(_, message):
     mention = user_name
     mm = random.randint(1, 100)
     BAT = f" <emoji id='5847995391122869577'>🍆</emoji> {mention}  ᴄᴏᴄᴋ ꜱɪᴢᴇ ɪᴢ {mm}ᴄᴍ"
-    await app.send_document (
-        chat_id=message.chat.id,
-        document=LANGD,
-        caption=BAT,
-        reply_markup=InlineKeyboardMarkup(BUTTON),
-        reply_to_message_id=message.reply_to_message.message_id if message.reply_to_message else None,
-)
+    try:
+        await app.send_document(
+            chat_id=message.chat.id,
+            document=LANGD,
+            caption=BAT,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
+    except Exception:
+        await message.reply(
+            BAT,
+            reply_markup=InlineKeyboardMarkup(BUTTON),
+        )
