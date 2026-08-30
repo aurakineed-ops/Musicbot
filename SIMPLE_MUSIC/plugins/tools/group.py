@@ -52,7 +52,7 @@ async def brah3(app: app, message: Message):
                try:
                    # Jinko invite kiya gaya hai unke naam aur links
                    user_name = to_small_caps(user.first_name)
-                   invited_users_list.append(f"[{user_name}](tg://user?id={user.id})")
+                   invited_users_list.append(f"<a href='tg://user?id={user.id}'>{user_name}</a>")
                except Exception:
                    pass
            

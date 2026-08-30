@@ -77,7 +77,7 @@ async def mention_users(client, message: Message, mode, text):
 
             usrnum += 1
             name = user.first_name or "User"
-            usrtxt += f"[{name}](tg://user?id={user.id}) "
+            usrtxt += f"<a href='tg://user?id={user.id}'>{name}</a> "
 
             if usrnum == 5:
                 if mode == "text_on_cmd":
@@ -160,7 +160,7 @@ async def atag(_, message: Message):
                 user = m.user
                 if user and not user.is_bot:
                     name = user.first_name or "Admin"
-                    members.append(f"[{name}](tg://user?id={user.id})")
+                    members.append(f"<a href='tg://user?id={user.id}'>{name}</a>")
     except Exception:
         return await message.reply_text("<i>Failed to fetch participants!</i>")
 

@@ -20,9 +20,9 @@ from SIMPLE_MUSIC import app
 
 def mention(user, name, mention=True):
     if mention:
-        link = f"[{name}](tg://openmessage?user_id={user})"
+        link = f'<a href="tg://openmessage?user_id={user}">{name}</a>'
     else:
-        link = f"[{name}](https://t.me/{user})"
+        link = f'<a href="https://t.me/{user}">{name}</a>'
     return link
 
 async def get_userid_from_username(username):
@@ -121,7 +121,7 @@ async def ban_command_handler(client, message):
     if member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER] and member.privileges.can_restrict_members:
         # Extract the user ID from the command or reply
         if len(message.command) > 1:
-            if message.reply_to_message:
+            if message.reply_to_message and message.reply_to_message.from_user:
                 user_id = message.reply_to_message.from_user.id
                 first_name = message.reply_to_message.from_user.first_name
                 reason = message.text.split(None, 1)[1]
@@ -136,7 +136,7 @@ async def ban_command_handler(client, message):
                     user_id = user_obj[0]
                     first_name = user_obj[1]
                 reason = message.text.partition(message.command[1])[2] or None
-        elif message.reply_to_message:
+        elif message.reply_to_message and message.reply_to_message.from_user:
             user_id = message.reply_to_message.from_user.id
             first_name = message.reply_to_message.from_user.first_name
             reason = None
@@ -188,7 +188,7 @@ async def mute_command_handler(client, message):
     if member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER] and member.privileges.can_restrict_members:
         # Extract the user ID from the command or reply
         if len(message.command) > 1:
-            if message.reply_to_message:
+            if message.reply_to_message and message.reply_to_message.from_user:
                 user_id = message.reply_to_message.from_user.id
                 first_name = message.reply_to_message.from_user.first_name
                 reason = message.text.split(None, 1)[1]
@@ -203,7 +203,7 @@ async def mute_command_handler(client, message):
                     user_id = user_obj[0]
                     first_name = user_obj[1]
                 reason = message.text.partition(message.command[1])[2] or None
-        elif message.reply_to_message:
+        elif message.reply_to_message and message.reply_to_message.from_user:
             user_id = message.reply_to_message.from_user.id
             first_name = message.reply_to_message.from_user.first_name
             reason = None

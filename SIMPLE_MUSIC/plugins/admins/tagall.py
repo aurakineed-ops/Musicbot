@@ -94,7 +94,7 @@ async def process_members(chat_id, members, text=None, replied=None):
         usernum += 1
         
         emoji = emoji_sequence[emoji_index % len(emoji_sequence)]
-        usertxt += f"[{emoji}](tg://user?id={member.user.id}) "
+        usertxt += f"<a href='tg://user?id={member.user.id}'>{emoji}</a> "
         emoji_index += 1
         
         if usernum == 5:

@@ -18,7 +18,7 @@ from functools import wraps
 from SIMPLE_MUSIC import app
 
 def mention(user_id, name):
-    return f"[{name}](tg://user?id={user_id})"
+    return f"<a href='tg://user?id={user_id}'>{name}</a>"
 
 def admin_required(*privileges):
     def decorator(func):
