@@ -48,8 +48,16 @@ CUTIE = "https://64.media.tumblr.com/d701f53eb5681e87a957a547980371d2/tumblr_nbj
 @app.on_message(filters.command("cute"))
 async def cute(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:

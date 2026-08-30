@@ -31,8 +31,16 @@ CUTIE = "https://graph.org/file/24375c6e54609c0e4621c.mp4"
 @app.on_message(filters.command("cutie"))
 async def cutie(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -78,8 +86,16 @@ async def cutie(_, message):
 @app.on_message(filters.command("horny"))
 async def horny(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -125,8 +141,16 @@ async def horny(_, message):
 @app.on_message(filters.command("hot"))
 async def hot(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -172,8 +196,16 @@ async def hot(_, message):
 @app.on_message(filters.command("sexy"))
 async def sexy(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -217,8 +249,16 @@ async def sexy(_, message):
 @app.on_message(filters.command("gay"))
 async def gay(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -262,8 +302,16 @@ async def gay(_, message):
 @app.on_message(filters.command("lesbian"))
 async def lesbian(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -308,8 +356,16 @@ async def lesbian(_, message):
 @app.on_message(filters.command("boob"))
 async def boob(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:
@@ -354,8 +410,16 @@ async def boob(_, message):
 @app.on_message(filters.command("cock"))
 async def cock(_, message):
     if message.reply_to_message:
-        user_id = message.reply_to_message.from_user.id
-        user_name = message.reply_to_message.from_user.first_name
+        if message.reply_to_message.from_user:
+            user_id = message.reply_to_message.from_user.id
+            user_name = message.reply_to_message.from_user.first_name
+        else:
+            try:
+                replied = await app.get_messages(message.chat.id, message.reply_to_message.id)
+                user_id = replied.from_user.id
+                user_name = replied.from_user.first_name
+            except Exception:
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴅᴇᴛᴇᴄᴛ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ᴀɢᴀɪɴ!")
     elif len(message.command) > 1 and message.command[1].startswith("@"):
         target_username = message.command[1][1:]
         try:

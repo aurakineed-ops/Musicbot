@@ -77,12 +77,6 @@ def private_panel(_):
                 icon_custom_emoji_id="6104953285758689029",
                 **get_style(1)
             ),
-            InlineKeyboardButton(
-                text=_["S_B_10"], 
-                callback_data="api_status",
-                icon_custom_emoji_id="5305282241268569732",
-                **get_style(1)
-            ),
         ],
         [
             InlineKeyboardButton(
