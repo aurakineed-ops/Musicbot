@@ -29,13 +29,13 @@ async def waifu_command_handler(_, message: Message):
             image = waifu_data['images'][0]
             await message.reply_photo(
                 photo=image["url"],
-                caption=f"🌸 ʜᴇʀᴇ'ꜱ ʏᴏᴜʀ ᴡᴀɪꜰᴜ ({tag})"
+                caption=f"<emoji id='5222044641200720562'>🌸</emoji> ʜᴇʀᴇ'ꜱ ʏᴏᴜʀ ᴡᴀɪꜰᴜ ({tag})"
             )
         else:
             await message.reply_text("❌ ɴᴏ ᴡᴀɪꜰᴜꜱ ꜰᴏᴜɴᴅ ᴡɪᴛʜ ᴛʜᴀᴛ ᴛᴀɢ.")
 
     except Exception as e:
-        await message.reply_text(f"⚠️ ᴇʀʀᴏʀ: `{str(e)}`")
+        await message.reply_text(f"<emoji id='6098337704682984714'>⚠</emoji>️ ᴇʀʀᴏʀ: `{str(e)}`")
 
 
 def get_waifu_data(tag):

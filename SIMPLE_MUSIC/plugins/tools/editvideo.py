@@ -33,12 +33,12 @@ async def remove_media(_, message: Message):
 
     if replied.video.file_size > MAX_SIZE_BYTES:
         return await message.reply_text(
-            f"🚫 File is too large ({replied.video.file_size // (1024*1024)} MB).\n"
+            f"<emoji id='5472267631979405211'>🚫</emoji> File is too large ({replied.video.file_size // (1024*1024)} MB).\n"
             f"Maximum allowed size is {MAX_SIZE_MB} MB."
         )
 
     command = message.command[1].lower()
-    processing_msg = await message.reply_text("🔧 Processing video…")
+    processing_msg = await message.reply_text("<emoji id='5462921117423384478'>🔧</emoji> Processing video…")
 
     file_path = None
     try:
@@ -53,7 +53,7 @@ async def remove_media(_, message: Message):
                 audio.export(output_audio, format="mp3")
 
             await asyncio.to_thread(process_audio)
-            await app.send_audio(message.chat.id, output_audio, caption="🎧 Audio extracted.")
+            await app.send_audio(message.chat.id, output_audio, caption="<emoji id='5303115116735119005'>🎧</emoji> Audio extracted.")
             os.remove(output_audio)
 
         elif command == "video":
@@ -63,7 +63,7 @@ async def remove_media(_, message: Message):
                 os.system(f"ffmpeg -hide_banner -loglevel error -i '{file_path}' -c copy -an '{output_video}'")
 
             await asyncio.to_thread(process_video)
-            await app.send_video(message.chat.id, output_video, caption="🎞️ Video with no audio.")
+            await app.send_video(message.chat.id, output_video, caption="<emoji id='5791796946645553971'>🎞</emoji>️ Video with no audio.")
             os.remove(output_video)
 
         else:

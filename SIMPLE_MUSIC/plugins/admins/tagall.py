@@ -22,44 +22,44 @@ from SIMPLE_MUSIC import app
 
 SPAM_CHATS = []
 EMOJI = [
-    "🦋🦋🦋🦋🦋",
-    "🧚🌸🧋🍬🫖",
-    "🥀🌷🌹🌺💐",
-    "🌸🌿💮🌱🌵",
-    "❤️💚💙💜🖤",
-    "💓💕💞💗💖",
-    "🌸💐🌺🌹🦋",
-    "🍔🦪🍛🍲🥗",
-    "🍎🍓🍒🍑🌶️",
-    "🧋🥤🧋🥛🍷",
-    "🍬🍭🧁🎂🍡",
-    "🍨🧉🍺☕🍻",
-    "🥪🥧🍦🍥🍚",
-    "🫖☕🍹🍷🥛",
-    "☕🧃🍩🍦🍙",
+    "<emoji id='5316558987141852841'>🦋</emoji><emoji id='5316558987141852841'>🦋</emoji><emoji id='5316558987141852841'>🦋</emoji><emoji id='5316558987141852841'>🦋</emoji><emoji id='5316558987141852841'>🦋</emoji>",
+    "<emoji id='5454136337345037322'>🧚</emoji><emoji id='5222044641200720562'>🌸</emoji><emoji id='5474268541278493225'>🧋</emoji><emoji id='5404573776253825754'>🍬</emoji>🫖",
+    "<emoji id='5208923808169222461'>🥀</emoji><emoji id='5404835520150773707'>🌷</emoji><emoji id='6102617459204822706'>🌹</emoji><emoji id='5440748683765227563'>🌺</emoji><emoji id='5192959294470895031'>💐</emoji>",
+    "<emoji id='5222044641200720562'>🌸</emoji>🌿💮🌱🌵",
+    "❤️<emoji id='5280723695579438810'>💚</emoji><emoji id='5283006736985234502'>💙</emoji><emoji id='5283077114319347060'>💜</emoji><emoji id='5370986599423156302'>🖤</emoji>",
+    "<emoji id='5258509003738066969'>💓</emoji><emoji id='5219862119209520083'>💕</emoji><emoji id='5219862119209520083'>💞</emoji><emoji id='5364201435858744869'>💗</emoji><emoji id='5431429648409969727'>💖</emoji>",
+    "<emoji id='5222044641200720562'>🌸</emoji><emoji id='5192959294470895031'>💐</emoji><emoji id='5440748683765227563'>🌺</emoji><emoji id='6102617459204822706'>🌹</emoji><emoji id='5316558987141852841'>🦋</emoji>",
+    "<emoji id='5364137887522628949'>🍔</emoji>🦪🍛🍲🥗",
+    "🍎<emoji id='5418365569076304689'>🍓</emoji><emoji id='5415722218569089767'>🍒</emoji><emoji id='5852518588686011408'>🍑</emoji>🌶️",
+    "<emoji id='5474268541278493225'>🧋</emoji>🥤<emoji id='5474268541278493225'>🧋</emoji><emoji id='5413704369918978673'>🥛</emoji><emoji id='5361964771509808811'>🍷</emoji>",
+    "<emoji id='5404573776253825754'>🍬</emoji><emoji id='5287295223175604777'>🍭</emoji><emoji id='5420462646988123921'>🧁</emoji><emoji id='6334379727062566543'>🎂</emoji>🍡",
+    "🍨🧉<emoji id='5363978187753670318'>🍺</emoji><emoji id='5463051955012122780'>☕</emoji>🍻",
+    "🥪🥧<emoji id='5258378333653056711'>🍦</emoji>🍥🍚",
+    "🫖<emoji id='5463051955012122780'>☕</emoji>🍹<emoji id='5361964771509808811'>🍷</emoji><emoji id='5413704369918978673'>🥛</emoji>",
+    "<emoji id='5463051955012122780'>☕</emoji><emoji id='5303548912726982102'>🧃</emoji><emoji id='5213249338452485580'>🍩</emoji><emoji id='5258378333653056711'>🍦</emoji>🍙",
     "🍁🌾💮🍂🌿",
     "🌨️🌥️⛈️🌩️🌧️",
-    "🌷🏵️🌸🌺💐",
+    "<emoji id='5404835520150773707'>🌷</emoji>🏵️<emoji id='5222044641200720562'>🌸</emoji><emoji id='5440748683765227563'>🌺</emoji><emoji id='5192959294470895031'>💐</emoji>",
     "💮🌼🌻🍀🍁",
-    "🧟🦸🦹🧙👸",
-    "🧅🍠🥕🌽🥦",
-    "🐷🐹🐭🐨🐻‍❄️",
-    "🦋🐇🐀🐈🐈‍⬛",
+    "<emoji id='5190680981824085932'>🧟</emoji>🦸🦹🧙<emoji id='5936271765218006741'>👸</emoji>",
+    "🧅🍠<emoji id='5318752353925471388'>🥕</emoji>🌽<emoji id='5431469278073207884'>🥦</emoji>",
+    "<emoji id='5357233044694508227'>🐷</emoji><emoji id='5305787660135063955'>🐹</emoji><emoji id='6111671507962829973'>🐭</emoji>🐨<emoji id='5206642759628241872'>🐻</emoji>‍❄️",
+    "<emoji id='5316558987141852841'>🦋</emoji><emoji id='5278653070371206372'>🐇</emoji>🐀🐈🐈‍⬛",
     "🌼🌳🌲🌴🌵",
-    "🥩🍋🍐🍈🍇",
-    "🍴🍽️🔪🍶🥃",
-    "🕌🏰🏩⛩️🏩",
-    "🎉🎊🎈🎂🎀",
+    "🥩🍋<emoji id='5456419915621742790'>🍐</emoji><emoji id='5438195085189595667'>🍈</emoji><emoji id='6273709899507568922'>🍇</emoji>",
+    "<emoji id='6093451264555750089'>🍴</emoji><emoji id='5424978787920021797'>🍽</emoji>️<emoji id='5371042017386176566'>🔪</emoji>🍶🥃",
+    "🕌<emoji id='5330116450843636190'>🏰</emoji>🏩⛩️🏩",
+    "🎉<emoji id='5404573776253825754'>🎊</emoji><emoji id='5278651867780377852'>🎈</emoji><emoji id='6334379727062566543'>🎂</emoji><emoji id='5363882032025849098'>🎀</emoji>",
     "🪴🌵🌴🌳🌲",
     "🎄🎋🎍🎑🎎",
     "🦅🦜🕊️🦤🦢",
-    "🦤🦩🦚🦃🦆",
-    "🐬🦭🦈🐋🐳",
-    "🐔🐟🐠🐡🦐",
-    "🦩🦀🦑🐙🦪",
-    "🐦🦂🕷️🕸️🐚",
+    "🦤🦩🦚🦃<emoji id='5368684320858843385'>🦆</emoji>",
+    "<emoji id='5362063083311214432'>🐬</emoji><emoji id='5420642954010175242'>🦭</emoji>🦈<emoji id='6282818902372128272'>🐋</emoji><emoji id='5400362079783770689'>🐳</emoji>",
+    "<emoji id='5283202076392827429'>🐔</emoji><emoji id='5384574037701696503'>🐟</emoji><emoji id='5397842858126353661'>🐠</emoji>🐡<emoji id='5361600498153564481'>🦐</emoji>",
+    "🦩<emoji id='5222474515887435551'>🦀</emoji><emoji id='5474140796066210842'>🦑</emoji><emoji id='5352815688010441881'>🐙</emoji>🦪",
+    "🐦<emoji id='5380003148821712039'>🦂</emoji><emoji id='6282555152725447369'>🕷</emoji>️<emoji id='5913384919584741274'>🕸</emoji>️<emoji id='5192907136388059100'>🐚</emoji>",
     "🥪🍰🥧🍨🍨",
-    "🥬🍉🧁🧇🔮",
+    "🥬<emoji id='5305336095863485125'>🍉</emoji><emoji id='5420462646988123921'>🧁</emoji>🧇<emoji id='5361837567463399422'>🔮</emoji>",
 ]
 
 def clean_text(text):
@@ -183,7 +183,7 @@ async def tag_all_users(_, message):
         )
         
         summary_msg = f"""
-✅ Tagging completed!
+<emoji id='6082375377123023700'>✅</emoji> Tagging completed!
 
 Total members: {total_members}
 Tagged members: {tagged_members}
@@ -245,7 +245,7 @@ async def tag_all_admins(_, message):
         )
         
         summary_msg = f"""
-✅ Admin tagging completed!
+<emoji id='6082375377123023700'>✅</emoji> Admin tagging completed!
 
 Total admins: {total_admins}
 Tagged admins: {tagged_admins}

@@ -25,7 +25,7 @@ from SIMPLE_MUSIC.utils.formatters import get_readable_time
 from SIMPLE_MUSIC.utils.inline import help_pannel_page1, private_panel, start_panel
 from strings import get_string
 
-# ✅ Purana tareeqa: Wapas START_IMG_URL import kar diya
+# <emoji id='6082375377123023700'>✅</emoji> Purana tareeqa: Wapas START_IMG_URL import kar diya
 from config import BANNED_USERS, START_IMG_URL
 
 async def send_logs_bg(message, text_type="started"):
@@ -88,9 +88,9 @@ async def start_pm(client, message: Message):
                 "<b>✦ ᴛʀᴀᴄᴋ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ✦</b>\n\n"
                 f"<b>📌 ᴛɪᴛʟᴇ :</b> <code>{title}</code>\n\n"
                 f"<b>⏳ ᴅᴜʀᴀᴛɪᴏɴ :</b> <code>{duration}</code>\n"
-                f"<b>👀 ᴠɪᴇᴡs :</b> <code>{views}</code>\n"
+                f"<b><emoji id='5208841018379612211'>👀</emoji> ᴠɪᴇᴡs :</b> <code>{views}</code>\n"
                 f"<b>⏰ ᴘᴜʙʟɪsʜᴇᴅ :</b> <code>{published}</code>\n"
-                f"<b>📎 ᴄʜᴀɴɴᴇʟ :</b> <a href=\"{channellink}\">{channel}</a>\n\n"
+                f"<b><emoji id='6098158454222887821'>📎</emoji> ᴄʜᴀɴɴᴇʟ :</b> <a href=\"{channellink}\">{channel}</a>\n\n"
                 f"<b>🔗 ᴠɪᴅᴇᴏ :</b> <a href=\"{link}\">ᴏᴘᴇɴ ᴏɴ ʏᴏᴜᴛᴜʙᴇ</a>"
             )
             key = InlineKeyboardMarkup([
@@ -108,7 +108,7 @@ async def start_pm(client, message: Message):
         await client.send_photo(
             chat_id=message.chat.id,
             photo=START_IMG_URL,
-            caption=_["start_2"].format(message.from_user.mention, app.mention, "Mina 0.5s", "0.2 GB", "1.2%", "14%", "⚡ Fast", "🔥 Active", app.username),
+            caption=_["start_2"].format(message.from_user.mention, app.mention, "Mina 0.5s", "0.2 GB", "1.2%", "14%", "<emoji id='5258203794772085854'>⚡</emoji> Fast", "<emoji id='6086954744268460848'>🔥</emoji> Active", app.username),
             reply_markup=InlineKeyboardMarkup(out),
         )
         asyncio.create_task(send_logs_bg(message, "started"))
@@ -123,7 +123,7 @@ async def home_cb(client, CallbackQuery, _):
         pass
     out = private_panel(_)
     await CallbackQuery.edit_message_text(
-        text=_["start_2"].format(CallbackQuery.from_user.mention, app.mention, "Mina 0.5s", "0.2 GB", "1.2%", "14%", "⚡ Fast", "🔥 Active", app.username),
+        text=_["start_2"].format(CallbackQuery.from_user.mention, app.mention, "Mina 0.5s", "0.2 GB", "1.2%", "14%", "<emoji id='5258203794772085854'>⚡</emoji> Fast", "<emoji id='6086954744268460848'>🔥</emoji> Active", app.username),
         reply_markup=InlineKeyboardMarkup(out),
     )
 

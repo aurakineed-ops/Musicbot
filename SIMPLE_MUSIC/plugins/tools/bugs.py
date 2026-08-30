@@ -50,15 +50,15 @@ async def bugs(_, msg: Message):
     
 
     bug_report = f"""
-**#ʙᴜɢ : ** **tg://user?id={owner_id}**
+<b>#ʙᴜɢ : </b> <b>tg://user?id={owner_id}</b>
 
-**ʀᴇᴩᴏʀᴛᴇᴅ ʙʏ : ** **{mention}**
-**ᴜsᴇʀ ɪᴅ : ** **{user_id}**
-**ᴄʜᴀᴛ : ** **{chat_username}**
+<b>ʀᴇᴩᴏʀᴛᴇᴅ ʙʏ : </b> <b>{mention}</b>
+<b>ᴜsᴇʀ ɪᴅ : </b> <b>{user_id}</b>
+<b>ᴄʜᴀᴛ : </b> <b>{chat_username}</b>
 
-**ʙᴜɢ : ** **{bugs}**
+<b>ʙᴜɢ : </b> <b>{bugs}</b>
 
-**ᴇᴠᴇɴᴛ sᴛᴀᴍᴩ : ** **{datetimes}**"""
+<b>ᴇᴠᴇɴᴛ sᴛᴀᴍᴩ : </b> <b>{datetimes}</b>"""
 
     if msg.chat.type == "private":
         await msg.reply_text("<b>» ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ɪs ᴏɴʟʏ ғᴏʀ ɢʀᴏᴜᴩs.</b>")
@@ -67,7 +67,7 @@ async def bugs(_, msg: Message):
     if user_id == owner_id:
         if bugs:
             await msg.reply_text(
-                "<b>» ᴀʀᴇ ʏᴏᴜ ᴄᴏᴍᴇᴅʏ ᴍᴇ 🤣, ʏᴏᴜ'ʀᴇ ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ᴛʜᴇ ʙᴏᴛ.</b>",
+                "<b>» ᴀʀᴇ ʏᴏᴜ ᴄᴏᴍᴇᴅʏ ᴍᴇ <emoji id='5458587027270280607'>🤣</emoji>, ʏᴏᴜ'ʀᴇ ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ᴛʜᴇ ʙᴏᴛ.</b>",
             )
             return
         else:

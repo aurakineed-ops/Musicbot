@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python3 -m Aaliya Music Bot",
+    "startCommand": "python3 -m SIMPLE_MUSIC",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

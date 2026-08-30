@@ -32,12 +32,12 @@ def speed_markup(_, chat_id):
         [
             [
                 InlineKeyboardButton(
-                    text="🕒 0.5x",
+                    text="<emoji id='5778605968208170641'>🕒</emoji> 0.5x",
                     callback_data=f"SpeedUP {chat_id}|0.5",
                     **get_random_style()
                 ),
                 InlineKeyboardButton(
-                    text="🕓 0.75x",
+                    text="<emoji id='6093456762113888541'>🕓</emoji> 0.75x",
                     callback_data=f"SpeedUP {chat_id}|0.75",
                     **get_random_style()
                 ),
@@ -56,7 +56,7 @@ def speed_markup(_, chat_id):
                     **get_random_style()
                 ),
                 InlineKeyboardButton(
-                    text="🕛 2.0x",
+                    text="<emoji id='5803392202998551545'>🕛</emoji> 2.0x",
                     callback_data=f"SpeedUP {chat_id}|2.0",
                     **get_random_style()
                 ),

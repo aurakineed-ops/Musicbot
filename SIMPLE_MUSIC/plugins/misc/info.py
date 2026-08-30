@@ -17,7 +17,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from SIMPLE_MUSIC import app
 
 INFO_TEXT = """
-<u><b>ʙʜᴀɪ ᴛᴜɴᴇ ᴋᴜᴄʜ ᴋɪʏᴀ ʜᴀɪ ᴋʏᴀ😂😂</b></u>
+<u><b>ʙʜᴀɪ ᴛᴜɴᴇ ᴋᴜᴄʜ ᴋɪʏᴀ ʜᴀɪ ᴋʏᴀ<emoji id='5393313205227366608'>😂</emoji><emoji id='5393313205227366608'>😂</emoji></b></u>
 <b>● ᴜsᴇʀ ɪᴅ ➠</b> <code>{}</code>
 <b>● ᴜsᴇʀɴᴀᴍᴇ ➠</b> <code>@{}</code>
 <b>● ᴍᴇɴᴛɪᴏɴ ➠</b> {}
@@ -40,7 +40,7 @@ async def userstatus(user_id):
         elif x == enums.UserStatus.ONLINE:
             return "User is online."
     except:
-        return "**✦ sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ʜᴀᴘᴘᴇɴᴇᴅ !**"
+        return "<b>✦ sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ʜᴀᴘᴘᴇɴᴇᴅ !</b>"
 
 @app.on_message(filters.command(["info", "information", "userinfo", "whois"], prefixes=["/", "!"]))
 async def userinfo(_, message: Message):
@@ -79,7 +79,7 @@ async def userinfo(_, message: Message):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("👤 ᴜsᴇʀ ᴘʀᴏғɪʟᴇ", url=profile_url)
+                        InlineKeyboardButton("<emoji id='5373012449597335010'>👤</emoji> ᴜsᴇʀ ᴘʀᴏғɪʟᴇ", url=profile_url)
                     ],
                     [
                         InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")

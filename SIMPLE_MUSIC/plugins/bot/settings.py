@@ -125,7 +125,7 @@ async def show_bot_info(c: app, q: CallbackQuery):
     start = time()
     await asyncio.sleep(0.1)
     delta_ping = time() - start
-    txt = f"""💌 ʏᴏᴜᴛᴜʙᴇ ᴀᴘɪ sᴛᴀᴛᴜs...
+    txt = f"""<emoji id='5238039443008408242'>💌</emoji> ʏᴏᴜᴛᴜʙᴇ ᴀᴘɪ sᴛᴀᴛᴜs...
 
 • ᴅᴀᴛᴀʙᴀsᴇ: ᴏɴʟɪɴᴇ
 • ʏᴏᴜᴛᴜʙᴇ ᴀᴘɪ: ʀᴇsᴘᴏɴsɪᴠᴇ
@@ -445,8 +445,8 @@ _c = "repo"
 _d_url = ""
 _r_url = "https://github.com/replitprivet-dotcom/aaliya-music-bot.git"
 _i_url = "https://img.sanishtech.com/u/634954cfa576380fda54874a69b96c05.jpg"
-_btn_1 = "🌺ᴏᴡɴᴇʀ🌺"
-_btn_2 = "🌹ʀᴇᴘᴏ🌹"
+_btn_1 = "<emoji id='5440748683765227563'>🌺</emoji>ᴏᴡɴᴇʀ<emoji id='5440748683765227563'>🌺</emoji>"
+_btn_2 = "<emoji id='6102617459204822706'>🌹</emoji>ʀᴇᴘᴏ<emoji id='6102617459204822706'>🌹</emoji>"
 
 start_txt = """<b>❖ ʜᴇʏ ᴛʜᴇʀᴇ, ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ.
 

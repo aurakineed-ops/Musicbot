@@ -163,7 +163,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id = message.from_user.id
             content, text, data_type = await GetNote(from_chat_id, note_name)
             text = (
-                f"**{note_name}:**\n\n"
+                f"<b>{note_name}:</b>\n\n"
                 f"{text}"
             ) 
 
@@ -298,7 +298,7 @@ async def exceNoteMessageSender(message, note_name, from_chat_id=None):
         await message.reply(
             (
                 "The notedata was incorrect, please update it. The buttons are most likely to be broken. If you are sure you aren't doing anything wrong and this was unexpected - please report it in my support chat.\n"
-                f"**Error:** `{e}`"
+                f"<b>Error:</b> `{e}`"
             ),
             quote=True
         )

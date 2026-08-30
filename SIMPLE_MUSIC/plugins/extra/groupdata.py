@@ -48,15 +48,15 @@ async def instatus(app, message):
         end_time = time.perf_counter()
         timelog = "{:.2f}".format(end_time - start_time)
         await sent_message.edit(f"""
-**➖➖➖➖➖➖➖
-➲ NAME : {message.chat.title} ✅
-➲ MEMBERS : [ {count} ]🫂
-➖➖➖➖➖➖➖
-➲ BOTS : {bot}💡
-➲ ZOMBIES : {deleted_acc}🧟
-➲ BANNED : {banned}🚫
-➲ PREMIUM USERS : {premium_acc}🎁
-➖➖➖➖➖➖➖
+**<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
+➲ NAME : {message.chat.title} <emoji id='6082375377123023700'>✅</emoji>
+➲ MEMBERS : [ {count} ]<emoji id='5992129361090711368'>🫂</emoji>
+<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
+➲ BOTS : {bot}<emoji id='5422439311196834318'>💡</emoji>
+➲ ZOMBIES : {deleted_acc}<emoji id='5190680981824085932'>🧟</emoji>
+➲ BANNED : {banned}<emoji id='5472267631979405211'>🚫</emoji>
+➲ PREMIUM USERS : {premium_acc}<emoji id='5384490809825450636'>🎁</emoji>
+<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
 TIME TAKEN : {timelog} S**""")
     else:
         sent_message = await message.reply_text("ONLY ADMINS CAN USE THIS !")

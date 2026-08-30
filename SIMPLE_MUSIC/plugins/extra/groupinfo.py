@@ -34,14 +34,14 @@ async def get_group_status(_, message: Message):
     premium_acc = banned = deleted_acc = bot = 0  # You should replace these variables with actual counts.
 
     response_text = (
-        f"➖➖➖➖➖➖➖\n"
-        f"➲ GROUP NAME : {group.title} ✅\n"
+        f"<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>\n"
+        f"➲ GROUP NAME : {group.title} <emoji id='6082375377123023700'>✅</emoji>\n"
         f"➲ GROUP ID : {group.id}\n"
         f"➲ TOTAL MEMBERS : {total_members}\n"
         f"➲ DESCRIPTION : {group_description or 'N/A'}\n"
         f"➲ USERNAME : @{group_username}\n"
        
-        f"➖➖➖➖➖➖➖"
+        f"<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>"
     )
     
     await message.reply(response_text)

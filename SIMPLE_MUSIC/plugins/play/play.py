@@ -257,7 +257,7 @@ async def play_commnd(
                 return await mystic.edit_text(_["general_2"].format(f"{type(e).__name__}: {e}"))
             return await mystic.delete()
         elif re.match(r"https?://(t|telegram)\.me/", url):
-            # ✅ Telegram message link handler
+            # <emoji id='6082375377123023700'>✅</emoji> Telegram message link handler
             try:
                 tg_pub  = re.match(r"https?://(?:t|telegram)\.me/(?!c/)([^/]+)/(\d+)", url)
                 tg_priv = re.match(r"https?://(?:t|telegram)\.me/c/(\d+)/(\d+)", url)

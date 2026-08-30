@@ -277,21 +277,21 @@ async def msg_quotly_cmd(self: app, ctx: Message):
                     if not i.empty and not i.media
                 ]
             except Exception:
-                return await ctx.reply_text("🤷🏻‍♂️")
+                return await ctx.reply_text("<emoji id='5435893060028345073'>🤷</emoji>🏻‍♂️")
             try:
                 make_quotly = await pyrogram_to_quotly(messages, is_reply=is_reply)
                 bio_sticker = BytesIO(make_quotly)
                 bio_sticker.name = "misskatyquote_sticker.webp"
                 return await ctx.reply_sticker(bio_sticker)
             except Exception:
-                return await ctx.reply_msg("🤷🏻‍♂️")
+                return await ctx.reply_msg("<emoji id='5435893060028345073'>🤷</emoji>🏻‍♂️")
     try:
         messages_one = await self.get_messages(
             chat_id=ctx.chat.id, message_ids=ctx.reply_to_message.id, replies=-1
         )
         messages = [messages_one]
     except Exception:
-        return await ctx.reply_msg("🤷🏻‍♂️")
+        return await ctx.reply_msg("<emoji id='5435893060028345073'>🤷</emoji>🏻‍♂️")
     try:
         make_quotly = await pyrogram_to_quotly(messages, is_reply=is_reply)
         bio_sticker = BytesIO(make_quotly)

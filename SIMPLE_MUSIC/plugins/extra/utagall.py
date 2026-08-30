@@ -40,11 +40,11 @@ async def mention_users(client, message: Message, mode, text):
 
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
-            "__This command can be used in groups and channels!__"
+            "<i>This command can be used in groups and channels!</i>"
         )
 
     if text and message.reply_to_message:
-        return await message.reply_text("__Give me one argument!__")
+        return await message.reply_text("<i>Give me one argument!</i>")
 
     if text:
         mode = "text_on_cmd"
@@ -56,7 +56,7 @@ async def mention_users(client, message: Message, mode, text):
         msg_text = None
     else:
         return await message.reply_text(
-            "__Reply to a message or give me some text to mention others!__"
+            "<i>Reply to a message or give me some text to mention others!</i>"
         )
 
     if chat_id not in spam_chats:
@@ -162,11 +162,11 @@ async def atag(_, message: Message):
                     name = user.first_name or "Admin"
                     members.append(f"[{name}](tg://user?id={user.id})")
     except Exception:
-        return await message.reply_text("__Failed to fetch participants!__")
+        return await message.reply_text("<i>Failed to fetch participants!</i>")
 
     if not members:
         return await message.reply_text(
-            "__No admins found in this group or channel!__"
+            "<i>No admins found in this group or channel!</i>"
         )
 
     admin_text = ", ".join(members)
@@ -209,7 +209,7 @@ async def cancel_spam(_, message: Message):
             spam_chats.remove(chat_id)
         except Exception:
             pass
-        await message.reply_text("🛑 **Tagging process has been stopped successfully!**")
+        await message.reply_text("<emoji id='5472030751648127392'>🛑</emoji> <b>Tagging process has been stopped successfully!</b>")
         
         # CRITICAL: Ye line doosri files ko /cancel par 'NOT TAGGING BABY' bolne se rok degi
         message.stop_propagation()

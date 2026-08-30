@@ -36,7 +36,7 @@ whisper_db = {}
 
 def get_switch_btn():
     r1 = random.choice(STYLES)
-    return InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat="", **_get_style(r1))]])
+    return InlineKeyboardMarkup([[InlineKeyboardButton("<emoji id='5262922516426420894'>💒</emoji> Start Whisper", switch_inline_query_current_chat="", **_get_style(r1))]])
 
 async def _whisper(_, inline_query):
     data = inline_query.query
@@ -45,9 +45,9 @@ async def _whisper(_, inline_query):
     if len(data.split()) < 2:
         mm = [
             InlineQueryResultArticle(
-                title="💒 Whisper",
+                title="<emoji id='5262922516426420894'>💒</emoji> Whisper",
                 description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
-                input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
+                input_message_content=InputTextMessageContent(f"<emoji id='5262922516426420894'>💒</emoji> Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
                 thumb_url="https://te.legra.ph/file/3eec679156a393c6a1053.jpg",
                 reply_markup=get_switch_btn()
             )
@@ -64,7 +64,7 @@ async def _whisper(_, inline_query):
         except:
             mm = [
                 InlineQueryResultArticle(
-                    title="💒 Whisper",
+                    title="<emoji id='5262922516426420894'>💒</emoji> Whisper",
                     description="Invalid username or ID!",
                     input_message_content=InputTextMessageContent("Invalid username or ID!"),
                     thumb_url="https://te.legra.ph/file/3eec679156a393c6a1053.jpg",
@@ -74,13 +74,13 @@ async def _whisper(_, inline_query):
         
         try:
             r1, r2 = random.choices(STYLES, k=2)
-            whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}", **_get_style(r1))]])
+            whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("<emoji id='5262922516426420894'>💒</emoji> Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}", **_get_style(r1))]])
             one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}_one", **_get_style(r2))]])
             mm = [
                 InlineQueryResultArticle(
-                    title="💒 Whisper",
+                    title="<emoji id='5262922516426420894'>💒</emoji> Whisper",
                     description=f"Send a Whisper to {user.first_name}!",
-                    input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
+                    input_message_content=InputTextMessageContent(f"<emoji id='5262922516426420894'>💒</emoji> You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
                     thumb_url="https://te.legra.ph/file/3eec679156a393c6a1053.jpg",
                     reply_markup=whisper_btn
                 ),
@@ -124,10 +124,10 @@ async def whispes_cb(_, query):
     try:
         msg = whisper_db[search_msg]
     except:
-        msg = "🚫 Error!\n\nWhisper has been deleted from the database!"
+        msg = "<emoji id='5472267631979405211'>🚫</emoji> Error!\n\nWhisper has been deleted from the database!"
     
     r1 = random.choice(STYLES)
-    SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="", **_get_style(r1))]])
+    SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline <emoji id='6208711264609246951'>🪝</emoji>", switch_inline_query_current_chat="", **_get_style(r1))]])
     
     await query.answer(msg, show_alert=True)
     
@@ -139,9 +139,9 @@ async def whispes_cb(_, query):
 async def in_help():
     answers = [
         InlineQueryResultArticle(
-            title="💒 Whisper",
+            title="<emoji id='5262922516426420894'>💒</emoji> Whisper",
             description=f"@{BOT_USERNAME} [USERNAME | ID] [TEXT]",
-            input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@{BOT_USERNAME} (Target Username or ID) (Your Message).\n\n**Example:**\n@{BOT_USERNAME} @username I Wanna Phuck You"),
+            input_message_content=InputTextMessageContent(f"<b>📍Usage:</b>\n\n@{BOT_USERNAME} (Target Username or ID) (Your Message).\n\n<b>Example:</b>\n@{BOT_USERNAME} @username I Wanna Phuck You"),
             thumb_url="https://te.legra.ph/file/3eec679156a393c6a1053.jpg",
             reply_markup=get_switch_btn()
         )

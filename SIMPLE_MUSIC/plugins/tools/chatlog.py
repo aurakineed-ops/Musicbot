@@ -58,14 +58,14 @@ async def join_watcher(_, message):
                 f"____________________________________\n\n"
                 f"📌 ᴄʜᴀᴛ ɴᴀᴍᴇ: {chat.title}\n"
                 f"🍂 ᴄʜᴀᴛ ɪᴅ: {chat.id}\n"
-                f"🔐 ᴄʜᴀᴛ ᴜsᴇʀɴᴀᴍᴇ: @{chat.username}\n"
+                f"<emoji id='5472308992514464048'>🔐</emoji> ᴄʜᴀᴛ ᴜsᴇʀɴᴀᴍᴇ: @{chat.username}\n"
                 f"🛰 ᴄʜᴀᴛ ʟɪɴᴋ: {f'[ᴄʟɪᴄᴋ]({link})' if link else 'N/A'}\n"
-                f"📈 ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count}\n"
-                f"🤔 ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention if message.from_user else 'Unknown'}"
+                f"<emoji id='5028746137645876535'>📈</emoji> ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count}\n"
+                f"<emoji id='5467538555158943525'>🤔</emoji> ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention if message.from_user else 'Unknown'}"
             )
             r1 = random.choice(STYLES)
             markup = InlineKeyboardMarkup([
-                [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ👀", url=link, **_get_style(r1))]
+                [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ<emoji id='5208841018379612211'>👀</emoji>", url=link, **_get_style(r1))]
             ]) if link else None
             await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=markup)
 

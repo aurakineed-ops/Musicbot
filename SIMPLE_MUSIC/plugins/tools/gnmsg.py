@@ -24,11 +24,11 @@ def goodnight_command_handler(_, message):
     if send_sticker:
         sticker_id = get_random_sticker()
         app.send_sticker(message.chat.id, sticker_id)
-        message.reply_text(f"**Goodnight, {sender}! Sleep tight. 🌙**")
+        message.reply_text(f"<b>Goodnight, {sender}! Sleep tight. <emoji id='5449569374065152798'>🌙</emoji></b>")
     else:
         emoji = get_random_emoji()
         app.send_message(message.chat.id, emoji)
-        message.reply_text(f"**Goodnight, {sender}! Sleep tight. {emoji}**")
+        message.reply_text(f"<b>Goodnight, {sender}! Sleep tight. {emoji}</b>")
 
 
 def get_random_sticker():
@@ -44,8 +44,8 @@ def get_random_sticker():
 
 def get_random_emoji():
     emojis = [
-        "😴",
-        "😪",
-        "💤",
+        "<emoji id='5350513671439133456'>😴</emoji>",
+        "<emoji id='5371009319800150304'>😪</emoji>",
+        "<emoji id='6095795620914664179'>💤</emoji>",
     ]
     return random.choice(emojis)

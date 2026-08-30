@@ -51,7 +51,7 @@ async def log_(client, message, _):
 @app.on_message(filters.command(["update", "gitpull"]) & SUDOERS)
 @language
 async def update_(client, message, _):
-    return await message.reply_text("GitHub updates are disabled for Aaliya Music Bot.")
+    return await message.reply_text("GitHub updates are disabled for Yoru Music Bot.")
     if await is_heroku():
         if HAPP is None:
             return await message.reply_text(_["server_2"])

@@ -1,23 +1,22 @@
-# Private runtime configuration and credentials
-!.env.example
+# Environment & secrets
+.env
 *.session
 *.session-journal
-*.pem
-*.key
 
-# Runtime data
-.venv/
-downloads/
-cache/
-*.log
-*.pid
-log.txt
-pypilog.txt
+# Python
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.Python
+*.egg-info/
+venv/
+env/
+.venv/
 
-# Local/editor files
+# Logs
+*.log
+
+# OS junk
 .DS_Store
-.vscode/
-.idea/
+Thumbs.db

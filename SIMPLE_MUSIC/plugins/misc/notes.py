@@ -157,7 +157,7 @@ async def ClearAll_Note(client, message):
         ]]
     )
     await message.reply(
-        f"Are you sure you want to clear **ALL** notes in {chat_title}? This action is irreversible.",
+        f"Are you sure you want to clear <b>ALL</b> notes in {chat_title}? This action is irreversible.",
         reply_markup=keyboard,
         quote=True
     )

@@ -116,13 +116,13 @@ async def cmd_scr(client, message):
         for fullcc in card_messages:
             card_caption = f"""
 ┏━━━━━━━⍟
-┃BRAINTREE AUTH 𝟓$ ✅
+┃BRAINTREE AUTH 𝟓$ <emoji id='6082375377123023700'>✅</emoji>
 ┗━━━━━━━━━━━⊛
 ➩ 𝗖𝗮𝗿𝗱 :<code>{fullcc}</code>
-➩ 𝗥𝗲𝘀𝗽𝗼𝗻𝘀𝗲 : APPROVED CARD ✅
+➩ 𝗥𝗲𝘀𝗽𝗼𝗻𝘀𝗲 : APPROVED CARD <emoji id='6082375377123023700'>✅</emoji>
 ➩ 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 : CHARGED 5$
 
-[↯] 𝗣𝗿𝗼𝘅𝘆 ↳ 148:382:1490xx...Live ✅
+[↯] 𝗣𝗿𝗼𝘅𝘆 ↳ 148:382:1490xx...Live <emoji id='6082375377123023700'>✅</emoji>
 ➩ 𝗖𝗵𝗲𝗰𝗸𝗲𝗱 𝗕𝘆 : {le}
 """
             await app.send_message(

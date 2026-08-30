@@ -64,8 +64,8 @@ def _pack_short_name(user_id: int, bot_username: str, packnum: int = 0) -> str:
     username = re.sub(r"[^a-z0-9_]", "", username)
     username = re.sub(r"_+", "_", username).strip("_")
     if not username or not username[0].isalpha():
-        username = f"aaliyamusicbot{username}"
-    username = username[:32].rstrip("_") or "aaliyamusicbot"
+        username = f"yorumusicbot{username}"
+    username = username[:32].rstrip("_") or "yorumusicbot"
 
     prefix = f"f{user_id}" if packnum == 0 else f"f{packnum}_{user_id}"
     prefix = re.sub(r"_+", "_", prefix).strip("_")
@@ -125,7 +125,7 @@ async def kang(client, message: Message):
     ):
         sticker_emoji = message.reply_to_message.sticker.emoji
     else:
-        sticker_emoji = "🤔"
+        sticker_emoji = "<emoji id='5467538555158943525'>🤔</emoji>"
 
     # Get the corresponding fileid, resize the file if necessary
     doc = message.reply_to_message.photo or message.reply_to_message.document

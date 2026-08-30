@@ -41,7 +41,7 @@ async def sg(client: Client, message: Message):
     else:
         user_id = message.text.split()[1]
 
-    loading = await message.reply("🔍 sᴇᴀʀᴄʜɪɴɢ...")
+    loading = await message.reply("<emoji id='5231012545799666522'>🔍</emoji> sᴇᴀʀᴄʜɪɴɢ...")
 
     try:
         user = await client.get_users(user_id)
@@ -71,7 +71,7 @@ async def sg(client: Client, message: Message):
         
         r1 = random.choice(STYLES)
         await message.reply(
-            f"🧾 <b>ʜɪsᴛᴏʀʏ:</b>\n\n{msg.text}",
+            f"<emoji id='5444856076954520455'>🧾</emoji> <b>ʜɪsᴛᴏʀʏ:</b>\n\n{msg.text}",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close", **_get_style(r1))]])
         )
         found = True

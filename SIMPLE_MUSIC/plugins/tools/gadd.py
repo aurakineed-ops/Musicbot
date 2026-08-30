@@ -26,7 +26,7 @@ async def add_allbot(client, message):
     command_parts = message.text.split(" ")
     if len(command_parts) != 2:
         await message.reply(
-            "**❍ ɪɴᴠᴀʟɪᴅ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀᴍᴀᴛ. ᴘʟᴇᴀsᴇ ᴜsᴇ ʟɪᴋᴇ » `/gadd @Bot_username`**"
+            "<b>❍ ɪɴᴠᴀʟɪᴅ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀᴍᴀᴛ. ᴘʟᴇᴀsᴇ ᴜsᴇ ʟɪᴋᴇ » `/gadd @Bot_username`</b>"
         )
         return
 
@@ -37,7 +37,7 @@ async def add_allbot(client, message):
         app_id = bot.id
         done = 0
         failed = 0
-        lol = await message.reply("❍ **ᴀᴅᴅɪɴɢ ɢɪᴠᴇɴ ʙᴏᴛ ɪɴ ᴀʟʟ ᴄʜᴀᴛs!**")
+        lol = await message.reply("❍ <b>ᴀᴅᴅɪɴɢ ɢɪᴠᴇɴ ʙᴏᴛ ɪɴ ᴀʟʟ ᴄʜᴀᴛs!</b>")
         await userbot.send_message(bot_username, f"/start")
         async for dialog in userbot.get_dialogs():
             if dialog.chat.id == -1002100130095:
@@ -47,17 +47,17 @@ async def add_allbot(client, message):
                 await userbot.add_chat_members(dialog.chat.id, app_id)
                 done += 1
                 await lol.edit(
-                    f"**❍ ᴀᴅᴅɪɴɢ {bot_username}**\n\n**➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs ✔**\n**➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘**\n\n**➲ ᴀᴅᴅᴇᴅ ʙʏ»** @{userbot.username}"
+                    f"<b>❍ ᴀᴅᴅɪɴɢ {bot_username}</b>\n\n<b>➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs <emoji id='5325632706850090150'>✔</emoji></b>\n<b>➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘</b>\n\n<b>➲ ᴀᴅᴅᴇᴅ ʙʏ»</b> @{userbot.username}"
                 )
             except Exception as e:
                 failed += 1
                 await lol.edit(
-                    f"**❍ ᴀᴅᴅɪɴɢ {bot_username}**\n\n**➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs ✔**\n**➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘**\n\n**➲ ᴀᴅᴅɪɴɢ ʙʏ»** @{userbot.username}"
+                    f"<b>❍ ᴀᴅᴅɪɴɢ {bot_username}</b>\n\n<b>➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs <emoji id='5325632706850090150'>✔</emoji></b>\n<b>➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘</b>\n\n<b>➲ ᴀᴅᴅɪɴɢ ʙʏ»</b> @{userbot.username}"
                 )
             await asyncio.sleep(3)  # Adjust sleep time based on rate limits
 
         await lol.edit(
-            f"**❍ {bot_username} ʙᴏᴛ ᴀᴅᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ🎉**\n\n**➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs ✅**\n**➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘**\n\n**➲ ᴀᴅᴅᴇᴅ ʙʏ»** @{userbot.username}"
+            f"<b>❍ {bot_username} ʙᴏᴛ ᴀᴅᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ🎉</b>\n\n<b>➥ ᴀᴅᴅᴇᴅ ɪɴ {done} ᴄʜᴀᴛs <emoji id='6082375377123023700'>✅</emoji></b>\n<b>➥ ғᴀɪʟᴇᴅ ɪɴ {failed} ᴄʜᴀᴛs ✘</b>\n\n<b>➲ ᴀᴅᴅᴇᴅ ʙʏ»</b> @{userbot.username}"
         )
     except Exception as e:
         await message.reply(f"Error: {str(e)}")

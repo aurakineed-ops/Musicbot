@@ -99,7 +99,7 @@ async def init():
         importlib.import_module("SIMPLE_MUSIC.plugins" + all_module)
 
     LOGGER("SIMPLE_MUSIC.plugins").info(
-        "𝗔𝗮𝗹𝗶𝘆𝗮 𝗠𝘂𝘀𝗶𝗰 𝗕𝗼𝘁 𝗜𝘀 𝗥𝗲𝗮𝗱𝘆🥳..."
+        "𝗬𝗼𝗿𝘂 𝗠𝘂𝘀𝗶𝗰 𝗕𝗼𝘁 𝗜𝘀 𝗥𝗲𝗮𝗱𝘆<emoji id='5317026657540780588'>🥳</emoji>..."
     )
 
     await userbot.start()
@@ -121,7 +121,7 @@ async def init():
     await SIMPLE.decorators()
 
     LOGGER("SIMPLE_MUSIC").info(
-        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗔𝗔𝗟𝗜𝗬𝗔 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧\n╚═════ஜ۩۞۩ஜ════╗"
+        "╔═════ஜ۩۞۩ஜ════╗\n  ☠︎︎𝗬𝗢𝗥𝗨 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧\n╚═════ஜ۩۞۩ஜ════╝"
     )
 
     await idle()
@@ -130,7 +130,7 @@ async def init():
     await userbot.stop()
 
     LOGGER("SIMPLE_MUSIC").info(
-        "𝗦𝗧𝗢𝗣 𝗔𝗔𝗟𝗜𝗬𝗔 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧.."
+        "𝗦𝗧𝗢𝗣 𝗬𝗢𝗥𝗨 𝗠𝗨𝗦𝗜𝗖🎻 𝗕𝗢𝗧.."
     )
 
 

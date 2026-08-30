@@ -25,7 +25,7 @@ async def tiny_sticker(client, message):
         await message.reply("Please reply to a sticker")
         return
     kontol = await message.reply("Processing please wait")
-    await kontol.edit_text("🐾")
+    await kontol.edit_text("<emoji id='5465284032335993108'>🐾</emoji>")
     ik = await app.download_media(reply)
     im1 = Image.open("SIMPLE_MUSIC/assets/simple.png")
     if ik.endswith(".tgs"):

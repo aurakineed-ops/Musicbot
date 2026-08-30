@@ -39,7 +39,7 @@ async def cutie(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    CUTE = f"🍑 {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ🥀"
+    CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 
     await app.send_document(
         chat_id=message.chat.id,
@@ -62,7 +62,7 @@ async def horny(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    HORNE = f"🔥 {mention} ɪꜱ {mm} % ʜᴏʀɴʏ!"
+    HORNE = f"<emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm} % ʜᴏʀɴʏ!"
 
     await app.send_document(
         chat_id=message.chat.id,
@@ -85,7 +85,7 @@ async def hot(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    HOTIE = f"🔥{mention} ɪꜱ {mm}% ʜᴏᴛ!"
+    HOTIE = f"<emoji id='6086954744268460848'>🔥</emoji>{mention} ɪꜱ {mm}% ʜᴏᴛ!"
 
     await app.send_document(
         chat_id=message.chat.id,
@@ -108,7 +108,7 @@ async def sexy(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    SEXO = f" 🔥 {mention} ɪꜱ {mm}% sexy!"
+    SEXO = f" <emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm}% sexy!"
     await app.send_document (
         chat_id=message.chat.id,
         document=SEMXY,
@@ -129,7 +129,7 @@ async def gay(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    GAYE = f" 🍷 {mention} ɪꜱ {mm}% ɢᴀʏ!"
+    GAYE = f" <emoji id='5361964771509808811'>🍷</emoji> {mention} ɪꜱ {mm}% ɢᴀʏ!"
     await app.send_document (
         chat_id=message.chat.id,
         document=GAY,
@@ -150,7 +150,7 @@ async def lesbian(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    LEZBIAN = f" 💜 {mention} ɪꜱ {mm}% ʟᴇꜱʙɪᴀɴ!"
+    LEZBIAN = f" <emoji id='5283077114319347060'>💜</emoji> {mention} ɪꜱ {mm}% ʟᴇꜱʙɪᴀɴ!"
     await app.send_document (
         chat_id=message.chat.id,
         document=LESBIAN,
@@ -172,7 +172,7 @@ async def boob(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    BALL = f" 🍒 {mention}ꜱ ʙᴏᴏʙꜱ ꜱɪᴢᴇ ɪᴢ {mm} ! "
+    BALL = f" <emoji id='5415722218569089767'>🍒</emoji> {mention}ꜱ ʙᴏᴏʙꜱ ꜱɪᴢᴇ ɪᴢ {mm} ! "
     await app.send_document (
         chat_id=message.chat.id,
         document=BIGBALL,
@@ -194,7 +194,7 @@ async def cock(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    BAT = f" 🍆 {mention}  ᴄᴏᴄᴋ ꜱɪᴢᴇ ɪᴢ {mm}ᴄᴍ"
+    BAT = f" <emoji id='5847995391122869577'>🍆</emoji> {mention}  ᴄᴏᴄᴋ ꜱɪᴢᴇ ɪᴢ {mm}ᴄᴍ"
     await app.send_document (
         chat_id=message.chat.id,
         document=LANGD,

@@ -27,6 +27,7 @@ class SIMPLE(Client):
             bot_token=config.BOT_TOKEN,
             in_memory=True,
             max_concurrent_transmissions=7,
+            parse_mode=ParseMode.HTML,
         )
 
     async def start(self):

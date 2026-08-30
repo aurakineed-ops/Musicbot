@@ -11,7 +11,7 @@ async def video_downloader(_, message: Message):
 
     video_url = message.text.split(None, 1)[1]
 
-    msg = await message.reply("🔍 Fetching video...")
+    msg = await message.reply("<emoji id='5231012545799666522'>🔍</emoji> Fetching video...")
 
     # Step 1: Call API
     payload = {
@@ -36,7 +36,7 @@ async def video_downloader(_, message: Message):
         video_link = best_video["url"]
 
         # Step 3: Download the video to temp file
-        await msg.edit("⬇️ Downloading video...")
+        await msg.edit("<emoji id='6098103517296205903'>⬇</emoji>️ Downloading video...")
 
         file_name = "video.mp4"
         with requests.get(video_link, stream=True) as v:
@@ -48,7 +48,7 @@ async def video_downloader(_, message: Message):
         await app.send_video(
             chat_id=message.chat.id,
             video=file_name,
-            caption=f"🎬 {data.get('title', 'Video')}\n\n✅ ",
+            caption=f"<emoji id='5368653135101310687'>🎬</emoji> {data.get('title', 'Video')}\n\n<emoji id='6082375377123023700'>✅</emoji> ",
             supports_streaming=True
         )
 

@@ -121,7 +121,7 @@ async def ctest(_, message):
          TXT = f"""
 **ᴛᴏᴅᴀʏ's ᴄᴏᴜᴘʟᴇ ᴏғ ᴛʜᴇ ᴅᴀʏ :
 
-{N1} + {N2} = 💚
+{N1} + {N2} = <emoji id='5280723695579438810'>💚</emoji>
 
 ɴᴇxᴛ ᴄᴏᴜᴘʟᴇs ᴡɪʟʟ ʙᴇ sᴇʟᴇᴄᴛᴇᴅ ᴏɴ {tomorrow} !!**
 """
@@ -146,9 +146,9 @@ async def ctest(_, message):
          
       #   TXT = f"""
 #**𝐓ᴏᴅᴀʏ's 𝐒ᴇʟᴇᴄᴛᴇᴅ 𝐂ᴏᴜᴘʟᴇs 🎉 :
-#➖➖➖➖➖➖➖➖➖➖➖➖
+#<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
 #[{c1_name}](tg://openmessage?user_id={c1_id}) + [{c2_name}](tg://openmessage?user_id={c2_id}) = ❣️
-#➖➖➖➖➖➖➖➖➖➖➖➖
+#<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
 #𝐍ᴇxᴛ 𝐂ᴏᴜᴘʟᴇs 𝐖ɪʟʟ 𝐁ᴇ 𝐒ᴇʟᴇᴄᴛᴇᴅ 𝐎ɴ {tomorrow} !!**
 #"""
  #        await message.reply_photo(b, caption=TXT)
@@ -165,7 +165,7 @@ async def ctest(_, message):
 
 __mod__ = "COUPLES"
 __help__ = """
-**» /couples** - Get Todays Couples Of The Group In Interactive View
+<b>» /couples</b> - Get Todays Couples Of The Group In Interactive View
 """
 
 

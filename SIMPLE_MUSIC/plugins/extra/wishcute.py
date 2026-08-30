@@ -22,16 +22,16 @@ from SIMPLE_MUSIC import app
 @app.on_message(filters.command("wish"))
 async def wish(_, m):
     if len(m.command) < 2:
-        await m.reply("ᴀᴅᴅ ᴡɪꜱʜ ʙᴀʙʏ🥀!")
+        await m.reply("ᴀᴅᴅ ᴡɪꜱʜ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>!")
         return 
 
     api = requests.get("https://nekos.best/api/v2/happy").json()
     url = api["results"][0]['url']
     text = m.text.split(None, 1)[1]
     wish_count = random.randint(1, 100)
-    wish = f"✨ ʜᴇʏ! {m.from_user.first_name}! "
-    wish += f"✨ ʏᴏᴜʀ ᴡɪꜱʜ: {text} "
-    wish += f"✨ ᴘᴏꜱꜱɪʙʟᴇ ᴛᴏ: {wish_count}%"
+    wish = f"<emoji id='5325547803936572038'>✨</emoji> ʜᴇʏ! {m.from_user.first_name}! "
+    wish += f"<emoji id='5325547803936572038'>✨</emoji> ʏᴏᴜʀ ᴡɪꜱʜ: {text} "
+    wish += f"<emoji id='5325547803936572038'>✨</emoji> ᴘᴏꜱꜱɪʙʟᴇ ᴛᴏ: {wish_count}%"
     
     await app.send_animation(
         chat_id=m.chat.id,
@@ -56,7 +56,7 @@ async def cute(_, message):
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)
-    CUTE = f"🍑 {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ🥀"
+    CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 
     await app.send_document(
         chat_id=message.chat.id,

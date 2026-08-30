@@ -84,9 +84,9 @@ async def isPreviewUp(preview: str) -> bool:
 @app.on_message(filters.command("paste"))
 async def paste_func(_, message):
     if not message.reply_to_message:
-        return await message.reply_text("**ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ /paste**")
+        return await message.reply_text("<b>ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ /paste</b>")
 
-    m = await message.reply_text("**ᴘᴀsᴛɪɴɢ ᴘʟs ᴡᴀɪᴛ 10 sᴇᴄ....**")
+    m = await message.reply_text("<b>ᴘᴀsᴛɪɴɢ ᴘʟs ᴡᴀɪᴛ 10 sᴇᴄ....</b>")
 
     if message.reply_to_message.text:
         content = str(message.reply_to_message.text)
@@ -94,16 +94,16 @@ async def paste_func(_, message):
             link = await paste(content)
             r1 = random.choice(STYLES)
             reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔗 ᴘᴀsᴛᴇ ʟɪɴᴋ", url=link, **_get_style(r1))]])
-            await m.edit("**✅ ᴘᴀsᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!**", reply_markup=reply_markup)
+            await m.edit("<b><emoji id='6082375377123023700'>✅</emoji> ᴘᴀsᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!</b>", reply_markup=reply_markup)
         except Exception as e:
-            await m.edit(f"**❌ ᴇʀʀᴏʀ ᴘᴀsᴛɪɴɢ:** `{e}`")
+            await m.edit(f"<b>❌ ᴇʀʀᴏʀ ᴘᴀsᴛɪɴɢ:</b> `{e}`")
             
     elif message.reply_to_message.document:
         document = message.reply_to_message.document
         if document.file_size > 1048576:
-            return await m.edit("**ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ ᴘᴀsᴛᴇ ғɪʟᴇs sᴍᴀʟʟᴇʀ ᴛʜᴀɴ 1ᴍʙ.**")
+            return await m.edit("<b>ʏᴏᴜ ᴄᴀɴ ᴏɴʟʏ ᴘᴀsᴛᴇ ғɪʟᴇs sᴍᴀʟʟᴇʀ ᴛʜᴀɴ 1ᴍʙ.</b>")
         if not pattern.search(document.mime_type):
-            return await m.edit("**ᴏɴʟʏ ᴛᴇxᴛ ғɪʟᴇs ᴄᴀɴ ʙᴇ ᴘᴀsᴛᴇᴅ.**")
+            return await m.edit("<b>ᴏɴʟʏ ᴛᴇxᴛ ғɪʟᴇs ᴄᴀɴ ʙᴇ ᴘᴀsᴛᴇᴅ.</b>")
 
         doc = await message.reply_to_message.download()
         async with aiofiles.open(doc, mode="r") as f:
@@ -121,12 +121,12 @@ async def paste_func(_, message):
             carbon = await make_carbon(content_chunk)
 
             await m.delete()
-            text = await message.reply("**✍️ᴘᴀsᴛᴇᴅ ᴏɴ ᴄᴀʀʙᴏɴ ᴘᴀɢᴇ !**")
+            text = await message.reply("<b><emoji id='5197269100878907942'>✍</emoji>️ᴘᴀsᴛᴇᴅ ᴏɴ ᴄᴀʀʙᴏɴ ᴘᴀɢᴇ !</b>")
             await asyncio.sleep(0.4)
-            await text.edit("**ᴜᴘʟᴏᴀᴅɪɴɢ ᴜɴᴅᴇʀ 5 sᴇᴄ.**")
+            await text.edit("<b>ᴜᴘʟᴏᴀᴅɪɴɢ ᴜɴᴅᴇʀ 5 sᴇᴄ.</b>")
             await asyncio.sleep(0.4)
-            await text.edit("**ᴜᴘʟᴏᴀᴅɪɴɢ ᴜɴᴅᴇʀ 5 sᴇᴄ....**")
-            caption = f"🥀ᴛʜɪs ɪs  {page_number} ᴘᴀɢᴇ - {current_line + 1} to {end_line} ʟɪɴᴇs..\n sᴇɴᴅɪɴɢ ᴍᴏʀᴇ ʟɪɴᴇs ɪғ ʜᴀᴠᴇ ᴏɴ ɴᴇxᴛ ᴘᴀɢᴇ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..."
+            await text.edit("<b>ᴜᴘʟᴏᴀᴅɪɴɢ ᴜɴᴅᴇʀ 5 sᴇᴄ....</b>")
+            caption = f"<emoji id='5208923808169222461'>🥀</emoji>ᴛʜɪs ɪs  {page_number} ᴘᴀɢᴇ - {current_line + 1} to {end_line} ʟɪɴᴇs..\n sᴇɴᴅɪɴɢ ᴍᴏʀᴇ ʟɪɴᴇs ɪғ ʜᴀᴠᴇ ᴏɴ ɴᴇxᴛ ᴘᴀɢᴇ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ..."
             
             r1 = random.choice(STYLES)
             reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("❌ ᴄʟᴏsᴇ", callback_data="close", **_get_style(r1))]])
@@ -140,4 +140,4 @@ async def paste_func(_, message):
             await sleep(1)  # Optional: Add a sleep to avoid rate limiting or being blocked
 
     else:
-        await m.edit("**Unsupported file type. Only text files can be pasted.**")
+        await m.edit("<b>Unsupported file type. Only text files can be pasted.</b>")

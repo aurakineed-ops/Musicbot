@@ -42,21 +42,21 @@ async def _filter(client, message):
     chat_id = message.chat.id 
     
     if len(message.command) < 2:
-        await message.reply_text("❌ **Filter ka naam batayein!**\nUsage: Kisi message/sticker par reply karein aur likhein `/filter <name>`")
+        await message.reply_text("❌ <b>Filter ka naam batayein!</b>\nUsage: Kisi message/sticker par reply karein aur likhein `/filter <name>`")
         return
 
     # Filter ke naam ko space-free aur lowercase banayein uniform storage ke liye
     filter_name = message.command[1].strip().lower()
     
     if not message.reply_to_message:
-        await message.reply_text("❌ **Kisi text, sticker, ya photo par reply karke ye command dein!**")
+        await message.reply_text("❌ <b>Kisi text, sticker, ya photo par reply karke ye command dein!</b>")
         return
 
     try:
         # GetFIlterMessage automatic sticker/media/text detect kar leta hai
         content, text, data_type = await GetFIlterMessage(message)
         await add_filter_db(chat_id, filter_name=filter_name, content=content, text=text, data_type=data_type)
-        await message.reply_text(f"✅ Saved filter '`{filter_name}`' successfully!")
+        await message.reply_text(f"<emoji id='6082375377123023700'>✅</emoji> Saved filter '`{filter_name}`' successfully!")
     except Exception as e:
         await message.reply_text(f"❌ Error saving filter: {e}")
 
@@ -146,7 +146,7 @@ async def stop(client, message):
     
     try:
         await stop_db(chat_id, actual_name)
-        await message.reply_text(f"🛑 I've successfully stopped and deleted `{actual_name}`.")
+        await message.reply_text(f"<emoji id='5472030751648127392'>🛑</emoji> I've successfully stopped and deleted `{actual_name}`.")
     except Exception as e:
         await message.reply_text(f"Error while deleting filter: {e}")
 
@@ -167,7 +167,7 @@ async def stopall(client, message):
     )
 
     await message.reply_text(
-        text=(f'Are you sure you want to stop **ALL** filters in {chat_title}? This action is irreversible.'),
+        text=(f'Are you sure you want to stop <b>ALL</b> filters in {chat_title}? This action is irreversible.'),
         reply_markup=KEYBOARD
     )
 

@@ -36,7 +36,7 @@ async def bin_lookup(bin_number):
                     
                     bin_info_text = f"""
 ┏━━━━━━━⍟
-┃𝗕𝗜𝗡 𝗟𝗼𝗼𝗸𝘂𝗽 𝗥𝗲𝘀𝘂𝗹𝘁 🔍
+┃𝗕𝗜𝗡 𝗟𝗼𝗼𝗸𝘂𝗽 𝗥𝗲𝘀𝘂𝗹𝘁 <emoji id='5231012545799666522'>🔍</emoji>
 ┗━━━━━━━━━━━⊛
 
 [ϟ] 𝗕𝗶𝗻: <code>{bin_number}</code>

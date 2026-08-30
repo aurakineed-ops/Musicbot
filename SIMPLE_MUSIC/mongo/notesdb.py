@@ -167,7 +167,7 @@ async def NoteList(chat_id) -> list:
                 NoteText = note['text']
                 NoteNames = note['note_name']
                 if '{admin}' in NoteText:
-                        NoteNames = NoteNames + ' ' + '__{admin}__'
+                        NoteNames = NoteNames + ' ' + '<i>{admin}</i>'
                 NotesNamesList.append(NoteNames)
             return NotesNamesList
         else:

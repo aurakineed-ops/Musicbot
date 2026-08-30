@@ -43,7 +43,7 @@ async def unban_all(_, msg):
     if bot_permission:
         r1 = random.choice(STYLES)
         status_msg = await msg.reply_text(
-            "⏳ **Unbanning all users...**", 
+            "⏳ <b>Unbanning all users...</b>", 
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("❌ Stop", callback_data="stop", **_get_style(r1))]])
         )
         
@@ -56,7 +56,7 @@ async def unban_all(_, msg):
                 pass
                 
         try:
-            await status_msg.edit_text(f"✅ **Successfully unbanned {x} users.**")
+            await status_msg.edit_text(f"<emoji id='6082375377123023700'>✅</emoji> <b>Successfully unbanned {x} users.</b>")
         except Exception:
             pass
     else:

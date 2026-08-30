@@ -601,7 +601,7 @@ class YouTubeAPI:
         except:
             is_live = True
 
-        # ⚡ 1 HOUR LIMIT BYPASS (>3600 sec)
+        # <emoji id='5258203794772085854'>⚡</emoji> 1 HOUR LIMIT BYPASS (>3600 sec)
         if is_live or duration_sec == 0 or duration_sec > 3600:
             # Cookies-first direct URL resolution for live/long videos.
             cookie_file = await fetch_cookie_file()
@@ -669,7 +669,7 @@ class YouTubeAPI:
                 if direct_url: return direct_url, False
             except: pass
 
-        # ⚡ REGULAR DOWNLOAD (Chunk mode for Zero Error)
+        # <emoji id='5258203794772085854'>⚡</emoji> REGULAR DOWNLOAD (Chunk mode for Zero Error)
         try:
             res = await _core_download(link, is_video)
             return (res, True) if res else (None, False)

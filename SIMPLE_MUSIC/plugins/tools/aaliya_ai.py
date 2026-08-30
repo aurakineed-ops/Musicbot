@@ -79,4 +79,4 @@ async def aaliya_ai(_, message: Message):
         return await message.reply_text(
             f"{_configured_name()} abhi thodi busy hai… thodi der baad phir try karo."
         )
-    return await message.reply_text(f"✦ **{_configured_name()}:**\n\n{answer}")
+    return await message.reply_text(f"✦ <b>{_configured_name()}:</b>\n\n{answer}")

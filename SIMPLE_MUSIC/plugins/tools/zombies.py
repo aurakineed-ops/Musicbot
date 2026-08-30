@@ -56,11 +56,11 @@ async def safe_edit(msg: Message, text: str):
 @app.on_message(filters.command(["zombies"]))
 async def prompt_zombie_cleanup(_: Client, message: Message):
     if not await is_admin(message):
-        return await message.reply("👮🏻 | **Only admins can execute this command.**")
+        return await message.reply("👮🏻 | <b>Only admins can execute this command.</b>")
 
     deleted_list = await scan_deleted_members(message.chat.id)
     if not deleted_list:
-        return await message.reply("⟳ | **No deleted accounts found in this chat.**")
+        return await message.reply("⟳ | <b>No deleted accounts found in this chat.</b>")
 
     total = len(deleted_list)
     est_time = max(1, total // 5)
@@ -69,7 +69,7 @@ async def prompt_zombie_cleanup(_: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("✅ Yes, Clean", callback_data=f"confirm_zombies:{message.chat.id}", **_get_style(r1)),
+                InlineKeyboardButton("<emoji id='6082375377123023700'>✅</emoji> Yes, Clean", callback_data=f"confirm_zombies:{message.chat.id}", **_get_style(r1)),
                 InlineKeyboardButton("❌ Cancel", callback_data="cancel_zombies", **_get_style(r2)),
             ]
         ]
@@ -77,8 +77,8 @@ async def prompt_zombie_cleanup(_: Client, message: Message):
 
     await message.reply(
         (
-            f"⚠️ | **Found `{total}` deleted accounts.**\n"
-            f"⏳ | **Estimated cleanup time:** `{est_time}s`\n\n"
+            f"<emoji id='6098337704682984714'>⚠</emoji>️ | <b>Found `{total}` deleted accounts.</b>\n"
+            f"⏳ | <b>Estimated cleanup time:</b> `{est_time}s`\n\n"
             "Do you want to clean them?"
         ),
         reply_markup=keyboard,
@@ -93,18 +93,18 @@ async def execute_zombie_cleanup(_: Client, cq: CallbackQuery):
         return await cq.answer("👮🏻 | Only admins can confirm this action.", show_alert=True)
 
     if chat_id in chatQueue:
-        return await cq.answer("⚠️ | Cleanup already in progress.", show_alert=True)
+        return await cq.answer("<emoji id='6098337704682984714'>⚠</emoji>️ | Cleanup already in progress.", show_alert=True)
 
     bot_me = await app.get_chat_member(chat_id, "self")
     if bot_me.status != ChatMemberStatus.ADMINISTRATOR:
-        return await cq.edit_message_text("➠ | **I need admin rights to remove deleted accounts.**")
+        return await cq.edit_message_text("➠ | <b>I need admin rights to remove deleted accounts.</b>")
 
     chatQueue.add(chat_id)
     deleted_list = await scan_deleted_members(chat_id)
     total = len(deleted_list)
 
     status = await cq.edit_message_text(
-        f"🧭 | **Found `{total}` deleted accounts.**\n🥀 | **Starting cleanup...**"
+        f"<emoji id='5433825729060018456'>🧭</emoji> | <b>Found `{total}` deleted accounts.</b>\n<emoji id='5208923808169222461'>🥀</emoji> | <b>Starting cleanup...</b>"
     )
 
     removed = 0
@@ -129,15 +129,15 @@ async def execute_zombie_cleanup(_: Client, cq: CallbackQuery):
     for i in range(0, len(tasks), batch_size):
         results = await asyncio.gather(*tasks[i:i + batch_size], return_exceptions=True)
         removed += sum(1 for r in results if r is True)
-        await safe_edit(status, f"♻️ | **Removed {removed}/{total} deleted accounts...**")
+        await safe_edit(status, f"<emoji id='5803057229909202251'>♻</emoji>️ | <b>Removed {removed}/{total} deleted accounts...</b>")
         await asyncio.sleep(2)
 
     chatQueue.discard(chat_id)
-    await safe_edit(status, f"✅ | **Successfully removed `{removed}` out of `{total}` zombies.**")
+    await safe_edit(status, f"<emoji id='6082375377123023700'>✅</emoji> | <b>Successfully removed `{removed}` out of `{total}` zombies.</b>")
 
 @app.on_callback_query(filters.regex(r"^cancel_zombies$"))
 async def cancel_zombie_cleanup(_: Client, cq: CallbackQuery):
-    await cq.edit_message_text("❌ | **Cleanup cancelled.**")
+    await cq.edit_message_text("❌ | <b>Cleanup cancelled.</b>")
 
 @app.on_message(filters.command(["admins", "staff"]))
 async def list_admins(_: Client, message: Message):
@@ -148,9 +148,9 @@ async def list_admins(_: Client, message: Message):
                 continue
             (owners if m.status == ChatMemberStatus.OWNER else admins).append(m.user)
 
-        txt = f"**Group Staff – {message.chat.title}**\n\n"
-        owner_line = owners[0].mention if owners else "<i>Hidden</i>"
-        txt += f"👑 Owner\n└ {owner_line}\n\n👮🏻 Admins\n"
+        txt = f"<b>Group Staff – {message.chat.title}</b>\n\n"
+        owner_line = owners[0].mention if owners else "__Hidden__"
+        txt += f"<emoji id='5217822164362739968'>👑</emoji> Owner\n└ {owner_line}\n\n👮🏻 Admins\n"
 
         if not admins:
             txt += "└ <i>No visible admins</i>"
@@ -158,7 +158,7 @@ async def list_admins(_: Client, message: Message):
             for i, adm in enumerate(admins):
                 branch = "└" if i == len(admins) - 1 else "├"
                 txt += f"{branch} {'@'+adm.username if adm.username else adm.mention}\n"
-        txt += f"\n✅ | **Total Admins**: {len(owners) + len(admins)}"
+        txt += f"\n<emoji id='6082375377123023700'>✅</emoji> | <b>Total Admins</b>: {len(owners) + len(admins)}"
         await app.send_message(message.chat.id, txt)
     except FloodWait as e:
         await asyncio.sleep(e.value)
@@ -167,11 +167,11 @@ async def list_admins(_: Client, message: Message):
 async def list_bots(_: Client, message: Message):
     try:
         bots = [b.user async for b in app.get_chat_members(message.chat.id, filter=enums.ChatMembersFilter.BOTS)]
-        txt = f"**Bot List – {message.chat.title}**\n\n🤖 Bots\n"
+        txt = f"<b>Bot List – {message.chat.title}</b>\n\n<emoji id='5309832892262654231'>🤖</emoji> Bots\n"
         for i, bt in enumerate(bots):
             branch = "└" if i == len(bots) - 1 else "├"
             txt += f"{branch} @{bt.username}\n"
-        txt += f"\n✅ | **Total Bots**: {len(bots)}"
+        txt += f"\n<emoji id='6082375377123023700'>✅</emoji> | <b>Total Bots</b>: {len(bots)}"
         await app.send_message(message.chat.id, txt)
     except FloodWait as e:
         await asyncio.sleep(e.value)

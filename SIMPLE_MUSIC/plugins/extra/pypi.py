@@ -61,9 +61,9 @@ def pypi_info_command(client, message):
 
             # Creating a message with PyPI information
             info_message = (
-                f"📦 **ᴘᴀᴄᴋᴀɢᴇ ɴᴀᴍᴇ** ➪ `{name}`\n\n"
-                f"🏷 **Lᴀᴛᴇsᴛ ᴠᴇʀsɪᴏɴ** ➪ `{version}`\n\n"
-                f"📝 **Dᴇsᴄʀɪᴘᴛɪᴏɴ** ➪ {summary}"
+                f"<emoji id='5990004971481862273'>📦</emoji> <b>ᴘᴀᴄᴋᴀɢᴇ ɴᴀᴍᴇ</b> ➪ `{name}`\n\n"
+                f"<emoji id='5296678515536581003'>🏷</emoji> <b>Lᴀᴛᴇsᴛ ᴠᴇʀsɪᴏɴ</b> ➪ `{version}`\n\n"
+                f"📝 <b>Dᴇsᴄʀɪᴘᴛɪᴏɴ</b> ➪ {summary}"
             )
             
             r1, r2 = random.choices(STYLES, k=2)
@@ -77,7 +77,7 @@ def pypi_info_command(client, message):
         
         else:
             # Handling the case where information retrieval failed
-            client.send_message(message.chat.id, "❌ **Failed to fetch information from PyPI.**")
+            client.send_message(message.chat.id, "❌ <b>Failed to fetch information from PyPI.</b>")
     
     except IndexError:
-        client.send_message(message.chat.id, "⚠️ **Please provide a package name after the /pypi command.**")
+        client.send_message(message.chat.id, "<emoji id='6098337704682984714'>⚠</emoji>️ <b>Please provide a package name after the /pypi command.</b>")

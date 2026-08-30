@@ -36,10 +36,10 @@ def _get_style(style_val):
 
 def stream_caption(title, duration, requester):
     return (
-        "<b>🎬 sᴛʀᴇᴀᴍ ʜᴀs sᴛᴀʀᴛᴇᴅ. ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ |</b>\n"
-        f"<b>🎧 ᴛɪᴛʟᴇ :</b> {title}\n"
+        "<b><emoji id='5368653135101310687'>🎬</emoji> sᴛʀᴇᴀᴍ ʜᴀs sᴛᴀʀᴛᴇᴅ. ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ |</b>\n"
+        f"<b><emoji id='5303115116735119005'>🎧</emoji> ᴛɪᴛʟᴇ :</b> {title}\n"
         f"<b>⏱️ ʟᴇɴɢᴛʜ :</b> {duration} ᴍɪɴs\n"
-        f"<b>🥀 ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}"
+        f"<b><emoji id='5208923808169222461'>🥀</emoji> ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}"
     )
 
 

@@ -104,7 +104,7 @@ async def bin_lookup(bin_number):
                     country_flag = bin_info.get("country_flag", "")
                     
                     bin_info_text = f"""
-𝗕𝗶𝗻 𝗟𝗼𝗼𝗸𝘂𝗽 𝗥𝗲𝘀𝘂𝗹𝘁 🔍
+𝗕𝗶𝗻 𝗟𝗼𝗼𝗸𝘂𝗽 𝗥𝗲𝘀𝘂𝗹𝘁 <emoji id='5231012545799666522'>🔍</emoji>
 
 [ϟ] 𝗕𝗶𝗻: <code>{bin_number}</code>
 [ϟ] 𝗜𝗻𝗳𝗼: {brand} - {card_type} - {level}
@@ -126,11 +126,11 @@ async def generate_cc(client, message):
         text = message.text.split()[1]
         amount = int(message.text.split()[2])
     else:
-        await message.reply("𝗜𝗡𝗩𝗔𝗟𝗜𝗗 𝗙𝗢𝗥𝗠𝗔𝗧 ⚠️", parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True)
+        await message.reply("𝗜𝗡𝗩𝗔𝗟𝗜𝗗 𝗙𝗢𝗥𝗠𝗔𝗧 <emoji id='6098337704682984714'>⚠</emoji>️", parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True)
         return
 
     if amount > 30000:
-        await message.reply("𝗟𝗜𝗠𝗜𝗧 𝗧𝗢 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘 30000 ⚠️", parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True)
+        await message.reply("𝗟𝗜𝗠𝗜𝗧 𝗧𝗢 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘 30000 <emoji id='6098337704682984714'>⚠</emoji>️", parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True)
         return
 
     params = re.sub('x+', 'x', text).split('|')
@@ -166,7 +166,7 @@ Here is your generated results:
         await message.reply(mess, parse_mode=enums.ParseMode.HTML, disable_web_page_preview=True)
     else:
         mess = f"""
-𝗖𝗖 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘𝗗 ✅
+𝗖𝗖 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘𝗗 <emoji id='6082375377123023700'>✅</emoji>
 
 [ϟ] 𝗔𝗹𝗴𝗼: 𝗟𝘂𝗵𝗻
 [ϟ] 𝗔𝗺𝗼𝘂𝗻𝘁: <code>{amount}</code>

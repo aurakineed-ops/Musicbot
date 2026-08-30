@@ -15,8 +15,8 @@
 n = "\n"
 w = " "
 
-bold = lambda x: f"**{x}:** "
-bold_ul = lambda x: f"**--{x}:**-- "
+bold = lambda x: f"<b>{x}:</b> "
+bold_ul = lambda x: f"<b>--{x}:</b>-- "
 
 mono = lambda x: f"`{x}`{n}"
 

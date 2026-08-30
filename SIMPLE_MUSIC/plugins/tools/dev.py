@@ -115,7 +115,7 @@ async def executor(client: app, message: Message):
                         callback_data=f"runtime {round(t2-t1, 3)} Seconds",
                     ),
                     InlineKeyboardButton(
-                        text="🗑",
+                        text="<emoji id='6280712659000107348'>🗑</emoji>",
                         callback_data=f"forceclose abc|{message.from_user.id}",
                     ),
                 ]

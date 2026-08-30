@@ -33,12 +33,12 @@ def to_small_caps(text):
 # vc on
 @app.on_message(filters.video_chat_started)
 async def brah(_, msg):
-       await msg.reply("👉 **ᴠᴏɪᴄᴇ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ**😍")
+       await msg.reply("<emoji id='5305244857873214182'>👉</emoji> <b>ᴠᴏɪᴄᴇ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ</b><emoji id='5449442513616121857'>😍</emoji>")
 
 # vc off
 @app.on_message(filters.video_chat_ended)
 async def brah2(_, msg):
-       await msg.reply("👉**ᴠᴄ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ**😆")
+       await msg.reply("<emoji id='5305244857873214182'>👉</emoji><b>ᴠᴄ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ</b><emoji id='6053086169770493395'>😆</emoji>")
 
 # invite members on vc (EDITED AS PER IMAGE 23218.jpg)
 @app.on_message(filters.video_chat_members_invited)
@@ -63,7 +63,7 @@ async def brah3(app: app, message: Message):
            invited_members = ", ".join(invited_users_list)
            
            # 📝 Image 23218.jpg ke mutabik naya layout text
-           final_text = f"🎤 {invited_members} **ɢᴏᴛ ᴀɴ ɪɴᴠɪᴛᴇ ғʀᴏᴍ** {inviter_mention} 💌"
+           final_text = f"<emoji id='5382003830487523366'>🎤</emoji> {invited_members} <b>ɢᴏᴛ ᴀɴ ɪɴᴠɪᴛᴇ ғʀᴏᴍ</b> {inviter_mention} <emoji id='5238039443008408242'>💌</emoji>"
            
            try:
                await message.reply(final_text)
@@ -85,9 +85,9 @@ async def calculate_math(client, message: Message):
 
     try:
         result = eval(expression)
-        response = f"✅ **Result:** `{result}`"
+        response = f"<emoji id='6082375377123023700'>✅</emoji> <b>Result:</b> `{result}`"
     except Exception:
-        response = "❌ **Invalid expression**"
+        response = "❌ <b>Invalid expression</b>"
 
     await message.reply_text(response, quote=True)
 

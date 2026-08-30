@@ -171,7 +171,7 @@ async def song_helper_cb(client, cq, lang):
     r1, r2, r3 = random.choices(STYLES, k=3)
     buttons = [
         [InlineKeyboardButton(
-            text="⬇️ Download",
+            text="<emoji id='6098103517296205903'>⬇</emoji>️ Download",
             callback_data=f"song_download {stype}|direct|{vidid}",
             **_get_style(r1)
         )],

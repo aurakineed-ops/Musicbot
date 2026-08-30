@@ -28,9 +28,9 @@ from SIMPLE_MUSIC.utils.database import (
 LOGGER = getLogger(__name__)
 
 WELCOME_VIDEO_URL = "https://files.catbox.moe/9iom66.mp4"
-WELCOME_USAGE = "**ᴜsᴀɢᴇ:**\n**⦿ /wel [on|off]**"
+WELCOME_USAGE = "<b>ᴜsᴀɢᴇ:</b>\n<b>⦿ /wel [on|off]</b>"
 SET_USAGE = (
-    "**Reply to a text, photo, or video with `/set welcome` to save it.**\n\n"
+    "<b>Reply to a text, photo, or video with `/set welcome` to save it.</b>\n\n"
     "Supported placeholders: `{ID}`, `{NAME}`, `{SURNAME}`, `{NAMESURNAME}`, `{LANG}`, "
     "`{DATE}`, `{TIME}`, `{WEEKDAY}`, `{MENTION}`, `{USERNAME}`, `{GROUPNAME}`, `{RULES}`"
 )
@@ -149,20 +149,20 @@ async def auto_state(_, message: Message):
         return await message.reply_text(WELCOME_USAGE)
     member = await app.get_chat_member(message.chat.id, message.from_user.id)
     if not _is_admin(member):
-        return await message.reply_text("**sᴏʀʀʏ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴄʜᴀɴɢᴇ ᴡᴇʟᴄᴏᴍᴇ sᴇᴛᴛɪɴɢs!**")
+        return await message.reply_text("<b>sᴏʀʀʏ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴄʜᴀɴɢᴇ ᴡᴇʟᴄᴏᴍᴇ sᴇᴛᴛɪɴɢs!</b>")
 
     state = message.command[1].strip().lower()
     enabled = await is_welcome_enabled(message.chat.id)
     if state == "off":
         if not enabled:
-            return await message.reply_text("**ᴡᴇʟᴄᴏᴍᴇ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ !**")
+            return await message.reply_text("<b>ᴡᴇʟᴄᴏᴍᴇ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ !</b>")
         await set_welcome_enabled(message.chat.id, False)
-        return await message.reply_text(f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɪɴ** {message.chat.title}")
+        return await message.reply_text(f"<b>ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɪɴ</b> {message.chat.title}")
     if state == "on":
         if enabled:
-            return await message.reply_text("**ᴡᴇʟᴄᴏᴍᴇ ᴀʟʀᴇᴀᴅʏ ᴇɴᴀʙʟᴇᴅ !**")
+            return await message.reply_text("<b>ᴡᴇʟᴄᴏᴍᴇ ᴀʟʀᴇᴀᴅʏ ᴇɴᴀʙʟᴇᴅ !</b>")
         await set_welcome_enabled(message.chat.id, True)
-        return await message.reply_text(f"**ᴇɴᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɪɴ** {message.chat.title}")
+        return await message.reply_text(f"<b>ᴇɴᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɪɴ</b> {message.chat.title}")
     return await message.reply_text(WELCOME_USAGE)
 
 
@@ -172,14 +172,14 @@ async def set_welcome(_, message: Message):
         return
     member = await app.get_chat_member(message.chat.id, message.from_user.id)
     if not _is_admin(member):
-        return await message.reply_text("**sɪʀғ ᴀᴅᴍɪɴ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ sᴇᴛ ᴋᴀʀ sᴀᴋᴛᴇ ʜᴀɪɴ.**")
+        return await message.reply_text("<b>sɪʀғ ᴀᴅᴍɪɴ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ sᴇᴛ ᴋᴀʀ sᴀᴋᴛᴇ ʜᴀɪɴ.</b>")
     if not message.reply_to_message:
         return await message.reply_text(SET_USAGE, parse_mode=ParseMode.MARKDOWN)
     content = await _message_content(message.reply_to_message)
     if not content:
         return await message.reply_text(SET_USAGE, parse_mode=ParseMode.MARKDOWN)
     await set_welcome_message(message.chat.id, content)
-    await message.reply_text("**✅ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ sᴀᴠᴇᴅ.**\nNaye member ke liye ab ye message use hoga.")
+    await message.reply_text("<b><emoji id='6082375377123023700'>✅</emoji> ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ sᴀᴠᴇᴅ.</b>\nNaye member ke liye ab ye message use hoga.")
 
 
 @app.on_message(filters.command("del") & filters.group)
@@ -188,9 +188,9 @@ async def delete_welcome(_, message: Message):
         return
     member = await app.get_chat_member(message.chat.id, message.from_user.id)
     if not _is_admin(member):
-        return await message.reply_text("**sɪʀғ ᴀᴅᴍɪɴ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ ʜᴀᴛᴀ sᴀᴋᴛᴇ ʜᴀɪɴ.**")
+        return await message.reply_text("<b>sɪʀғ ᴀᴅᴍɪɴ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ ʜᴀᴛᴀ sᴀᴋᴛᴇ ʜᴀɪɴ.</b>")
     await clear_welcome_message(message.chat.id)
-    await message.reply_text("**✅ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ ʀᴇᴍᴏᴠᴇᴅ.**\nAb default welcome use hoga.")
+    await message.reply_text("<b><emoji id='6082375377123023700'>✅</emoji> ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ ʀᴇᴍᴏᴠᴇᴅ.</b>\nAb default welcome use hoga.")
 
 
 @app.on_chat_member_updated(filters.group, group=-3)
@@ -211,16 +211,16 @@ async def greet_new_member(_, member: ChatMemberUpdated):
             await _send_custom_welcome(chat_id, custom, user, member.chat.title or "", count)
             return
         caption_text = f"""
-**⎊─────☵ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ☵─────⎊**
-📋 **ɢʀᴏᴜᴘ ⧽** {html.escape(member.chat.title or '')}
-**▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬**
-☉ **ɴᴀᴍᴇ ⧽** {user.mention}
-☉ **ɪᴅ ⧽** `{user.id}`
-☉ **ᴜ_ɴᴀᴍᴇ ⧽** @{html.escape(user.username) if user.username else 'None'}
-☉ **ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs ⧽** {count}
+<b>⎊─────☵ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ☵─────⎊</b>
+<emoji id='5197269100878907942'>📋</emoji> <b>ɢʀᴏᴜᴘ ⧽</b> {html.escape(member.chat.title or '')}
+<b>▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬</b>
+☉ <b>ɴᴀᴍᴇ ⧽</b> {user.mention}
+☉ <b>ɪᴅ ⧽</b> `{user.id}`
+☉ <b>ᴜ_ɴᴀᴍᴇ ⧽</b> @{html.escape(user.username) if user.username else 'None'}
+☉ <b>ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs ⧽</b> {count}
 
-**▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬**
-**⎉──────▢✭ 侖 ✭▢──────⎉**
+<b>▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬</b>
+<b>⎉──────▢✭ 侖 ✭▢──────⎉</b>
 """
         await app.send_video(
             chat_id,

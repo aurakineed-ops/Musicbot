@@ -45,7 +45,7 @@ def love_command(client, message):
         love_percentage = random.randint(10, 100)
         love_message = get_random_message(love_percentage)
 
-        response = f"{name1}💕 + {name2}💕 = {love_percentage}%\n\n{love_message}"
+        response = f"{name1}<emoji id='5219862119209520083'>💕</emoji> + {name2}<emoji id='5219862119209520083'>💕</emoji> = {love_percentage}%\n\n{love_message}"
     else:
         response = "Please enter two names after /love command."
     app.send_message(message.chat.id, response)

@@ -76,19 +76,19 @@ async def sudoers_list(client, message: Message):
     keyboard = [[InlineKeyboardButton("๏ ᴠɪᴇᴡ sᴜᴅᴏʟɪsᴛ ๏", callback_data="check_sudo_list", **_get_style(r1))]]
     reply_markups = InlineKeyboardMarkup(keyboard)
     
-    await message.reply_photo(photo="https://img.sanishtech.com/u/634954cfa576380fda54874a69b96c05.jpg", caption="**» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.**\n\n**» ɴᴏᴛᴇ:**  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markups)
+    await message.reply_photo(photo="https://img.sanishtech.com/u/634954cfa576380fda54874a69b96c05.jpg", caption="<b>» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.</b>\n\n<b>» ɴᴏᴛᴇ:</b>  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markups)
     
 
 @app.on_callback_query(filters.regex("^check_sudo_list$"))
 async def check_sudo_list(client, callback_query: CallbackQuery):
     keyboard = []
     if callback_query.from_user.id not in SUDOERS:
-        return await callback_query.answer("𝗡𝗶𝗸𝗮𝗹 𝗕𝘀𝗱𝗸 😂 𝗦𝘂𝗱𝗼𝗹𝗶𝘀𝘁 𝗗𝗲𝗸𝗵𝗻𝗲 𝗔𝘆𝗮 𝗛𝗮𝗶 𝗕𝗮𝗱𝗮 🤣 𝗞𝗼𝗶 𝗞𝗮𝗮𝗺 𝗞𝗿𝗹𝗲 𝗝𝗮𝗸𝗲 🖕😎😂", show_alert=True)
+        return await callback_query.answer("𝗡𝗶𝗸𝗮𝗹 𝗕𝘀𝗱𝗸 <emoji id='5393313205227366608'>😂</emoji> 𝗦𝘂𝗱𝗼𝗹𝗶𝘀𝘁 𝗗𝗲𝗸𝗵𝗻𝗲 𝗔𝘆𝗮 𝗛𝗮𝗶 𝗕𝗮𝗱𝗮 <emoji id='5458587027270280607'>🤣</emoji> 𝗞𝗼𝗶 𝗞𝗮𝗮𝗺 𝗞𝗿𝗹𝗲 𝗝𝗮𝗸𝗲 <emoji id='5319098279181431124'>🖕</emoji><emoji id='5258073279305889554'>😎</emoji><emoji id='5393313205227366608'>😂</emoji>", show_alert=True)
     else:
         user = await app.get_users(OWNER_ID)
 
         user_mention = (user.first_name if not user.mention else user.mention)
-        caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n**🌹Oᴡɴᴇʀ** ➥ {user_mention}\n\n"
+        caption = f"<b>˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼</b>\n\n<b><emoji id='6102617459204822706'>🌹</emoji>Oᴡɴᴇʀ</b> ➥ {user_mention}\n\n"
 
         r_owner = random.choice(STYLES)
         keyboard.append([InlineKeyboardButton("๏ ᴠɪᴇᴡ ᴏᴡɴᴇʀ ๏", url=f"tg://openmessage?user_id={OWNER_ID}", **_get_style(r_owner))])
@@ -98,8 +98,8 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
             if user_id != OWNER_ID:
                 try:
                     user = await app.get_users(user_id)
-                    user_mention = user.mention if user else f"**🎁 Sᴜᴅᴏ {count} ɪᴅ:** {user_id}"
-                    caption += f"**🎁 Sᴜᴅᴏ** {count} **»** {user_mention}\n"
+                    user_mention = user.mention if user else f"<b><emoji id='5384490809825450636'>🎁</emoji> Sᴜᴅᴏ {count} ɪᴅ:</b> {user_id}"
+                    caption += f"<b><emoji id='5384490809825450636'>🎁</emoji> Sᴜᴅᴏ</b> {count} <b>»</b> {user_mention}\n"
                     button_text = f"๏ ᴠɪᴇᴡ sᴜᴅᴏ {count} ๏ "
                     r_sudo = random.choice(STYLES)
                     keyboard.append([InlineKeyboardButton(button_text, url=f"tg://openmessage?user_id={user_id}", **_get_style(r_sudo))])
@@ -120,7 +120,7 @@ async def back_to_main_menu(client, callback_query: CallbackQuery):
     r1 = random.choice(STYLES)
     keyboard = [[InlineKeyboardButton("๏ ᴠɪᴇᴡ sᴜᴅᴏʟɪsᴛ ๏", callback_data="check_sudo_list", **_get_style(r1))]]
     reply_markupes = InlineKeyboardMarkup(keyboard)
-    await callback_query.message.edit_caption(caption="**» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.**\n\n**» ɴᴏᴛᴇ:**  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markupes)
+    await callback_query.message.edit_caption(caption="<b>» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.</b>\n\n<b>» ɴᴏᴛᴇ:</b>  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markupes)
 
 
 @app.on_message(filters.command(["delallsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
