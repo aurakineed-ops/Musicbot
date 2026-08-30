@@ -54,6 +54,8 @@ async def cute(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -76,7 +78,7 @@ async def cute(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 

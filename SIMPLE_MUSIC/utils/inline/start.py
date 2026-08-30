@@ -73,7 +73,7 @@ def private_panel(_):
         [
             InlineKeyboardButton(
                 text=_["S_B_5"],
-                url=f"tg://user?id={config.OWNER_ID}",
+                url=f"tg://openmessage?user_id={config.OWNER_ID}",
                 icon_custom_emoji_id="6104953285758689029",
                 **get_style(1)
             ),

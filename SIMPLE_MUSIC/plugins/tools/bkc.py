@@ -37,6 +37,8 @@ async def cutie(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -59,7 +61,7 @@ async def cutie(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 
@@ -82,6 +84,8 @@ async def horny(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -104,7 +108,7 @@ async def horny(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     HORNE = f"<emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm} % ʜᴏʀɴʏ!"
 
@@ -127,6 +131,8 @@ async def hot(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -149,7 +155,7 @@ async def hot(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     HOTIE = f"<emoji id='6086954744268460848'>🔥</emoji>{mention} ɪꜱ {mm}% ʜᴏᴛ!"
 
@@ -172,6 +178,8 @@ async def sexy(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -194,7 +202,7 @@ async def sexy(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     SEXO = f" <emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm}% sexy!"
     await app.send_document (
@@ -215,6 +223,8 @@ async def gay(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -237,7 +247,7 @@ async def gay(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     GAYE = f" <emoji id='5361964771509808811'>🍷</emoji> {mention} ɪꜱ {mm}% ɢᴀʏ!"
     await app.send_document (
@@ -258,6 +268,8 @@ async def lesbian(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -280,7 +292,7 @@ async def lesbian(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     LEZBIAN = f" <emoji id='5283077114319347060'>💜</emoji> {mention} ɪꜱ {mm}% ʟᴇꜱʙɪᴀɴ!"
     await app.send_document (
@@ -302,6 +314,8 @@ async def boob(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -324,7 +338,7 @@ async def boob(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     BALL = f" <emoji id='5415722218569089767'>🍒</emoji> {mention}ꜱ ʙᴏᴏʙꜱ ꜱɪᴢᴇ ɪᴢ {mm} ! "
     await app.send_document (
@@ -346,6 +360,8 @@ async def cock(_, message):
         target_username = message.command[1][1:]
         try:
             target_user = await app.get_users(target_username)
+            if not target_user.username or target_user.username.lower() != target_username.lower():
+                return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ᴠᴇʀɪғʏ ᴛʜᴀᴛ ᴜꜱᴇʀ, ᴛʀʏ ʀᴇᴘʟʏɪɴɢ ᴛᴏ ᴛʜᴇɪʀ ᴍᴇꜱꜱᴀɢᴇ ɪɴꜱᴛᴇᴀᴅ!")
             user_id = target_user.id
             user_name = target_user.first_name
         except Exception:
@@ -368,7 +384,7 @@ async def cock(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = f"[{user_name}](tg://user?id={str(user_id)})"
+    mention = user_name
     mm = random.randint(1, 100)
     BAT = f" <emoji id='5847995391122869577'>🍆</emoji> {mention}  ᴄᴏᴄᴋ ꜱɪᴢᴇ ɪᴢ {mm}ᴄᴍ"
     await app.send_document (
