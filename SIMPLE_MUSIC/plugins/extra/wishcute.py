@@ -47,12 +47,34 @@ CUTIE = "https://64.media.tumblr.com/d701f53eb5681e87a957a547980371d2/tumblr_nbj
 
 @app.on_message(filters.command("cute"))
 async def cute(_, message):
-    if not message.reply_to_message:
-        user_id = message.from_user.id
-        user_name = message.from_user.first_name
-    else:
+    if message.reply_to_message:
         user_id = message.reply_to_message.from_user.id
         user_name = message.reply_to_message.from_user.first_name
+    elif len(message.command) > 1 and message.command[1].startswith("@"):
+        target_username = message.command[1][1:]
+        try:
+            target_user = await app.get_users(target_username)
+            user_id = target_user.id
+            user_name = target_user.first_name
+        except Exception:
+            return await message.reply("<emoji id='5472267631979405211'>🚫</emoji> ᴄᴏᴜʟᴅɴ'ᴛ ғɪɴᴅ ᴛʜᴀᴛ ᴜꜱᴇʀ!")
+    elif message.entities:
+        target_id = None
+        target_name = None
+        for entity in message.entities:
+            if entity.type.name == "TEXT_MENTION":
+                target_id = entity.user.id
+                target_name = entity.user.first_name
+                break
+        if target_id:
+            user_id = target_id
+            user_name = target_name
+        else:
+            user_id = message.from_user.id
+            user_name = message.from_user.first_name
+    else:
+        user_id = message.from_user.id
+        user_name = message.from_user.first_name
 
     mention = f"[{user_name}](tg://user?id={str(user_id)})"
     mm = random.randint(1, 100)

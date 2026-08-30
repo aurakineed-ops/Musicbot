@@ -65,7 +65,7 @@ async def join_watcher(_, message):
             )
             r1 = random.choice(STYLES)
             markup = InlineKeyboardMarkup([
-                [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ<emoji id='5208841018379612211'>👀</emoji>", url=link, **_get_style(r1))]
+                [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ👀", url=link, **_get_style(r1))]
             ]) if link else None
             await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=markup)
 

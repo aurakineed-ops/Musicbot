@@ -36,7 +36,7 @@ whisper_db = {}
 
 def get_switch_btn():
     r1 = random.choice(STYLES)
-    return InlineKeyboardMarkup([[InlineKeyboardButton("<emoji id='5262922516426420894'>💒</emoji> Start Whisper", switch_inline_query_current_chat="", **_get_style(r1))]])
+    return InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat="", **_get_style(r1))]])
 
 async def _whisper(_, inline_query):
     data = inline_query.query
@@ -74,7 +74,7 @@ async def _whisper(_, inline_query):
         
         try:
             r1, r2 = random.choices(STYLES, k=2)
-            whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("<emoji id='5262922516426420894'>💒</emoji> Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}", **_get_style(r1))]])
+            whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}", **_get_style(r1))]])
             one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}_one", **_get_style(r2))]])
             mm = [
                 InlineQueryResultArticle(
@@ -127,7 +127,7 @@ async def whispes_cb(_, query):
         msg = "<emoji id='5472267631979405211'>🚫</emoji> Error!\n\nWhisper has been deleted from the database!"
     
     r1 = random.choice(STYLES)
-    SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline <emoji id='6208711264609246951'>🪝</emoji>", switch_inline_query_current_chat="", **_get_style(r1))]])
+    SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="", **_get_style(r1))]])
     
     await query.answer(msg, show_alert=True)
     

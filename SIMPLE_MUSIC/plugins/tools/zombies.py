@@ -69,7 +69,7 @@ async def prompt_zombie_cleanup(_: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("<emoji id='6082375377123023700'>✅</emoji> Yes, Clean", callback_data=f"confirm_zombies:{message.chat.id}", **_get_style(r1)),
+                InlineKeyboardButton("✅ Yes, Clean", callback_data=f"confirm_zombies:{message.chat.id}", **_get_style(r1)),
                 InlineKeyboardButton("❌ Cancel", callback_data="cancel_zombies", **_get_style(r2)),
             ]
         ]

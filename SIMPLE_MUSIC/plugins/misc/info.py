@@ -79,7 +79,7 @@ async def userinfo(_, message: Message):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton("<emoji id='5373012449597335010'>👤</emoji> ᴜsᴇʀ ᴘʀᴏғɪʟᴇ", url=profile_url)
+                        InlineKeyboardButton("👤 ᴜsᴇʀ ᴘʀᴏғɪʟᴇ", url=profile_url)
                     ],
                     [
                         InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")

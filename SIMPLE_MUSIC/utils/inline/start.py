@@ -37,11 +37,13 @@ def start_panel(_):
             InlineKeyboardButton(
                 text=_["S_B_1"], 
                 url=f"https://t.me/{app.username}?startgroup=true",
+                icon_custom_emoji_id="6106976571837389806",
                 **get_style()
             ),
             InlineKeyboardButton(
                 text=_["S_B_2"], 
                 url=config.SUPPORT_CHAT,
+                icon_custom_emoji_id="6107010613748177541",
                 **get_style()
             ),
         ],
@@ -64,6 +66,7 @@ def private_panel(_):
             InlineKeyboardButton(
                 text=_["S_B_3"],
                 url=f"https://t.me/{app.username}?startgroup=true",
+                icon_custom_emoji_id="6106976571837389806",
                 **get_style(0)
             )
         ],
@@ -71,11 +74,13 @@ def private_panel(_):
             InlineKeyboardButton(
                 text=_["S_B_5"],
                 url=f"tg://user?id={config.OWNER_ID}",
+                icon_custom_emoji_id="6104953285758689029",
                 **get_style(1)
             ),
             InlineKeyboardButton(
                 text=_["S_B_10"], 
                 callback_data="api_status",
+                icon_custom_emoji_id="5305282241268569732",
                 **get_style(1)
             ),
         ],
@@ -83,11 +88,13 @@ def private_panel(_):
             InlineKeyboardButton(
                 text=_["S_B_2"], 
                 url=config.SUPPORT_CHAT,
+                icon_custom_emoji_id="6107010613748177541",
                 **get_style(2)
             ),
             InlineKeyboardButton(
                 text=_["S_B_6"], 
                 url=config.SUPPORT_CHANNEL,
+                icon_custom_emoji_id="5325773869540205894",
                 **get_style(2)
             ),
         ],
@@ -95,6 +102,7 @@ def private_panel(_):
             InlineKeyboardButton(
                 text=_["S_B_4"], 
                 callback_data="settingsback_helper",
+                icon_custom_emoji_id="5989830505615331276",
                 **get_style(3)
             )
         ],
