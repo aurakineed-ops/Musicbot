@@ -69,7 +69,7 @@ async def cutie(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 
@@ -124,7 +124,7 @@ async def horny(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     HORNE = f"<emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm} % ʜᴏʀɴʏ!"
 
@@ -179,7 +179,7 @@ async def hot(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     HOTIE = f"<emoji id='6086954744268460848'>🔥</emoji>{mention} ɪꜱ {mm}% ʜᴏᴛ!"
 
@@ -234,7 +234,7 @@ async def sexy(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     SEXO = f" <emoji id='6086954744268460848'>🔥</emoji> {mention} ɪꜱ {mm}% sexy!"
     try:
@@ -292,7 +292,7 @@ async def gay(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     GAYE = f" <emoji id='5361964771509808811'>🍷</emoji> {mention} ɪꜱ {mm}% ɢᴀʏ!"
     try:
@@ -350,7 +350,7 @@ async def lesbian(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     LEZBIAN = f" <emoji id='5283077114319347060'>💜</emoji> {mention} ɪꜱ {mm}% ʟᴇꜱʙɪᴀɴ!"
     try:
@@ -409,7 +409,7 @@ async def boob(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     BALL = f" <emoji id='5415722218569089767'>🍒</emoji> {mention}ꜱ ʙᴏᴏʙꜱ ꜱɪᴢᴇ ɪᴢ {mm} ! "
     try:
@@ -468,7 +468,7 @@ async def cock(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     BAT = f" <emoji id='5847995391122869577'>🍆</emoji> {mention}  ᴄᴏᴄᴋ ꜱɪᴢᴇ ɪᴢ {mm}ᴄᴍ"
     try:

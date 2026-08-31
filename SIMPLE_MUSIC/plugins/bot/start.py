@@ -1,5 +1,7 @@
 import asyncio
+import random
 import time
+import requests
 from html import escape
 from pyrogram import filters
 from pyrogram.enums import ChatType
@@ -27,6 +29,68 @@ from strings import get_string
 
 # <emoji id='6082375377123023700'>✅</emoji> Purana tareeqa: Wapas START_IMG_URL import kar diya
 from config import BANNED_USERS, START_IMG_URL
+
+# 💖 Heart effect on /start (private chats only)
+HEART_EFFECTS = ["5159385139981059251"]
+FALLBACK_EFFECTS = ["💖", "❤️", "💗", "💓", "💞", "💕", "💝"]
+
+
+async def delete_effect_message(chat_id: int, message_id: int):
+    await asyncio.sleep(2)
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{config.BOT_TOKEN}/deleteMessage",
+            json={"chat_id": chat_id, "message_id": message_id},
+            timeout=5,
+        )
+    except Exception:
+        pass
+
+
+async def send_heart_effect_private(chat_id: int, retries: int = 3):
+    """Sends a floating heart-effect message that auto-deletes, private chats only."""
+    for _attempt in range(retries):
+        try:
+            effect_id = random.choice(HEART_EFFECTS)
+            emoji = random.choice(FALLBACK_EFFECTS)
+            response = requests.post(
+                f"https://api.telegram.org/bot{config.BOT_TOKEN}/sendMessage",
+                json={"chat_id": chat_id, "text": emoji, "message_effect_id": effect_id},
+                headers={"Content-Type": "application/json"},
+                timeout=10,
+            )
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("ok"):
+                    message_id = data.get("result", {}).get("message_id")
+                    if message_id:
+                        asyncio.create_task(delete_effect_message(chat_id, message_id))
+                        return True
+            await asyncio.sleep(0.5)
+        except Exception:
+            await asyncio.sleep(0.5)
+    return False
+
+
+async def send_welcome_animation(message: Message):
+    """Small 'Welcome Baby' cycling text animation before the real start message."""
+    welcome_msgs = [
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. ⚣",
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. 🥳",
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. 💥",
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. 🤩",
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. 💌",
+        "Wᴇʟᴄᴏᴍᴇ Bᴀʙʏ ꨄ {}.. 💞",
+    ]
+    try:
+        lol = await message.reply_text(welcome_msgs[0].format(message.from_user.mention))
+        for msg in welcome_msgs[1:]:
+            await asyncio.sleep(0.3)
+            await lol.edit_text(msg.format(message.from_user.mention))
+        await asyncio.sleep(1.5)
+        await lol.delete()
+    except Exception:
+        pass
 
 async def send_logs_bg(message, text_type="started"):
     if await is_on_off(2):
@@ -104,6 +168,16 @@ async def start_pm(client, message: Message):
             )
             asyncio.create_task(send_logs_bg(message, "info"))
     else:
+        # Reaction
+        try:
+            await message.react(random.choice(FALLBACK_EFFECTS))
+        except Exception:
+            pass
+
+        # 💖 Heart effect + welcome animation (private only)
+        asyncio.create_task(send_heart_effect_private(message.chat.id))
+        await send_welcome_animation(message)
+
         out = private_panel(_)
         await client.send_photo(
             chat_id=message.chat.id,

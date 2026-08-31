@@ -86,7 +86,7 @@ async def cute(_, message):
         user_id = message.from_user.id
         user_name = message.from_user.first_name
 
-    mention = user_name
+    mention = f"<a href='tg://openmessage?user_id={user_id}'>{user_name}</a>"
     mm = random.randint(1, 100)
     CUTE = f"<emoji id='5852518588686011408'>🍑</emoji> {mention} {mm}% ᴄᴜᴛᴇ ʙᴀʙʏ<emoji id='5208923808169222461'>🥀</emoji>"
 

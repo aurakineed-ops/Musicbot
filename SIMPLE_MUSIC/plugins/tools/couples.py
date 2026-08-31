@@ -11,170 +11,147 @@
 #
 # ❤️ Made with dedication and love by Aaliya Music Bot
 # -----------------------------------------------
-import os 
+import os
 import random
-from datetime import datetime 
-from telegraph import upload_file
-from PIL import Image , ImageDraw
-from pyrogram import *
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.enums import *
+from datetime import datetime, timedelta
+from pathlib import Path
 
-#BOT FILE NAME
-from SIMPLE_MUSIC import app as app
-from SIMPLE_MUSIC.mongo.couples_db import _get_image, get_couple
+from PIL import Image, ImageDraw, UnidentifiedImageError
+from pyrogram import errors, filters
+from pyrogram.enums import ChatType
+from pyrogram.types import Message
 
-POLICE = [
-    [
-        InlineKeyboardButton(
-            text="𝗦𝗨𝗣𝗣𝗢𝗥𝗧",
-            url=f"https://t.me/+wcALPiJtMCQ0NWFh",
-        ),
-    ],
-]
+from SIMPLE_MUSIC import app
+from SIMPLE_MUSIC.mongo.couples_db import get_couple, save_couple
 
 
-def dt():
-    now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M")
-    dt_list = dt_string.split(" ")
-    return dt_list
-    
+ASSETS = Path("SIMPLE_MUSIC/assets")
+FALLBACK = ASSETS / "upic.png"
+COUPLE_BG = ASSETS / "cppic.png"
+OUT_DIR = Path("downloads")
 
-def dt_tom():
-    a = (
-        str(int(dt()[0].split("/")[0]) + 1)
-        + "/"
-        + dt()[0].split("/")[1]
-        + "/"
-        + dt()[0].split("/")[2]
-    )
-    return a
 
-tomorrow = str(dt_tom())
-today = str(dt()[0])
+def today() -> str:
+    return datetime.now().strftime("%d/%m/%Y")
+
+
+def tomorrow() -> str:
+    return (datetime.now() + timedelta(days=1)).strftime("%d/%m/%Y")
+
+
+def circular(path) -> Image.Image:
+    try:
+        img = Image.open(path).convert("RGBA").resize((437, 437))
+    except (FileNotFoundError, UnidentifiedImageError):
+        img = Image.open(FALLBACK).convert("RGBA").resize((437, 437))
+    mask = Image.new("L", img.size, 0)
+    ImageDraw.Draw(mask).ellipse((0, 0) + img.size, fill=255)
+    img.putalpha(mask)
+    return img
+
+
+async def safe_get_user(uid: int):
+    try:
+        return await app.get_users(uid)
+    except errors.PeerIdInvalid:
+        return None
+    except Exception:
+        return None
+
+
+async def safe_photo(uid: int, name: str):
+    try:
+        chat = await app.get_chat(uid)
+        if chat.photo and chat.photo.big_file_id:
+            path = await app.download_media(chat.photo.big_file_id, file_name=str(OUT_DIR / name))
+            return Path(path) if path else FALLBACK
+    except Exception:
+        pass
+    return FALLBACK
+
+
+async def generate_image(chat_id: int, uid1: int, uid2: int, date: str) -> str:
+    base = Image.open(COUPLE_BG).convert("RGBA")
+    p1 = await safe_photo(uid1, "pfp1.png")
+    p2 = await safe_photo(uid2, "pfp2.png")
+
+    a1 = circular(p1)
+    a2 = circular(p2)
+    base.paste(a1, (116, 160), a1)
+    base.paste(a2, (789, 160), a2)
+
+    out_path = OUT_DIR / f"couple_{chat_id}_{date.replace('/', '-')}.png"
+    base.save(out_path)
+
+    for pf in (p1, p2):
+        try:
+            if pf != FALLBACK and pf.exists() and pf.parent == OUT_DIR:
+                pf.unlink()
+        except Exception:
+            pass
+
+    return str(out_path)
+
 
 @app.on_message(filters.command("couples"))
-async def ctest(_, message):
-    cid = message.chat.id
+async def couples_handler(_, message: Message):
     if message.chat.type == ChatType.PRIVATE:
-        return await message.reply_text("ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴏɴʟʏ ᴡᴏʀᴋs ɪɴ ɢʀᴏᴜᴘs.")
-    try:
-     #  is_selected = await get_couple(cid, today)
-     #  if not is_selected:
-         msg = await message.reply_text("ɢᴇɴᴇʀᴀᴛɪɴɢ ᴄᴏᴜᴘʟᴇs ɪᴍᴀɢᴇ...")
-         #GET LIST OF USERS
-         list_of_users = []
+        return await message.reply("<b>ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴏɴʟʏ ᴡᴏʀᴋs ɪɴ ɢʀᴏᴜᴘs.</b>")
 
-         async for i in app.get_chat_members(message.chat.id, limit=50):
-             if not i.user.is_bot:
-               list_of_users.append(i.user.id)
+    wait = await message.reply("<emoji id='5316558987141852841'>🦋</emoji>")
+    cid = message.chat.id
+    date = today()
 
-         c1_id = random.choice(list_of_users)
-         c2_id = random.choice(list_of_users)
-         while c1_id == c2_id:
-              c1_id = random.choice(list_of_users)
+    record = await get_couple(cid, date)
+    user1 = user2 = None
+    img_path = None
 
+    if record:
+        uid1, uid2, img_path = record["c1_id"], record["c2_id"], record.get("img")
+        user1 = await safe_get_user(uid1)
+        user2 = await safe_get_user(uid2)
 
-         photo1 = (await app.get_chat(c1_id)).photo
-         photo2 = (await app.get_chat(c2_id)).photo
- 
-         N1 = (await app.get_users(c1_id)).mention 
-         N2 = (await app.get_users(c2_id)).mention
-         
-         try:
-            p1 = await app.download_media(photo1.big_file_id, file_name="pfp.png")
-         except Exception:
-            p1 = "SIMPLE_MUSIC/assets/upic.png"
-         try:
-            p2 = await app.download_media(photo2.big_file_id, file_name="pfp1.png")
-         except Exception:
-            p2 = "SIMPLE_MUSIC/assets/upic.png"
-            
-         img1 = Image.open(f"{p1}")
-         img2 = Image.open(f"{p2}")
+        if not (user1 and user2) or not img_path or not Path(img_path).exists():
+            record = None
 
-         img = Image.open("SIMPLE_MUSIC/assets/cppic.png")
+    if not record:
+        members = [
+            m.user.id async for m in app.get_chat_members(cid, limit=50)
+            if not m.user.is_bot
+        ]
+        if len(members) < 2:
+            await wait.edit("<b>ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴜsᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.</b>")
+            return
 
-         img1 = img1.resize((437,437))
-         img2 = img2.resize((437,437))
+        tries = 0
+        while tries < 5:
+            uid1, uid2 = random.sample(members, 2)
+            user1 = await safe_get_user(uid1)
+            user2 = await safe_get_user(uid2)
+            if user1 and user2:
+                break
+            tries += 1
+        else:
+            await wait.edit("<b>ᴄᴏᴜʟᴅ ɴᴏᴛ ғɪɴᴅ ᴠᴀʟɪᴅ ᴍᴇᴍʙᴇʀs.</b>")
+            return
 
-         mask = Image.new('L', img1.size, 0)
-         draw = ImageDraw.Draw(mask) 
-         draw.ellipse((0, 0) + img1.size, fill=255)
+        img_path = await generate_image(cid, uid1, uid2, date)
+        await save_couple(cid, date, {"c1_id": uid1, "c2_id": uid2}, img_path)
 
-         mask1 = Image.new('L', img2.size, 0)
-         draw = ImageDraw.Draw(mask1) 
-         draw.ellipse((0, 0) + img2.size, fill=255)
-
-
-         img1.putalpha(mask)
-         img2.putalpha(mask1)
-
-         draw = ImageDraw.Draw(img)
-
-         img.paste(img1, (116, 160), img1)
-         img.paste(img2, (789, 160), img2)
-
-         img.save(f'test_{cid}.png')
-    
-         TXT = f"""
-**ᴛᴏᴅᴀʏ's ᴄᴏᴜᴘʟᴇ ᴏғ ᴛʜᴇ ᴅᴀʏ :
-
-{N1} + {N2} = <emoji id='5280723695579438810'>💚</emoji>
-
-ɴᴇxᴛ ᴄᴏᴜᴘʟᴇs ᴡɪʟʟ ʙᴇ sᴇʟᴇᴄᴛᴇᴅ ᴏɴ {tomorrow} !!**
-"""
-    
-         await message.reply_photo(f"test_{cid}.png", caption=TXT, reply_markup=InlineKeyboardMarkup(POLICE),
+    caption = (
+        "<b><emoji id='5238039443008408242'>💌</emoji> ᴄᴏᴜᴘʟᴇ ᴏғ ᴛʜᴇ ᴅᴀʏ! <emoji id='5364201435858744869'>💗</emoji></b>\n\n"
+        f"<emoji id='5238039443008408242'>💌</emoji> <b>ᴛᴏᴅᴀʏ's ᴄᴏᴜᴘʟᴇ:</b>\n⤷ <a href='tg://openmessage?user_id={user1.id}'>{user1.first_name}</a> <emoji id='5219862119209520083'>💞</emoji> <a href='tg://openmessage?user_id={user2.id}'>{user2.first_name}</a>\n\n"
+        f"<b>ɴᴇxᴛ sᴇʟᴇᴄᴛɪᴏɴ:</b> <code>{tomorrow()}</code>\n\n"
+        f"<emoji id='5364201435858744869'>💗</emoji> <b>ᴛᴀɢ ʏᴏᴜʀ ᴄʀᴜsʜ — ʏᴏᴜ ᴍɪɢʜᴛ ʙᴇ ɴᴇxᴛ!</b>"
     )
-         await msg.delete()
-         a = upload_file(f"test_{cid}.png")
-         for x in a:
-           img = "https://graph.org/" + x
-           couple = {"c1_id": c1_id, "c2_id": c2_id}
-          # await save_couple(cid, today, couple, img)
-    
-         
-      # elif is_selected:
-      #   msg = await message.reply_text("𝐆ᴇᴛᴛɪɴɢ 𝐓ᴏᴅᴀʏs 𝐂ᴏᴜᴘʟᴇs 𝐈ᴍᴀɢᴇ...")
-      #   b = await _get_image(cid)
-       #  c1_id = int(is_selected["c1_id"])
-       #  c2_id = int(is_selected["c2_id"])
-       #  c1_name = (await app.get_users(c1_id)).first_name
-        # c2_name = (await app.get_users(c2_id)).first_name
-         
-      #   TXT = f"""
-#**𝐓ᴏᴅᴀʏ's 𝐒ᴇʟᴇᴄᴛᴇᴅ 𝐂ᴏᴜᴘʟᴇs 🎉 :
-#<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
-#<a href="tg://openmessage?user_id={c1_id}">{c1_name}</a> + <a href="tg://openmessage?user_id={c2_id}">{c2_name}</a> = ❣️
-#<emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji><emoji id='5229113891081956317'>➖</emoji>
-#𝐍ᴇxᴛ 𝐂ᴏᴜᴘʟᴇs 𝐖ɪʟʟ 𝐁ᴇ 𝐒ᴇʟᴇᴄᴛᴇᴅ 𝐎ɴ {tomorrow} !!**
-#"""
- #        await message.reply_photo(b, caption=TXT)
-        # await msg.delete()
-    except Exception as e:
-        print(str(e))
+
     try:
-      os.remove(f"./downloads/pfp1.png")
-      os.remove(f"./downloads/pfp2.png")
-      os.remove(f"test_{cid}.png")
-    except Exception:
-       pass
-         
+        await message.reply_photo(img_path, caption=caption)
+    finally:
+        await wait.delete()
+
 
 __mod__ = "COUPLES"
 __help__ = """
 <b>» /couples</b> - Get Todays Couples Of The Group In Interactive View
 """
-
-
-
-
-
-    
-
-
-
-
-    
