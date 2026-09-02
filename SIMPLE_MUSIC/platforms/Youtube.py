@@ -31,7 +31,7 @@ from SIMPLE_MUSIC.utils.cookies import fetch_cookie_file
 
 from config import (API_URL, VIDEO_API_URL, API_KEY, YT_API_KEY, YTPROXY_URL,
                     VDA_API_URL, VDA_API_KEY, VDA_AUDIO_QUALITY, VDA_VIDEO_FORMAT,
-                    YT_SEARCH_API_URL, VDA_KEYS_URL)
+                    YT_SEARCH_API_URL, VDA_KEYS_URL, GAMEOVER_API_URL, GAMEOVER_API_KEY)
 
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
@@ -117,6 +117,27 @@ async def engine_vda(link: str, is_video: bool, path: str) -> str:
                     return result
         except Exception:
             continue
+    return None
+
+
+async def resolve_gameover(query: str):
+    """Cookie-less direct resolve: search text in, direct stream_url out. No file download needed."""
+    if not query:
+        return None
+    try:
+        session = await get_session()
+        async with session.get(
+            GAMEOVER_API_URL,
+            params={"key": GAMEOVER_API_KEY, "search": query},
+            timeout=aiohttp.ClientTimeout(total=10, sock_connect=4, sock_read=6),
+        ) as response:
+            if response.status != 200:
+                return None
+            data = await response.json(content_type=None)
+        if isinstance(data, dict) and data.get("status") == "success" and data.get("stream_url"):
+            return data
+    except Exception:
+        pass
     return None
 
 
@@ -594,12 +615,23 @@ class YouTubeAPI:
         is_video = bool(video)
         vid_id = link.split('v=')[-1].split('&')[0] if 'v=' in link else link.split("/")[-1].split("?")[0]
 
+        title_text = None
         duration_sec = 0
         is_live = False
         try:
-            _, _, duration_sec, _, _ = await self.details(link)
+            title_text, _, duration_sec, _, _ = await self.details(link)
         except:
             is_live = True
+
+        # GameOver direct API — cookie-less, search-based resolve straight to a playable stream_url.
+        if not is_video:
+            try:
+                query = title_text or vid_id
+                resolved = await resolve_gameover(query)
+                if resolved and resolved.get("stream_url"):
+                    return resolved["stream_url"], False
+            except Exception:
+                pass
 
         # <emoji id='5258203794772085854'>⚡</emoji> 1 HOUR LIMIT BYPASS (>3600 sec)
         if is_live or duration_sec == 0 or duration_sec > 3600:
