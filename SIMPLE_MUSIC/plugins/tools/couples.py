@@ -18,7 +18,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, UnidentifiedImageError
 from pyrogram import errors, filters
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatMembersFilter, ChatType
 from pyrogram.types import Message
 
 from SIMPLE_MUSIC import app
@@ -31,8 +31,16 @@ COUPLE_BG = ASSETS / "cppic.png"
 OUT_DIR = Path("downloads")
 
 
+COOLDOWN_SECONDS = 300
+_last_used = {}
+
+
 def today() -> str:
     return datetime.now().strftime("%d/%m/%Y")
+
+
+def date_key(admins_only: bool, date: str) -> str:
+    return f"{date}-admins" if admins_only else date
 
 
 def tomorrow() -> str:
@@ -95,12 +103,34 @@ async def generate_image(chat_id: int, uid1: int, uid2: int, date: str) -> str:
 
 @app.on_message(filters.command("couples"))
 async def couples_handler(_, message: Message):
+    await _run_couple(message, admins_only=False)
+
+
+@app.on_message(filters.command("couple"))
+async def couple_admin_handler(_, message: Message):
+    await _run_couple(message, admins_only=True)
+
+
+async def _run_couple(message: Message, admins_only: bool):
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply("<b>ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴏɴʟʏ ᴡᴏʀᴋs ɪɴ ɢʀᴏᴜᴘs.</b>")
 
-    wait = await message.reply("<emoji id='5316558987141852841'>🦋</emoji>")
     cid = message.chat.id
-    date = today()
+    key = (cid, admins_only)
+    now = datetime.now()
+    last = _last_used.get(key)
+    if last:
+        elapsed = (now - last).total_seconds()
+        if elapsed < COOLDOWN_SECONDS:
+            remaining = int(COOLDOWN_SECONDS - elapsed)
+            mins, secs = divmod(remaining, 60)
+            return await message.reply(
+                f"<b>⏳ ᴡᴀɪᴛ {mins}ᴍ {secs}s ʙᴇғᴏʀᴇ ᴜsɪɴɢ ᴛʜɪs ᴀɢᴀɪɴ.</b>"
+            )
+    _last_used[key] = now
+
+    wait = await message.reply("<emoji id='5316558987141852841'>🦋</emoji>")
+    date = date_key(admins_only, today())
 
     record = await get_couple(cid, date)
     user1 = user2 = None
@@ -115,12 +145,19 @@ async def couples_handler(_, message: Message):
             record = None
 
     if not record:
-        members = [
-            m.user.id async for m in app.get_chat_members(cid, limit=50)
-            if not m.user.is_bot
-        ]
+        if admins_only:
+            members = [
+                m.user.id async for m in app.get_chat_members(cid, filter=ChatMembersFilter.ADMINISTRATORS)
+                if not m.user.is_bot
+            ]
+        else:
+            members = [
+                m.user.id async for m in app.get_chat_members(cid, limit=50)
+                if not m.user.is_bot
+            ]
         if len(members) < 2:
-            await wait.edit("<b>ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴜsᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.</b>")
+            msg = "<b>ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴀᴅᴍɪɴs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.</b>" if admins_only else "<b>ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴜsᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.</b>"
+            await wait.edit(msg)
             return
 
         tries = 0
@@ -154,4 +191,5 @@ async def couples_handler(_, message: Message):
 __mod__ = "COUPLES"
 __help__ = """
 <b>» /couples</b> - Get Todays Couples Of The Group In Interactive View
+<b>» /couple</b> - Get Todays Couple picked from Group Admins only
 """

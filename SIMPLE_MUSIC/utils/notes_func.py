@@ -15,6 +15,7 @@ from enum import Enum, auto
 from pyrogram.types import Message
 import html
 import re
+from pyrogram.enums import ParseMode
 from pyrogram.types import InlineKeyboardMarkup
 from SIMPLE_MUSIC import app
 from SIMPLE_MUSIC.mongo.notesdb import GetNote
@@ -163,7 +164,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id = message.from_user.id
             content, text, data_type = await GetNote(from_chat_id, note_name)
             text = (
-                f"<b>{note_name}:</b>\n\n"
+                f"**{note_name}:**\n\n"
                 f"{text}"
             ) 
 
@@ -180,7 +181,6 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
 
     text = NoteFillings(message, text)
 
-    text = html.escape(text)
     if (
         not text
         or re.search(r"^\s*$", text)
@@ -199,6 +199,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
         await app.send_message(
             chat_id=chat_id,
             text=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup,
             disable_web_page_preview=preview
@@ -220,6 +221,8 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
         await app.send_animation(
             chat_id=chat_id,
             animation=content,
+            caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )
@@ -232,6 +235,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id=chat_id,
             document=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )
@@ -243,6 +247,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id=chat_id,
             photo=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )  
@@ -254,6 +259,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id=chat_id,
             audio=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )
@@ -264,6 +270,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id=chat_id,
             voice=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )
@@ -275,6 +282,7 @@ async def SendNoteMessage(message: Message, note_name: str, from_chat_id: int):
             chat_id=chat_id,
             video=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_to_message_id=message_id,
             reply_markup=reply_markup
         )

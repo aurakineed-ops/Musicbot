@@ -41,6 +41,7 @@ VDA_KEYS_CACHE = None
 SEARCH_CACHE = {}
 DETAILS_CACHE = {}
 VIDEO_INFO_CACHE = {}
+GAMEOVER_CACHE = {}
 CACHE_TTL_SECONDS = 120
 
 
@@ -139,6 +140,16 @@ async def resolve_gameover(query: str):
     except Exception:
         pass
     return None
+
+
+async def _prefetch_gameover(vidid: str, title: str):
+    """Fired in the background right after search, so download() finds it already cached = instant play."""
+    try:
+        resolved = await resolve_gameover(title)
+        if resolved and resolved.get("stream_url"):
+            GAMEOVER_CACHE[vidid] = (time.monotonic(), resolved)
+    except Exception:
+        pass
 
 
 async def search_youtube_api(query: str):
@@ -572,6 +583,8 @@ class YouTubeAPI:
             "watchUrl": result.get("watchUrl") or f"https://www.youtube.com/watch?v={vidid}",
         }
         VIDEO_INFO_CACHE[vidid] = (time.monotonic(), cached_info)
+        # Pre-resolve the cookie-less GameOver stream in the background so download() is instant later.
+        asyncio.create_task(_prefetch_gameover(vidid, cached_info["title"]))
         return {
             "title": cached_info["title"],
             "link": cached_info["watchUrl"],
@@ -615,6 +628,14 @@ class YouTubeAPI:
         is_video = bool(video)
         vid_id = link.split('v=')[-1].split('&')[0] if 'v=' in link else link.split("/")[-1].split("?")[0]
 
+        # GameOver direct API — check the background-prefetched cache first (instant, no extra round-trip).
+        if not is_video:
+            cached = GAMEOVER_CACHE.get(vid_id)
+            if cached and time.monotonic() - cached[0] < CACHE_TTL_SECONDS:
+                stream_url = cached[1].get("stream_url")
+                if stream_url:
+                    return stream_url, False
+
         title_text = None
         duration_sec = 0
         is_live = False
@@ -629,6 +650,7 @@ class YouTubeAPI:
                 query = title_text or vid_id
                 resolved = await resolve_gameover(query)
                 if resolved and resolved.get("stream_url"):
+                    GAMEOVER_CACHE[vid_id] = (time.monotonic(), resolved)
                     return resolved["stream_url"], False
             except Exception:
                 pass

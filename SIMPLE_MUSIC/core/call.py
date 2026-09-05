@@ -30,6 +30,7 @@ from SIMPLE_MUSIC.utils.database import (
     get_loop,
     group_assistant,
     is_autoend,
+    is_autoplay,
     music_on,
     remove_active_chat,
     remove_active_video_chat,
@@ -310,6 +311,53 @@ class Call(PyTgCalls):
             if users == 1:
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
+    async def _autoplay_next(self, client: PyTgCalls, chat_id: int, popped: dict) -> bool:
+        """Cookie-less autoplay: pick a related song by re-searching the last title and push it into the queue."""
+        try:
+            from SIMPLE_MUSIC.platforms.Youtube import search_youtube_api
+            from SIMPLE_MUSIC.utils.stream.queue import put_queue
+            import random as _random
+
+            last_vidid = popped.get("vidid")
+            title = popped.get("title") or ""
+            results = await search_youtube_api(title) or []
+            candidates = [r for r in results if r.get("videoId") and r.get("videoId") != last_vidid]
+            if not candidates:
+                return False
+            pick = _random.choice(candidates[:5]) if len(candidates) > 1 else candidates[0]
+            vidid = pick["videoId"]
+            new_title = pick.get("title", "Autoplay")
+            duration_min = pick.get("durationText") or "00:00"
+
+            original_chat_id = popped.get("chat_id")
+            try:
+                file_path, direct = await YouTube.download(vidid, None, videoid=True, video=None)
+            except Exception:
+                return False
+            if not file_path:
+                return False
+
+            stream_obj = self._build_stream(file_path, video=False)
+            try:
+                await self._play_on_assistant(client, chat_id, stream_obj)
+            except Exception:
+                return False
+
+            await put_queue(
+                chat_id, original_chat_id, file_path if direct else f"vid_{vidid}",
+                new_title, duration_min, "Autoplay", vidid, popped.get("user_id") or 0, "audio",
+            )
+            db[chat_id][0]["played"] = 0
+            img = await gen_thumb(vidid, title=new_title, duration=duration_min)
+            await app.send_photo(
+                chat_id=original_chat_id,
+                photo=img,
+                caption=f"🎶 Autoplay\n\n{new_title[:23]} • {duration_min}",
+            )
+            return True
+        except Exception:
+            return False
+
     async def change_stream(self, client: PyTgCalls, chat_id: int):
         check = db.get(chat_id)
         popped = None
@@ -322,6 +370,10 @@ class Call(PyTgCalls):
                 await set_loop(chat_id, loop)
             await auto_clean(popped)
             if not check:
+                if popped and await is_autoplay(chat_id):
+                    queued = await self._autoplay_next(client, chat_id, popped)
+                    if queued:
+                        return
                 await _clear_(chat_id)
                 return await client.leave_call(chat_id, close=False)
         except Exception:

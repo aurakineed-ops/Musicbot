@@ -13,6 +13,7 @@
 # -----------------------------------------------
 from enum import Enum, auto
 from SIMPLE_MUSIC import app
+from pyrogram.enums import ParseMode
 from pyrogram.types import InlineKeyboardMarkup, Message
 from SIMPLE_MUSIC.utils.msg_types import button_markdown_parser
 from SIMPLE_MUSIC.utils.notes_func import NoteFillings
@@ -36,6 +37,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
         await app.send_message(
             chat_id=chat_id,
             text=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -52,6 +54,8 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
         await app.send_animation(
             chat_id=chat_id,
             animation=content,
+            caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -61,6 +65,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
             chat_id=chat_id,
             document=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -70,6 +75,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
             chat_id=chat_id,
             photo=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -79,6 +85,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
             chat_id=chat_id,
             audio=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -88,6 +95,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
             chat_id=chat_id,
             voice=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )
@@ -97,6 +105,7 @@ async def SendFilterMessage(message: Message, filter_name: str, content: str, te
             chat_id=chat_id,
             video=content,
             caption=text,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup,
             reply_to_message_id=message_id
         )

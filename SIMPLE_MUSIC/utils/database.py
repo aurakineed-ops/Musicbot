@@ -35,6 +35,7 @@ skipdb = mongodb.skipmode
 sudoersdb = mongodb.sudoers
 usersdb = mongodb.tgusersdb
 cardsdb = mongodb.cards
+autoplaydb = mongodb.autoplay
 
 # Shifting to memory [mongo sucks often]
 active = []
@@ -227,6 +228,29 @@ async def autoend_on():
 async def autoend_off():
     chat_id = 1234
     await autoenddb.delete_one({"chat_id": chat_id})
+
+
+autoplay_cache: Dict[int, bool] = {}
+
+
+async def is_autoplay(chat_id: int) -> bool:
+    cached = autoplay_cache.get(chat_id)
+    if cached is not None:
+        return cached
+    data = await autoplaydb.find_one({"chat_id": chat_id})
+    state = bool(data)
+    autoplay_cache[chat_id] = state
+    return state
+
+
+async def autoplay_on(chat_id: int):
+    autoplay_cache[chat_id] = True
+    await autoplaydb.update_one({"chat_id": chat_id}, {"$set": {"chat_id": chat_id}}, upsert=True)
+
+
+async def autoplay_off(chat_id: int):
+    autoplay_cache[chat_id] = False
+    await autoplaydb.delete_one({"chat_id": chat_id})
 
 
 async def get_loop(chat_id: int) -> int:
