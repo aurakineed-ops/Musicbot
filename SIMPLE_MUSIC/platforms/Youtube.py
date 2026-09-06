@@ -28,6 +28,34 @@ from py_yt import Playlist
 from SIMPLE_MUSIC import LOGGER
 from SIMPLE_MUSIC.utils.formatters import time_to_seconds
 from SIMPLE_MUSIC.utils.cookies import fetch_cookie_file
+from SIMPLE_MUSIC.core.mongo import mongodb
+
+gameoverdb = mongodb.gameover_cache
+GAMEOVER_PERSIST_TTL_SECONDS = 6 * 60 * 60  # 6 hours; re-resolved automatically after this
+
+
+async def get_persisted_gameover(vidid: str):
+    try:
+        doc = await gameoverdb.find_one({"vidid": vidid})
+        if not doc:
+            return None
+        if time.time() - doc.get("saved_at", 0) > GAMEOVER_PERSIST_TTL_SECONDS:
+            return None
+        return doc.get("data")
+    except Exception:
+        return None
+
+
+async def save_persisted_gameover(vidid: str, data: dict):
+    try:
+        await gameoverdb.update_one(
+            {"vidid": vidid},
+            {"$set": {"vidid": vidid, "data": data, "saved_at": time.time()}},
+            upsert=True,
+        )
+    except Exception:
+        pass
+
 
 from config import (API_URL, VIDEO_API_URL, API_KEY, YT_API_KEY, YTPROXY_URL,
                     VDA_API_URL, VDA_API_KEY, VDA_AUDIO_QUALITY, VDA_VIDEO_FORMAT,
@@ -145,9 +173,14 @@ async def resolve_gameover(query: str):
 async def _prefetch_gameover(vidid: str, title: str):
     """Fired in the background right after search, so download() finds it already cached = instant play."""
     try:
+        persisted = await get_persisted_gameover(vidid)
+        if persisted and persisted.get("stream_url"):
+            GAMEOVER_CACHE[vidid] = (time.monotonic(), persisted)
+            return
         resolved = await resolve_gameover(title)
         if resolved and resolved.get("stream_url"):
             GAMEOVER_CACHE[vidid] = (time.monotonic(), resolved)
+            await save_persisted_gameover(vidid, resolved)
     except Exception:
         pass
 
@@ -635,6 +668,11 @@ class YouTubeAPI:
                 stream_url = cached[1].get("stream_url")
                 if stream_url:
                     return stream_url, False
+            # In-memory cache expired/missing — check the persistent (mongodb) cache before calling the API again.
+            persisted = await get_persisted_gameover(vid_id)
+            if persisted and persisted.get("stream_url"):
+                GAMEOVER_CACHE[vid_id] = (time.monotonic(), persisted)
+                return persisted["stream_url"], False
 
         title_text = None
         duration_sec = 0
@@ -651,6 +689,7 @@ class YouTubeAPI:
                 resolved = await resolve_gameover(query)
                 if resolved and resolved.get("stream_url"):
                     GAMEOVER_CACHE[vid_id] = (time.monotonic(), resolved)
+                    await save_persisted_gameover(vid_id, resolved)
                     return resolved["stream_url"], False
             except Exception:
                 pass

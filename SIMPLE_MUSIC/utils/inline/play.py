@@ -116,7 +116,11 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r2)),
         ],
         [
-            InlineKeyboardButton(text="Ｃʟσѕᴇ", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
+            InlineKeyboardButton(text="⏪ 10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r2)),
+            InlineKeyboardButton(text="10s ⏩", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r2)),
+        ],
+        [
+            InlineKeyboardButton(text="❌ Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
         ],
     ]
     return buttons
@@ -136,7 +140,11 @@ def stream_markup(_, chat_id):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r1)),
         ],
         [
-            InlineKeyboardButton(text="Ｃʟσѕᴇ", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
+            InlineKeyboardButton(text="⏪ 10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r1)),
+            InlineKeyboardButton(text="10s ⏩", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r1)),
+        ],
+        [
+            InlineKeyboardButton(text="❌ Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
         ],
     ]
     return buttons

@@ -243,7 +243,50 @@ async def del_back_playlist(client, CallbackQuery, _):
                         return await CallbackQuery.answer(
                             _["admin_14"], show_alert=True
                         )
-    if command == "Pause":
+    if command == "Fwd10" or command == "Back10":
+        playing = db.get(chat_id)
+        if not playing:
+            return await CallbackQuery.answer(_["queue_2"], show_alert=True)
+        duration_seconds = int(playing[0]["seconds"])
+        if duration_seconds == 0:
+            return await CallbackQuery.answer(_["admin_22"], show_alert=True)
+        file_path = playing[0]["file"]
+        duration_played = int(playing[0]["played"])
+        duration = playing[0]["dur"]
+        step = 10
+        if command == "Back10":
+            if (duration_played - step) <= 10:
+                return await CallbackQuery.answer(_["admin_23"].format(seconds_to_min(duration_played), duration), show_alert=True)
+            to_seek = duration_played - step + 1
+        else:
+            if (duration_seconds - (duration_played + step)) <= 10:
+                return await CallbackQuery.answer(_["admin_23"].format(seconds_to_min(duration_played), duration), show_alert=True)
+            to_seek = duration_played + step + 1
+        await CallbackQuery.answer("⏳ Seeking...")
+        if "vid_" in file_path:
+            n, file_path = await YouTube.video(playing[0]["vidid"], True)
+            if n == 0:
+                return await CallbackQuery.answer(_["admin_22"], show_alert=True)
+        check = (playing[0]).get("speed_path")
+        if check:
+            file_path = check
+        if "index_" in file_path:
+            file_path = playing[0]["vidid"]
+        try:
+            await SIMPLE.seek_stream(
+                chat_id, file_path, seconds_to_min(to_seek), duration, playing[0]["streamtype"],
+            )
+        except Exception:
+            return await CallbackQuery.answer(_["admin_26"], show_alert=True)
+        if command == "Back10":
+            db[chat_id][0]["played"] -= step
+        else:
+            db[chat_id][0]["played"] += step
+        await CallbackQuery.message.reply_text(
+            text=_["admin_25"].format(seconds_to_min(to_seek), mention),
+            reply_markup=close_markup(_),
+        )
+    elif command == "Pause":
         if not await is_music_playing(chat_id):
             return await CallbackQuery.answer(_["admin_1"], show_alert=True)
         await CallbackQuery.answer()
