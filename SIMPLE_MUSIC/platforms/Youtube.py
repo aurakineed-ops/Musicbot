@@ -27,7 +27,6 @@ from py_yt import Playlist
 
 from SIMPLE_MUSIC import LOGGER
 from SIMPLE_MUSIC.utils.formatters import time_to_seconds
-from SIMPLE_MUSIC.utils.cookies import fetch_cookie_file
 from SIMPLE_MUSIC.core.mongo import mongodb
 
 gameoverdb = mongodb.gameover_cache
@@ -338,53 +337,6 @@ async def engine_shuvo(link: str, is_video: bool, path: str) -> str:
         pass
     return None
 
-async def engine_cookie(link: str, is_video: bool, path: str) -> str:
-    """Try yt-dlp with the owner-configured cookies file first."""
-    cookie_file = await fetch_cookie_file()
-    if not cookie_file:
-        return None
-    loop = asyncio.get_running_loop()
-
-    def cookie_download():
-        options = {
-            "format": (
-                "bestvideo[height<=720]+bestaudio/best[height<=720]/best"
-                if is_video else "bestaudio/best"
-            ),
-            "outtmpl": path,
-            "cookiefile": cookie_file,
-            "noplaylist": True,
-            "quiet": True,
-            "no_warnings": True,
-            "nocheckcertificate": True,
-            "retries": 2,
-            "fragment_retries": 2,
-            "merge_output_format": "mp4" if is_video else None,
-        }
-        if not is_video:
-            options["postprocessors"] = [
-                {
-                    "key": "FFmpegExtractAudio",
-                    "preferredcodec": "mp3",
-                    "preferredquality": VDA_AUDIO_QUALITY,
-                }
-            ]
-        options = {key: value for key, value in options.items() if value is not None}
-        with yt_dlp.YoutubeDL(options) as ydl:
-            ydl.download([link])
-
-    try:
-        await loop.run_in_executor(None, cookie_download)
-    except Exception:
-        if os.path.exists(path):
-            try:
-                os.remove(path)
-            except OSError:
-                pass
-        return None
-    return path if os.path.exists(path) and os.path.getsize(path) > 1024 else None
-
-
 async def _core_download(link: str, is_video: bool) -> str:
     vid_id = link.split('v=')[-1].split('&')[0] if 'v=' in link else link.split("/")[-1].split("?")[0]
     ext = "mp4" if is_video else "mp3"
@@ -392,15 +344,6 @@ async def _core_download(link: str, is_video: bool) -> str:
 
     if os.path.exists(final_path) and os.path.getsize(final_path) > 1024:
         return final_path
-
-    # Owner cookies are tried first; all failures fall through to the API engines.
-    cookie_path = await engine_cookie(link, is_video, f"{final_path}_cookie")
-    if cookie_path and os.path.exists(cookie_path):
-        try:
-            os.rename(cookie_path, final_path)
-            return final_path
-        except OSError:
-            return cookie_path
 
     vda_path = await engine_vda(link, is_video, f"{final_path}_vda")
     if vda_path and os.path.exists(vda_path):
@@ -410,7 +353,7 @@ async def _core_download(link: str, is_video: bool) -> str:
         except OSError:
             return vda_path
 
-    # Keep the existing API engines as non-cookie fallbacks.
+    # Keep the existing API engines as fallbacks; no YouTube cookies are used.
     tasks = [
         asyncio.create_task(engine_shuvo(link, is_video, f"{final_path}_shuvo")),
         asyncio.create_task(engine_shrutibots(vid_id, is_video, f"{final_path}_shruti")),
@@ -461,7 +404,7 @@ async def download_video(link: str) -> str:
 
 
 async def get_exact_video_info(video_id: str):
-    """Resolve one exact YouTube ID with cookies first and API fallback second."""
+    """Resolve one exact YouTube ID without using a cookie file."""
     video_id = str(video_id or "").strip()
     cached = VIDEO_INFO_CACHE.get(video_id)
     if cached and time.monotonic() - cached[0] < CACHE_TTL_SECONDS:
@@ -469,7 +412,6 @@ async def get_exact_video_info(video_id: str):
     if not re.fullmatch(r"[A-Za-z0-9_-]{6,}", video_id):
         return None
     link = f"https://www.youtube.com/watch?v={video_id}"
-    cookie_file = await fetch_cookie_file()
     loop = asyncio.get_running_loop()
 
     def extract_exact():
@@ -481,8 +423,6 @@ async def get_exact_video_info(video_id: str):
             "nocheckcertificate": True,
             "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
         }
-        if cookie_file:
-            options["cookiefile"] = cookie_file
         with yt_dlp.YoutubeDL(options) as ydl:
             return ydl.extract_info(link, download=False)
 
@@ -510,7 +450,7 @@ async def get_exact_video_info(video_id: str):
         VIDEO_INFO_CACHE[video_id] = (time.monotonic(), result)
         return result
 
-    # Cookie/yt-dlp failure: use the API only if it returns the same exact ID.
+    # yt-dlp failure: use the search API only if it returns the same exact ID.
     for result in await search_youtube_api(video_id):
         if str(result.get("videoId", "")) == video_id:
             VIDEO_INFO_CACHE[video_id] = (time.monotonic(), result)
@@ -645,10 +585,11 @@ class YouTubeAPI:
     async def formats(self, link: str, videoid: Union[bool, str] = None):
         if videoid: link = self.base + link
         if "&" in link: link = link.split("&")[0]
-        base_fmt_opts = {"quiet": True, "no_warnings": True, "extractor_args": {"youtube": {"player_client": ["android", "web"]}}, }
-        cookie_file = await fetch_cookie_file()
-        if cookie_file:
-            base_fmt_opts["cookiefile"] = cookie_file
+        base_fmt_opts = {
+            "quiet": True,
+            "no_warnings": True,
+            "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+        }
         try:
             with yt_dlp.YoutubeDL(base_fmt_opts) as ydl:
                 info = ydl.extract_info(link, download=False)
@@ -698,7 +639,8 @@ class YouTubeAPI:
         except:
             is_live = True
 
-        # GameOver direct API — cookie-less, search-based resolve straight to a playable stream_url.
+        # GameOver direct API — search-based resolve straight to a playable
+        # stream_url. This is the primary audio path and avoids cookies.
         if not is_video:
             try:
                 query = _clean_query_for_gameover(title_text) or vid_id
@@ -712,32 +654,7 @@ class YouTubeAPI:
 
         # <emoji id='5258203794772085854'>⚡</emoji> 1 HOUR LIMIT BYPASS (>3600 sec)
         if is_live or duration_sec == 0 or duration_sec > 3600:
-            # Cookies-first direct URL resolution for live/long videos.
-            cookie_file = await fetch_cookie_file()
-            if cookie_file:
-                try:
-                    loop = asyncio.get_running_loop()
-
-                    def extract_cookie_direct_url():
-                        cookie_opts = {
-                            "quiet": True,
-                            "no_warnings": True,
-                            "skip_download": True,
-                            "noplaylist": True,
-                            "cookiefile": cookie_file,
-                            "format": "best[height<=720]/best" if is_video else "bestaudio/best",
-                            "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
-                        }
-                        with yt_dlp.YoutubeDL(cookie_opts) as ydl:
-                            info = ydl.extract_info(link, download=False)
-                            return info.get("url") or (info.get("formats") or [{}])[-1].get("url")
-
-                    cookie_direct_url = await loop.run_in_executor(None, extract_cookie_direct_url)
-                    if cookie_direct_url:
-                        return cookie_direct_url, False
-                except Exception:
-                    pass
-
+            # No cookie lookup here. Use the configured API proxy first.
             try:
                 session = await get_session()
                 async with session.get(f"{YTPROXY_URL}/info/{vid_id}", headers={"x-api-key": YT_API_KEY}, timeout=3) as r:

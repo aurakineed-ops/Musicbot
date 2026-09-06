@@ -255,18 +255,29 @@ async def del_back_playlist(client, CallbackQuery, _):
         duration = playing[0]["dur"]
         step = 10
         if command == "Back10":
-            if (duration_played - step) <= 10:
-                return await CallbackQuery.answer(_["admin_23"].format(seconds_to_min(duration_played), duration), show_alert=True)
-            to_seek = duration_played - step + 1
+            to_seek = max(0, duration_played - step)
         else:
-            if (duration_seconds - (duration_played + step)) <= 10:
-                return await CallbackQuery.answer(_["admin_23"].format(seconds_to_min(duration_played), duration), show_alert=True)
-            to_seek = duration_played + step + 1
-        await CallbackQuery.answer("⏳ Seeking...")
+            to_seek = min(duration_seconds, duration_played + step)
+        if to_seek == duration_played:
+            return await CallbackQuery.answer(
+                _["admin_23"].format(seconds_to_min(duration_played), duration),
+                show_alert=True,
+            )
+        await CallbackQuery.answer("10s Forward" if command == "Fwd10" else "10s Back")
         if "vid_" in file_path:
-            n, file_path = await YouTube.video(playing[0]["vidid"], True)
-            if n == 0:
-                return await CallbackQuery.answer(_["admin_22"], show_alert=True)
+            if playing[0]["streamtype"] == "video":
+                n, file_path = await YouTube.video(playing[0]["vidid"], True)
+                if n == 0:
+                    return await CallbackQuery.answer(_["admin_22"], show_alert=True)
+            else:
+                file_path, _ = await YouTube.download(
+                    playing[0]["vidid"],
+                    None,
+                    video=None,
+                    videoid=True,
+                )
+                if not file_path:
+                    return await CallbackQuery.answer(_["admin_22"], show_alert=True)
         check = (playing[0]).get("speed_path")
         if check:
             file_path = check
@@ -278,14 +289,20 @@ async def del_back_playlist(client, CallbackQuery, _):
             )
         except Exception:
             return await CallbackQuery.answer(_["admin_26"], show_alert=True)
-        if command == "Back10":
-            db[chat_id][0]["played"] -= step
-        else:
-            db[chat_id][0]["played"] += step
-        await CallbackQuery.message.reply_text(
-            text=_["admin_25"].format(seconds_to_min(to_seek), mention),
-            reply_markup=close_markup(_),
-        )
+        db[chat_id][0]["played"] = to_seek
+        try:
+            await CallbackQuery.message.edit_reply_markup(
+                reply_markup=InlineKeyboardMarkup(
+                    stream_markup_timer(
+                        _,
+                        chat_id,
+                        seconds_to_min(to_seek),
+                        duration,
+                    )
+                )
+            )
+        except Exception:
+            pass
     elif command == "Pause":
         if not await is_music_playing(chat_id):
             return await CallbackQuery.answer(_["admin_1"], show_alert=True)
