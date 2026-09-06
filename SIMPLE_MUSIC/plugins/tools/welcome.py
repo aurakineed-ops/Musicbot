@@ -11,8 +11,9 @@ from logging import getLogger
 
 from pyrogram import enums, filters
 from pyrogram.enums import ParseMode
-from pyrogram.types import ChatMemberUpdated, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import CallbackQuery, ChatMemberUpdated, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
+import config
 from SIMPLE_MUSIC import app
 from SIMPLE_MUSIC.utils.database import (
     add_served_chat,
@@ -43,9 +44,28 @@ def _is_admin(member):
     )
 
 
+def _btn_style():
+    if getattr(config, "BUTTON_COLOUR", False):
+        return {"style": enums.ButtonStyle.SUCCESS}
+    return {}
+
+
 def _welcome_markup():
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="✙ ᴋɪᴅɴᴀᴘ ᴍᴇ ✙", url=f"https://t.me/{app.username}?startgroup=true")]]
+        [
+            [InlineKeyboardButton(text="✙ ᴋɪᴅɴᴀᴘ ᴍᴇ ✙", url=f"https://t.me/{app.username}?startgroup=true", **_btn_style())],
+            [InlineKeyboardButton(text="👑 ᴏᴡɴᴇʀ", callback_data="welcome_owner_alert", **_btn_style())],
+        ]
+    )
+
+
+@app.on_callback_query(filters.regex("^welcome_owner_alert$"))
+async def welcome_owner_alert_cb(_, query: CallbackQuery):
+    await query.answer(
+        f"🇨🇦 ♪ {config.BOT_NAME} ✕ ᴍᴜsɪᴄʙᴏᴛ 🐾\n\n"
+        "🚨 SYSTEM ALERT: TU BHIKHARI HAI, OWNER SE DOOR REH "
+        "WARNA GHAR ME GHUS KE SYSTEM SET KAR DENGE! 💀",
+        show_alert=True,
     )
 
 
@@ -133,11 +153,11 @@ async def _send_custom_welcome(chat_id: int, content: dict, user, group_name: st
         "reply_markup": _welcome_markup(),
     }
     if content_type == "photo":
-        return await app.send_photo(photo=content["file_id"], **send_kwargs)
+        return await app.send_photo(photo=content["file_id"], has_spoiler=True, **send_kwargs)
     if content_type == "video":
-        return await app.send_video(video=content["file_id"], **send_kwargs)
+        return await app.send_video(video=content["file_id"], has_spoiler=True, **send_kwargs)
     if content_type == "animation":
-        return await app.send_animation(animation=content["file_id"], **send_kwargs)
+        return await app.send_animation(animation=content["file_id"], has_spoiler=True, **send_kwargs)
     if content_type == "document":
         return await app.send_document(document=content["file_id"], **send_kwargs)
     return None
@@ -210,22 +230,24 @@ async def greet_new_member(_, member: ChatMemberUpdated):
         if custom:
             await _send_custom_welcome(chat_id, custom, user, member.chat.title or "", count)
             return
-        caption_text = f"""
-<b>⎊─────☵ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ☵─────⎊</b>
-<emoji id='5197269100878907942'>📋</emoji> <b>ɢʀᴏᴜᴘ ⧽</b> {html.escape(member.chat.title or '')}
-<b>▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬</b>
-☉ <b>ɴᴀᴍᴇ ⧽</b> {user.mention}
-☉ <b>ɪᴅ ⧽</b> `{user.id}`
-☉ <b>ᴜ_ɴᴀᴍᴇ ⧽</b> @{html.escape(user.username) if user.username else 'None'}
-☉ <b>ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs ⧽</b> {count}
-
-<b>▬▭▬▭▬▭▬▭▬▭▬▭▬▭▬</b>
-<b>⎉──────▢✭ 侖 ✭▢──────⎉</b>
-"""
+        caption_text = f"""✨ ╭── [ <emoji id='5411200584374056500'>🎁</emoji> <b>ᴡ є ʟ ᴄ σ ϻ є  ʙ ᴧ ʙ ʏ</b> <emoji id='5422470088932491424'>🎁</emoji> ]
+│
+├── <emoji id='5278433859535385490'>🍼</emoji> ⇛ <b>η ᴧ ϻ є :</b> {user.mention}
+├── <emoji id='6296330130750972317'>🎁</emoji> ⇛ <b>υ s є ʀ :</b> @{html.escape(user.username) if user.username else 'None'}
+├── <emoji id='5409090883553358005'>🎁</emoji> ⇛ <b>ɢ ʀ σ υ ᴘ :</b> {html.escape(member.chat.title or '')}
+├── <emoji id='6327605773362794574'>🩷</emoji> ⇛ <b>ϻ є ϻ ʙ є ʀ s :</b> {count}
+│
+├── [ <emoji id='5305481188448703682'>🎁</emoji> <b>ɢ ʀ σ υ ᴘ  ʀ υ ʟ є s</b> ]
+├── <emoji id='6296409308473073026'>😽</emoji> ⇛ <b>ʀєsᴘєᴄᴛ ᴧʟʟ ϻєϻʙєʀs .</b>
+├── <emoji id='5422649648630233281'>🎁</emoji> ⇛ <b>ησ sᴘᴧϻ σʀ 18+ ᴄσηᴛєηᴛ .</b>
+├── <emoji id='5409350832153979723'>🎁</emoji> ⇛ <b>єηᴊσʏ ᴛʜє ϻυsɪᴄ ᴧηᴅ ᴠɪʙє !</b>
+│
+🌸 ╰── <b>ᴘ σ ᴡ є ʀ є ᴅ  ʙ ʏ  ʏ σ ʀ υ</b>"""
         await app.send_video(
             chat_id,
             video=WELCOME_VIDEO_URL,
             caption=caption_text,
+            has_spoiler=True,
             reply_markup=_welcome_markup(),
         )
     except Exception as e:

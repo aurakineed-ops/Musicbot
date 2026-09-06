@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 from typing import Union
 from ntgcalls import ConnectionNotFound, TelegramServerError
 from pyrogram import Client
+from pyrogram.enums import ParseMode
 from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls, exceptions, types
 from pytgcalls.pytgcalls_session import PyTgCallsSession
@@ -386,6 +387,21 @@ class Call(PyTgCalls):
                     if queued:
                         return
                 await _clear_(chat_id)
+                try:
+                    original_chat_id = popped["chat_id"] if popped else chat_id
+                    await app.send_message(
+                        original_chat_id,
+                        "<emoji id='6325715141643997191'>❤️</emoji> ╭── [ ǫᴜꫀᴜꫀ ꫀꪑᴘᴛʏ ]\n"
+                        "│\n"
+                        "├── <emoji id='5422559269633421747'>💐</emoji> ⇛ ʙꫝʙʏ ɢꫝꫝꪀꫀ ᴋʜꫝᴛꫝꪑ ʜꪮ ɢꫝʏꫀ ʜꫝɪꪀ!\n"
+                        "│\n"
+                        "├── <emoji id='5278477152805729495'>🐇</emoji> ⇛ ꫝᴜʀ ꜱᴜꪀꪀꫝ ʜꫝɪ ᴛꪮ ꪀɪᥴʜꫀ ᥴʟɪᥴᴋ ᴋꫝʀꪮ...\n"
+                        "│\n"
+                        "<emoji id='5422609769858889724'>💖</emoji> ╰── ᴘꪮᴡꫀʀꫀᴅ ʙʏ : ˹Yꪮʀᴜ ꪛ Mᴜꜱɪᴄ !! 🌿",
+                        parse_mode=ParseMode.HTML,
+                    )
+                except Exception:
+                    pass
                 return await client.leave_call(chat_id, close=False)
         except Exception:
             try:

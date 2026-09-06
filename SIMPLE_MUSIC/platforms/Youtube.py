@@ -31,6 +31,13 @@ from SIMPLE_MUSIC.core.mongo import mongodb
 
 gameoverdb = mongodb.gameover_cache
 GAMEOVER_PERSIST_TTL_SECONDS = 6 * 60 * 60  # 6 hours; re-resolved automatically after this
+VIDEO_ID_RE = re.compile(r"(?:v=|vi=|youtu\.be/|shorts/|embed/)([A-Za-z0-9_-]{11})")
+
+
+def _extract_video_id(link: str):
+    """Pull the 11-char video ID out of any YouTube URL shape (watch?v=, youtu.be/, shorts/, ?si= etc.)."""
+    match = VIDEO_ID_RE.search(link)
+    return match.group(1) if match else None
 
 
 async def get_persisted_gameover(vidid: str):
@@ -486,8 +493,8 @@ class YouTubeAPI:
         # Direct YouTube URL — resolve the exact ID with cookies first.
         if re.search(self.regex, link):
             try:
-                direct_id = link.split("v=")[-1].split("&")[0]
-                exact = await get_exact_video_info(direct_id)
+                direct_id = _extract_video_id(link)
+                exact = await get_exact_video_info(direct_id) if direct_id else None
                 if exact:
                     vid = exact.get("videoId") or direct_id
                     dur_sec = int(exact.get("durationSeconds") or 0)
@@ -541,8 +548,8 @@ class YouTubeAPI:
         # Direct YouTube URL — resolve the exact ID with cookies first.
         if re.search(self.regex, link):
             try:
-                direct_id = link.split("v=")[-1].split("&")[0]
-                exact = await get_exact_video_info(direct_id)
+                direct_id = _extract_video_id(link)
+                exact = await get_exact_video_info(direct_id) if direct_id else None
                 if exact:
                     vid = exact.get("videoId") or direct_id
                     return {
@@ -643,8 +650,11 @@ class YouTubeAPI:
         # stream_url. This is the primary audio path and avoids cookies.
         if not is_video:
             try:
-                query = _clean_query_for_gameover(title_text) or vid_id
-                resolved = await resolve_gameover(query)
+                is_direct_url = bool(re.search(self.regex, link))
+                resolved = await resolve_gameover(link) if is_direct_url else None
+                if not resolved or not resolved.get("stream_url"):
+                    query = _clean_query_for_gameover(title_text) or vid_id
+                    resolved = await resolve_gameover(query)
                 if resolved and resolved.get("stream_url"):
                     GAMEOVER_CACHE[vid_id] = (time.monotonic(), resolved)
                     await save_persisted_gameover(vid_id, resolved)
