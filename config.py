@@ -144,6 +144,7 @@ STRING7 = getenv("STRING_SESSION7", None)
 # ❖ ᴍ ɪ s ᴄ ᴇ ʟ ʟ ᴀ ɴ ᴇ ᴏ ᴜ s  s ᴇ ᴛ ᴛ ɪ ɴ ɢ s
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BUTTON_COLOUR = getenv("BUTTON_COLOUR", "True").lower() == "true"
+BUTTON_ICON = getenv("BUTTON_ICON", "False").lower() == "true"  # requires bot owner Telegram Premium or Fragment username
 BANNED_USERS = filters.user()
 adminlist = {}
 lyrical = {}

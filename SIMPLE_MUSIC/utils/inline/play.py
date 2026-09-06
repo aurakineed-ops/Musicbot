@@ -34,12 +34,23 @@ def _get_style(style_val):
         return {"style": style_val}
     return {}
 
+
+def _get_icon(emoji_id: str):
+    # icon_custom_emoji_id only renders if the bot owner has Telegram Premium
+    # (or the bot purchased a Fragment username) — gate it behind a config flag
+    # so bots without Premium don't get a BUTTON_ICON_INVALID error on send.
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": emoji_id}
+    return {}
+
 def stream_caption(title, duration, requester):
     return (
         "<b><emoji id='5388992682875958399'>🎬</emoji> sᴛʀᴇᴀᴍ ʜᴀs sᴛᴀʀᴛᴇᴅ. ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ |</b>\n"
         f"<b><emoji id='5989830505615331276'>🎵</emoji> ᴛɪᴛʟᴇ :</b> {title}\n"
         f"<b><emoji id='5258419835922030550'>🕔</emoji> ʟᴇɴɢᴛʜ :</b> {duration} ᴍɪɴs\n"
-        f"<b><emoji id='5256143829672672750'>👤</emoji>ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}"
+        f"<b><emoji id='5256143829672672750'>👤</emoji>ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}\n\n"
+        "<emoji id='6127214603765027855'>⬅️</emoji>10s   <emoji id='6127514998072680291'>➡️</emoji>10s   "
+        "<emoji id='5269763170968297861'>❤️</emoji>"
     )
 
 
@@ -116,11 +127,11 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r2)),
         ],
         [
-            InlineKeyboardButton(text="⏪ 10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r2)),
-            InlineKeyboardButton(text="10s ⏩", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r2)),
+            InlineKeyboardButton(text="10s Back", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r2), **_get_icon("6127214603765027855")),
+            InlineKeyboardButton(text="10s Fwd", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r2), **_get_icon("6127514998072680291")),
         ],
         [
-            InlineKeyboardButton(text="❌ Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
+            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("5269763170968297861"))
         ],
     ]
     return buttons
@@ -140,11 +151,11 @@ def stream_markup(_, chat_id):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r1)),
         ],
         [
-            InlineKeyboardButton(text="⏪ 10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r1)),
-            InlineKeyboardButton(text="10s ⏩", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r1)),
+            InlineKeyboardButton(text="10s Back", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r1), **_get_icon("6127214603765027855")),
+            InlineKeyboardButton(text="10s Fwd", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r1), **_get_icon("6127514998072680291")),
         ],
         [
-            InlineKeyboardButton(text="❌ Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3))
+            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("5269763170968297861"))
         ],
     ]
     return buttons

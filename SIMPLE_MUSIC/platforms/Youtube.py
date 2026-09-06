@@ -149,6 +149,22 @@ async def engine_vda(link: str, is_video: bool, path: str) -> str:
     return None
 
 
+_TITLE_NOISE_RE = re.compile(
+    r"\(.*?\)|\[.*?\]|\{.*?\}|official\s*(video|audio|music\s*video)?|lyrics?\s*(video)?|"
+    r"full\s*(video|song|audio)|hd|4k|new\s*song|latest\s*song|video\s*song",
+    re.IGNORECASE,
+)
+
+
+def _clean_query_for_gameover(title: str) -> str:
+    """Strip common noise (Official Video, [Lyrics], HD, etc.) so the search API gets a cleaner query."""
+    if not title:
+        return title
+    cleaned = _TITLE_NOISE_RE.sub("", title)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" -|")
+    return cleaned or title
+
+
 async def resolve_gameover(query: str):
     """Cookie-less direct resolve: search text in, direct stream_url out. No file download needed."""
     if not query:
@@ -177,7 +193,7 @@ async def _prefetch_gameover(vidid: str, title: str):
         if persisted and persisted.get("stream_url"):
             GAMEOVER_CACHE[vidid] = (time.monotonic(), persisted)
             return
-        resolved = await resolve_gameover(title)
+        resolved = await resolve_gameover(_clean_query_for_gameover(title))
         if resolved and resolved.get("stream_url"):
             GAMEOVER_CACHE[vidid] = (time.monotonic(), resolved)
             await save_persisted_gameover(vidid, resolved)
@@ -685,7 +701,7 @@ class YouTubeAPI:
         # GameOver direct API — cookie-less, search-based resolve straight to a playable stream_url.
         if not is_video:
             try:
-                query = title_text or vid_id
+                query = _clean_query_for_gameover(title_text) or vid_id
                 resolved = await resolve_gameover(query)
                 if resolved and resolved.get("stream_url"):
                     GAMEOVER_CACHE[vid_id] = (time.monotonic(), resolved)

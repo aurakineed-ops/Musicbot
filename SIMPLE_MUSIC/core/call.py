@@ -311,6 +311,8 @@ class Call(PyTgCalls):
             if users == 1:
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
+    _autoplay_history: dict = {}
+
     async def _autoplay_next(self, client: PyTgCalls, chat_id: int, popped: dict) -> bool:
         """Cookie-less autoplay: pick a related song by re-searching the last title and push it into the queue."""
         try:
@@ -320,14 +322,23 @@ class Call(PyTgCalls):
 
             last_vidid = popped.get("vidid")
             title = popped.get("title") or ""
+            history = self._autoplay_history.setdefault(chat_id, [])
+            if last_vidid and last_vidid not in history:
+                history.append(last_vidid)
+            history[:] = history[-15:]  # keep last 15 so a full playlist isn't repeated too soon
+
             results = await search_youtube_api(title) or []
-            candidates = [r for r in results if r.get("videoId") and r.get("videoId") != last_vidid]
+            candidates = [r for r in results if r.get("videoId") and r.get("videoId") not in history]
+            if not candidates:
+                # everything in the search overlaps recent history — fall back to just excluding the last song
+                candidates = [r for r in results if r.get("videoId") and r.get("videoId") != last_vidid]
             if not candidates:
                 return False
             pick = _random.choice(candidates[:5]) if len(candidates) > 1 else candidates[0]
             vidid = pick["videoId"]
             new_title = pick.get("title", "Autoplay")
             duration_min = pick.get("durationText") or "00:00"
+            history.append(vidid)
 
             original_chat_id = popped.get("chat_id")
             try:
