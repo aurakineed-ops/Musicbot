@@ -13,9 +13,10 @@
 # -----------------------------------------------
 from SIMPLE_MUSIC import app 
 import asyncio
+from html import escape
 import random
 from pyrogram import Client, filters
-from pyrogram.enums import ChatType, ChatMemberStatus
+from pyrogram.enums import ChatType, ChatMemberStatus, ParseMode
 from pyrogram.errors import UserNotParticipant
 from pyrogram.types import ChatPermissions
 
@@ -225,11 +226,42 @@ VC_TAG = [ "<b>❅ ɪғ ʏᴏᴜ ᴅᴏ ɴᴏᴛ sᴛᴇᴘ ғᴏʀᴡᴀʀᴅ �
         ]
 
 
+async def _tag_members(client, message, reply_message, templates):
+    chat_id = message.chat.id
+    spam_chats.append(chat_id)
+    try:
+        async for usr in client.get_chat_members(chat_id):
+            if chat_id not in spam_chats:
+                break
+            user = usr.user
+            if not user or user.is_bot or user.is_deleted:
+                continue
+            name = escape(user.first_name or "User")
+            mention = f"<a href='tg://user?id={user.id}'>{name}</a>"
+            if reply_message:
+                await reply_message.reply(
+                    f"{mention} {random.choice(templates)}",
+                    parse_mode=ParseMode.HTML,
+                )
+            else:
+                await client.send_message(
+                    chat_id,
+                    f"{mention} {random.choice(templates)}",
+                    parse_mode=ParseMode.HTML,
+                )
+            await asyncio.sleep(4)
+    finally:
+        if chat_id in spam_chats:
+            spam_chats.remove(chat_id)
+
+
 @app.on_message(filters.command(["hitag" ], prefixes=["/", "@", "#"]))
 async def mentionall(client, message):
     chat_id = message.chat.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply("๏ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴏɴʟʏ ғᴏʀ ɢʀᴏᴜᴘs.")
+    if not message.from_user:
+        return
 
     is_admin = False
     try:
@@ -245,44 +277,22 @@ async def mentionall(client, message):
     if not is_admin:
         return await message.reply("๏ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴅᴍɪɴ ʙᴀʙʏ, ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴛᴀɢ ᴍᴇᴍʙᴇʀs. ")
 
-    if message.reply_to_message and message.text:
-        return await message.reply("/hitag ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ᴛʏᴘᴇ ʟɪᴋᴇ ᴛʜɪs / ʀᴇᴘʟʏ ᴀɴʏ ᴍᴇssᴀɢᴇ ɴᴇxᴛ ᴛɪᴍᴇ ʙᴏᴛ ᴛᴀɢɢɪɴɢ...")
-    elif message.text:
-        mode = "text_on_cmd"
-        msg = message.text
-    elif message.reply_to_message:
+    if message.reply_to_message:
         mode = "text_on_reply"
         msg = message.reply_to_message
-        if not msg:
-            return await message.reply("/hitag ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ᴛʏᴘᴇ ʟɪᴋᴇ ᴛʜɪs / ʀᴇᴘʟʏ ᴀɴʏ ᴍᴇssᴀɢᴇ ɴᴇxᴛ ᴛɪᴍᴇ ғᴏᴛ ᴛᴀɢɢɪɴɢ...")
+    elif len(message.command) > 1:
+        mode = "text_on_cmd"
+        msg = message.text
     else:
         return await message.reply("/hitag ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ᴛʏᴘᴇ ʟɪᴋᴇ ᴛʜɪs / ʀᴇᴘʟʏ ᴀɴʏ ᴍᴇssᴀɢᴇ ɴᴇxᴛ ᴛɪᴍᴇ ʙᴏᴛ ᴛᴀɢɢɪɴɢ...")
     if chat_id in spam_chats:
         return await message.reply("๏ ᴘʟᴇᴀsᴇ ᴀᴛ ғɪʀsᴛ sᴛᴏᴘ ʀᴜɴɴɪɴɢ ᴍᴇɴᴛɪᴏɴ ᴘʀᴏᴄᴇss...")
-    spam_chats.append(chat_id)
-    usrnum = 0
-    usrtxt = ""
-    async for usr in client.get_chat_members(chat_id):
-        if not chat_id in spam_chats:
-            break
-        if usr.user.is_bot:
-            continue
-        usrnum += 1
-        usrtxt += f"<a href='tg://user?id={usr.user.id}'>{usr.user.first_name}</a> "
-
-        if usrnum == 1:
-            if mode == "text_on_cmd":
-                txt = f"{usrtxt} {random.choice(TAGMES)}"
-                await client.send_message(chat_id, txt)
-            elif mode == "text_on_reply":
-                await msg.reply(f"<a href='tg://user?id={usr.user.id}'>{random.choice(EMOJI)}</a>")
-            await asyncio.sleep(4)
-            usrnum = 0
-            usrtxt = ""
-    try:
-        spam_chats.remove(chat_id)
-    except:
-        pass
+    await _tag_members(
+        client,
+        message,
+        msg if mode == "text_on_reply" else None,
+        EMOJI if mode == "text_on_reply" else TAGMES,
+    )
 
 
 @app.on_message(filters.command(["lifetag"], prefixes=["/", "@", "#"]))
@@ -290,6 +300,8 @@ async def mention_allvc(client, message):
     chat_id = message.chat.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply("๏ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴏɴʟʏ ғᴏʀ ɢʀᴏᴜᴘs.")
+    if not message.from_user:
+        return
 
     is_admin = False
     try:
@@ -306,32 +318,14 @@ async def mention_allvc(client, message):
         return await message.reply("๏ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴅᴍɪɴ ʙᴀʙʏ, ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴛᴀɢ ᴍᴇᴍʙᴇʀs. ")
     if chat_id in spam_chats:
         return await message.reply("๏ ᴘʟᴇᴀsᴇ ᴀᴛ ғɪʀsᴛ sᴛᴏᴘ ʀᴜɴɴɪɴɢ ᴍᴇɴᴛɪᴏɴ ᴘʀᴏᴄᴇss...")
-    spam_chats.append(chat_id)
-    usrnum = 0
-    usrtxt = ""
-    async for usr in client.get_chat_members(chat_id):
-        if not chat_id in spam_chats:
-            break
-        if usr.user.is_bot:
-            continue
-        usrnum += 1
-        usrtxt += f"<a href='tg://user?id={usr.user.id}'>{usr.user.first_name}</a> "
-
-        if usrnum == 1:
-            txt = f"{usrtxt} {random.choice(VC_TAG)}"
-            await client.send_message(chat_id, txt)
-            await asyncio.sleep(4)
-            usrnum = 0
-            usrtxt = ""
-    try:
-        spam_chats.remove(chat_id)
-    except:
-        pass
+    await _tag_members(client, message, None, VC_TAG)
 
 
 
-@app.on_message(filters.command(["cancel", "histop", "lifestop"]))
+@app.on_message(filters.command(["histop", "lifestop", "hicancel"]) & filters.group)
 async def cancel_spam(client, message):
+    if not message.from_user:
+        return
     if not message.chat.id in spam_chats:
         return await message.reply("๏ ᴄᴜʀʀᴇɴᴛʟʏ ɪ'ᴍ ɴᴏᴛ ᴛᴀɢɢɪɴɢ ʙᴀʙʏ.")
     is_admin = False

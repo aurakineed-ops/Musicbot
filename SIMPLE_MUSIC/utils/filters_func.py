@@ -135,7 +135,7 @@ async def GetFIlterMessage(message):
     content = None
     text = str()
 
-    raw_text = message.text or message.caption
+    raw_text = message.text or message.caption or ""
     args = raw_text.split(None, 2)
         
     if len(args) >= 3 and not message.reply_to_message:

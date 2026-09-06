@@ -23,10 +23,8 @@ async def add_filter_db(chat_id: int, filter_name: str, content: str, text: str,
    )
 
    if filter_data is None:
-      _id = await filters.count_documents({}) + 1
       await filters.insert_one(
          {
-            '_id': _id,
             'chat_id': chat_id,
             'filters': [
                {
@@ -88,7 +86,7 @@ async def stop_db(chat_id: int, filter_name:str):
       }
    )
 
-async def stop_all_db(chat_id: id):
+async def stop_all_db(chat_id: int):
    await filters.update_one(
       {
          'chat_id': chat_id
@@ -108,7 +106,7 @@ async def get_filter(chat_id: int, filter_name: str):
       }
    )
    if filter_data is not None:
-      filters_ = filter_data['filters']
+      filters_ = filter_data.get('filters', [])
       for filter_ in filters_:
          if filter_['filter_name'] == filter_name:
             content = filter_['content']
@@ -129,7 +127,7 @@ async def get_filters_list(chat_id: int):
    )
    if filter_data is not None:
       FILTERS_NAME = list()
-      for filter_name in filter_data['filters']:
+      for filter_name in filter_data.get('filters', []):
          FILTERS_NAME.append(filter_name['filter_name'])
       return FILTERS_NAME
    else:

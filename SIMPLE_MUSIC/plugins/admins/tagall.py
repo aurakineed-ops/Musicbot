@@ -13,6 +13,7 @@
 # ---------------------------------------------------------------
 
 import asyncio
+from html import escape
 from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ParseMode
 from pyrogram.errors import FloodWait
@@ -63,65 +64,63 @@ EMOJI = [
 ]
 
 def clean_text(text):
-    """Escape markdown special characters"""
+    """Escape user text before sending it as HTML."""
     if not text:
         return ""
-    return re.sub(r'([_*()~`>#+-=|{}.!])', r'\\1', text)
+    return escape(text, quote=False)
 
 async def is_admin(chat_id, user_id):
-    admin_ids = [
-        admin.user.id
+    if not user_id:
+        return False
+    try:
         async for admin in app.get_chat_members(
             chat_id, filter=ChatMembersFilter.ADMINISTRATORS
-        )
-    ]
-    return user_id in admin_ids
+        ):
+            if admin.user and admin.user.id == user_id:
+                return True
+    except Exception:
+        return False
+    return False
 
 async def process_members(chat_id, members, text=None, replied=None):
     tagged_members = 0
     usernum = 0
     usertxt = ""
-    emoji_sequence = random.choice(EMOJI)
-    emoji_index = 0
-    
     for member in members:
         if chat_id not in SPAM_CHATS:
             break
-        if member.user.is_deleted or member.user.is_bot:
+        user = member.user
+        if not user or user.is_deleted or user.is_bot:
             continue
             
         tagged_members += 1
         usernum += 1
         
-        emoji = emoji_sequence[emoji_index % len(emoji_sequence)]
-        usertxt += f"<a href='tg://user?id={member.user.id}'>{emoji}</a> "
-        emoji_index += 1
+        name = escape(user.first_name or "User")
+        usertxt += f"<a href='tg://user?id={user.id}'>{name}</a> "
         
         if usernum == 5:
-            try:
-                if replied:
-                    await replied.reply_text(
-                        usertxt,
-                        disable_web_page_preview=True,
-                        parse_mode=ParseMode.MARKDOWN
-                    )
-                else:
-                    await app.send_message(
-                        chat_id,
-                        f"{text}\n{usertxt}",
-                        disable_web_page_preview=True,
-                        parse_mode=ParseMode.MARKDOWN
-                    )
-                await asyncio.sleep(2)  # Reduced sleep time to 2 seconds
-                usernum = 0
-                usertxt = ""
-                emoji_sequence = random.choice(EMOJI)
-                emoji_index = 0
-            except FloodWait as e:
-                await asyncio.sleep(e.value + 2)  # Extra buffer time
-            except Exception as e:
-                await app.send_message(chat_id, f"Error while tagging: {str(e)}")
-                continue
+            while True:
+                try:
+                    if replied:
+                        await replied.reply_text(
+                            usertxt,
+                            disable_web_page_preview=True,
+                            parse_mode=ParseMode.HTML
+                        )
+                    else:
+                        await app.send_message(
+                            chat_id,
+                            f"{text}\n{usertxt}",
+                            disable_web_page_preview=True,
+                            parse_mode=ParseMode.HTML
+                        )
+                    break
+                except FloodWait as e:
+                    await asyncio.sleep(e.value + 1)
+            await asyncio.sleep(2)
+            usernum = 0
+            usertxt = ""
     
     if usernum > 0 and chat_id in SPAM_CHATS:
         try:
@@ -129,14 +128,14 @@ async def process_members(chat_id, members, text=None, replied=None):
                 await replied.reply_text(
                     usertxt,
                     disable_web_page_preview=True,
-                    parse_mode=ParseMode.MARKDOWN
+                    parse_mode=ParseMode.HTML
                 )
             else:
                 await app.send_message(
                     chat_id,
                     f"{text}\n\n{usertxt}",
                     disable_web_page_preview=True,
-                    parse_mode=ParseMode.MARKDOWN
+                    parse_mode=ParseMode.HTML
                 )
         except Exception as e:
             await app.send_message(chat_id, f"Error sending final batch: {str(e)}")
@@ -144,10 +143,16 @@ async def process_members(chat_id, members, text=None, replied=None):
     return tagged_members
 
 @app.on_message(
-    filters.command(["all", "allmention", "mentionall", "tagall"], prefixes=["/", "@"])
+    filters.command(
+        ["all", "allmention", "mentionall", "tagall"],
+        prefixes=["/", "@", "#"]
+    ) & filters.group
 )
 async def tag_all_users(_, message):
-    admin = await is_admin(message.chat.id, message.from_user.id)
+    admin = await is_admin(
+        message.chat.id,
+        message.from_user.id if message.from_user else None
+    )
     if not admin:
         return await message.reply_text("Only admins can use this command.")
 
@@ -168,7 +173,10 @@ async def tag_all_users(_, message):
         async for m in app.get_chat_members(message.chat.id):
             members.append(m)
         
-        total_members = len(members)
+        total_members = sum(
+            1 for m in members
+            if m.user and not m.user.is_bot and not m.user.is_deleted
+        )
         SPAM_CHATS.append(message.chat.id)
         
         text = None
@@ -201,7 +209,10 @@ Tagged members: {tagged_members}
             pass
 
 @app.on_message(
-    filters.command(["admintag", "adminmention", "admins", "report"], prefixes=["/", "@"])
+    filters.command(
+        ["admintag", "adminmention", "report"],
+        prefixes=["/", "@", "#"]
+    ) & filters.group
 )
 async def tag_all_admins(_, message):
     if not message.from_user:
@@ -266,18 +277,20 @@ Tagged admins: {tagged_admins}
     filters.command(
         [
             "stopmention",
-            "cancel",
             "cancelmention",
             "offmention",
             "mentionoff",
             "cancelall",
         ],
-        prefixes=["/", "@"],
-    )
+        prefixes=["/", "@", "#"],
+    ) & filters.group
 )
 async def cancelcmd(_, message):
     chat_id = message.chat.id
-    admin = await is_admin(chat_id, message.from_user.id)
+    admin = await is_admin(
+        chat_id,
+        message.from_user.id if message.from_user else None
+    )
     if not admin:
         return await message.reply_text("Only admins can use this command.")
 

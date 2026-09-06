@@ -1,4 +1,5 @@
 import asyncio
+from html import escape
 import logging
 from pyrogram import filters
 from pyrogram.enums import (
@@ -76,7 +77,7 @@ async def mention_users(client, message: Message, mode, text):
                 continue
 
             usrnum += 1
-            name = user.first_name or "User"
+            name = escape(user.first_name or "User")
             usrtxt += f"<a href='tg://user?id={user.id}'>{name}</a> "
 
             if usrnum == 5:
@@ -84,13 +85,13 @@ async def mention_users(client, message: Message, mode, text):
                     await client.send_message(
                         chat_id,
                         f"{usrtxt}\n\n{msg_text}",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True,
                     )
                 else:
                     await reply_msg.reply_text(
                         usrtxt,
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True,
                     )
 
@@ -104,13 +105,13 @@ async def mention_users(client, message: Message, mode, text):
                 await client.send_message(
                     chat_id,
                     f"{usrtxt}\n\n{msg_text if msg_text else ''}",
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.HTML,
                     disable_web_page_preview=True,
                 )
             else:
                 await reply_msg.reply_text(
                     usrtxt,
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.HTML,
                     disable_web_page_preview=True,
                 )
 
@@ -135,7 +136,7 @@ async def utag(_, message: Message):
 
     text = None
     if len(message.command) > 1:
-        text = message.text.split(None, 1)[1]
+        text = escape(message.text.split(None, 1)[1], quote=False)
 
     await mention_users(app, message, "text_on_cmd", text)
 
@@ -159,7 +160,7 @@ async def atag(_, message: Message):
             ):
                 user = m.user
                 if user and not user.is_bot:
-                    name = user.first_name or "Admin"
+                    name = escape(user.first_name or "Admin")
                     members.append(f"<a href='tg://user?id={user.id}'>{name}</a>")
     except Exception:
         return await message.reply_text("<i>Failed to fetch participants!</i>")
@@ -175,19 +176,19 @@ async def atag(_, message: Message):
         text = message.text.split(None, 1)[1]
         await message.reply_text(
             f"{admin_text}\n\n{text}",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
     elif message.reply_to_message:
         await message.reply_to_message.reply_text(
             admin_text,
-            parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
     else:
         await message.reply_text(
             admin_text,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
 
@@ -195,7 +196,7 @@ async def atag(_, message: Message):
 # ===================== CANCEL (FIXED) =====================
 
 # group=-1 lagaya hai taaki ye handler sabse pehle run ho clashing se bachne ke liye
-@app.on_message(filters.command(["cancel", "utagstop", "stop"]) & filters.group, group=-1)
+@app.on_message(filters.command(["utagstop"]) & filters.group, group=-1)
 async def cancel_spam(_, message: Message):
     user_id = message.from_user.id if message.from_user else None
     if not await is_admin(message.chat.id, user_id):

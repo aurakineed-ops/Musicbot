@@ -36,7 +36,7 @@ def _get_style(style_val):
     return {}
 
 # 1. FILTER SET KARNE KA FUNCTION (Text, Sticker, Media Sab Support Karega)
-@app.on_message(filters.command("filter") & admin_filter)
+@app.on_message(filters.command("filter") & filters.group & admin_filter)
 @user_admin
 async def _filter(client, message):
     chat_id = message.chat.id 
@@ -47,6 +47,9 @@ async def _filter(client, message):
 
     # Filter ke naam ko space-free aur lowercase banayein uniform storage ke liye
     filter_name = message.command[1].strip().lower()
+    if not filter_name:
+        await message.reply_text("❌ <b>Filter ka naam empty nahi ho sakta!</b>")
+        return
     
     if not message.reply_to_message:
         await message.reply_text("❌ <b>Kisi text, sticker, ya photo par reply karke ye command dein!</b>")
@@ -55,6 +58,12 @@ async def _filter(client, message):
     try:
         # GetFIlterMessage automatic sticker/media/text detect kar leta hai
         content, text, data_type = await GetFIlterMessage(message)
+        if data_type is None:
+            await message.reply_text(
+                "❌ Is message type ke liye filter support nahi hai. "
+                "Text, sticker, photo, video, audio, voice ya document use karein."
+            )
+            return
         await add_filter_db(chat_id, filter_name=filter_name, content=content, text=text, data_type=data_type)
         await message.reply_text(f"<emoji id='6082375377123023700'>✅</emoji> Saved filter '`{filter_name}`' successfully!")
     except Exception as e:
@@ -70,7 +79,10 @@ async def FilterCheckker(client, message):
     text = (message.text or message.caption).strip().lower()
     chat_id = message.chat.id
     
-    ALL_FILTERS = await get_filters_list(chat_id)
+    try:
+        ALL_FILTERS = await get_filters_list(chat_id)
+    except Exception:
+        return
     if not ALL_FILTERS or len(ALL_FILTERS) == 0:
         return
 
@@ -87,14 +99,26 @@ async def FilterCheckker(client, message):
         # Word matching filter logic
         pattern = r"( |^|[^\w])" + re.escape(filter_.lower()) + r"( |$|[^\w])"
         if re.search(pattern, text, flags=re.IGNORECASE):
-            filter_name, content, text, data_type = await get_filter(chat_id, filter_)
-            await SendFilterMessage(
-                message=message,
-                filter_name=filter_,
-                content=content,
-                text=text,
-                data_type=data_type
-            )
+            try:
+                filter_data = await get_filter(chat_id, filter_)
+            except Exception:
+                continue
+            if not filter_data:
+                continue
+            filter_name, content, text, data_type = filter_data
+            if not content and data_type != 1:
+                continue
+            try:
+                await SendFilterMessage(
+                    message=message,
+                    filter_name=filter_,
+                    content=content,
+                    text=text,
+                    data_type=data_type
+                )
+            except Exception:
+                return
+            break
 
 
 # 3. FILTERS LIST DEKHNE KA FUNCTION
@@ -119,7 +143,7 @@ async def _filters(client, message):
 
 
 # 4. FILTER STOP/DELETE KARNE KA FUNCTION (100% Fixed Bug)
-@app.on_message(filters.command(['stopfilter', 'stop']) & admin_filter)
+@app.on_message(filters.command('stopfilter') & filters.group & admin_filter)
 @user_admin
 async def stop(client, message):
     chat_id = message.chat.id
