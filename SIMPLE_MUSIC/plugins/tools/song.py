@@ -51,6 +51,11 @@ def _get_style(style_val):
         return {"style": style_val}
     return {}
 
+def _get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 
 async def _prepare_song_photo(source):
     """Resolve an HTTP thumbnail to a local path accepted by Pyrogram."""
@@ -177,7 +182,7 @@ async def song_helper_cb(client, cq, lang):
         )],
         [
             InlineKeyboardButton(lang["BACK_BUTTON"], callback_data=f"song_back {stype}|{vidid}", **_get_style(r2)),
-            InlineKeyboardButton(lang["CLOSE_BUTTON"], callback_data="close", **_get_style(r3)),
+            InlineKeyboardButton(lang["CLOSE_BUTTON"], callback_data="close", **_get_style(r3), **_get_close_icon()),
         ],
     ]
     await cq.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))

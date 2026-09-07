@@ -27,6 +27,11 @@ def get_random_style():
         return {"style": random.choice(STYLES)}
     return {}
 
+def get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def song_markup(_, vidid):
     buttons = [
         [
@@ -45,7 +50,8 @@ def song_markup(_, vidid):
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"], 
                 callback_data="close",
-                **get_random_style()
+                **get_random_style(),
+                **get_close_icon()
             ),
         ],
     ]

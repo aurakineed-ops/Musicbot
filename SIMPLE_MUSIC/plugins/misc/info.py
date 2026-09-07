@@ -15,6 +15,12 @@ import asyncio
 from pyrogram import filters, Client, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from SIMPLE_MUSIC import app
+import config
+
+def _close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
 
 INFO_TEXT = """
 <u><b>ʙʜᴀɪ ᴛᴜɴᴇ ᴋᴜᴄʜ ᴋɪʏᴀ ʜᴀɪ ᴋʏᴀ<emoji id='5393313205227366608'>😂</emoji><emoji id='5393313205227366608'>😂</emoji></b></u>
@@ -82,7 +88,7 @@ async def userinfo(_, message: Message):
                         InlineKeyboardButton("👤 ᴜsᴇʀ ᴘʀᴏғɪʟᴇ", url=profile_url)
                     ],
                     [
-                        InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")
+                        InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close", **_close_icon())
                     ]
                 ]
             ),

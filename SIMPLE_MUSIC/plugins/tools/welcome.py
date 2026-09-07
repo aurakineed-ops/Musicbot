@@ -28,7 +28,7 @@ from SIMPLE_MUSIC.utils.database import (
 
 LOGGER = getLogger(__name__)
 
-WELCOME_VIDEO_URL = "https://files.catbox.moe/9iom66.mp4"
+WELCOME_VIDEO_URL_DEFAULT = "https://files.catbox.moe/9iom66.mp4"
 WELCOME_USAGE = "<b>ᴜsᴀɢᴇ:</b>\n<b>⦿ /wel [on|off]</b>"
 SET_USAGE = (
     "<b>Reply to a text, photo, or video with `/set welcome` to save it.</b>\n\n"
@@ -50,11 +50,17 @@ def _btn_style():
     return {}
 
 
+def _owner_btn_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "6293963629540677526"}
+    return {}
+
+
 def _welcome_markup():
     return InlineKeyboardMarkup(
         [
             [InlineKeyboardButton(text="✙ ᴋɪᴅɴᴀᴘ ᴍᴇ ✙", url=f"https://t.me/{app.username}?startgroup=true", **_btn_style())],
-            [InlineKeyboardButton(text="👑 ᴏᴡɴᴇʀ", callback_data="welcome_owner_alert", **_btn_style())],
+            [InlineKeyboardButton(text="ᴍᥲsᴛꫀʀ (ꪮᴡɴꫀʀ)", callback_data="welcome_owner_alert", **_btn_style(), **_owner_btn_icon())],
         ]
     )
 
@@ -62,9 +68,10 @@ def _welcome_markup():
 @app.on_callback_query(filters.regex("^welcome_owner_alert$"))
 async def welcome_owner_alert_cb(_, query: CallbackQuery):
     await query.answer(
-        f"🇨🇦 ♪ {config.BOT_NAME} ✕ ᴍᴜsɪᴄʙᴏᴛ 🐾\n\n"
-        "🚨 SYSTEM ALERT: TU BHIKHARI HAI, OWNER SE DOOR REH "
-        "WARNA GHAR ME GHUS KE SYSTEM SET KAR DENGE! 💀",
+        "💀 ᴍᴀsᴛᴇʀ (ᴏᴡɴᴇʀ)\n\n"
+        "🚨 ꜱʏꜱᴛᴇᴍ ᴀʟᴇʀᴛ:\n"
+        "ᴛᴜ ʙʜɪᴋʜᴀʀɪ ʜᴀɪ, ᴏᴡɴᴇʀ ꜱᴇ ᴅᴏᴏʀ ʀᴇʜ,\n"
+        "ᴡᴀʀɴᴀ ɢʜᴀʀ ᴍᴇ ɢʜᴜꜱ ᴋᴇ ꜱʏꜱᴛᴇᴍ ꜱᴇᴛ ᴋᴀʀ ᴅᴇɴɢᴇ! 💀",
         show_alert=True,
     )
 
@@ -230,7 +237,7 @@ async def greet_new_member(_, member: ChatMemberUpdated):
         if custom:
             await _send_custom_welcome(chat_id, custom, user, member.chat.title or "", count)
             return
-        caption_text = f"""✨ ╭── [ <emoji id='5411200584374056500'>🎁</emoji> <b>ᴡ є ʟ ᴄ σ ϻ є  ʙ ᴧ ʙ ʏ</b> <emoji id='5422470088932491424'>🎁</emoji> ]
+        caption_text = f"""<blockquote>✨ ╭── [ <emoji id='5411200584374056500'>🎁</emoji> <b>ᴡ є ʟ ᴄ σ ϻ є  ʙ ᴧ ʙ ʏ</b> <emoji id='5422470088932491424'>🎁</emoji> ]
 │
 ├── <emoji id='5278433859535385490'>🍼</emoji> ⇛ <b>η ᴧ ϻ є :</b> {user.mention}
 ├── <emoji id='6296330130750972317'>🎁</emoji> ⇛ <b>υ s є ʀ :</b> @{html.escape(user.username) if user.username else 'None'}
@@ -242,10 +249,10 @@ async def greet_new_member(_, member: ChatMemberUpdated):
 ├── <emoji id='5422649648630233281'>🎁</emoji> ⇛ <b>ησ sᴘᴧϻ σʀ 18+ ᴄσηᴛєηᴛ .</b>
 ├── <emoji id='5409350832153979723'>🎁</emoji> ⇛ <b>єηᴊσʏ ᴛʜє ϻυsɪᴄ ᴧηᴅ ᴠɪʙє !</b>
 │
-🌸 ╰── <b>ᴘ σ ᴡ є ʀ є ᴅ  ʙ ʏ  ʏ σ ʀ υ</b>"""
+🌸 ╰── <b>ᴘ σ ᴡ є ʀ є ᴅ  ʙ ʏ  ʏ σ ʀ υ</b></blockquote>"""
         await app.send_video(
             chat_id,
-            video=WELCOME_VIDEO_URL,
+            video=getattr(config, "WELCOME_VIDEO_URL", WELCOME_VIDEO_URL_DEFAULT),
             caption=caption_text,
             has_spoiler=True,
             reply_markup=_welcome_markup(),

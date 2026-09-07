@@ -28,6 +28,7 @@ from SIMPLE_MUSIC.core.call import SIMPLE
 from SIMPLE_MUSIC.misc import sudo
 from SIMPLE_MUSIC.plugins import ALL_MODULES
 from SIMPLE_MUSIC.utils.database import get_banned_users, get_gbanned
+from SIMPLE_MUSIC.utils.dynamic_settings import load_overrides
 
 
 class _HealthHandler(BaseHTTPRequestHandler):
@@ -78,6 +79,7 @@ async def init():
         exit()
 
     await sudo()
+    await load_overrides()
 
     try:
         users = await get_gbanned()

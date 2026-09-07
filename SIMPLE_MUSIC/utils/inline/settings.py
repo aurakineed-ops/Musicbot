@@ -28,6 +28,11 @@ def get_random_style():
         return {"style": random.choice(STYLES)}
     return {}
 
+def get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 
 def setting_markup(_):
     buttons = [
@@ -42,7 +47,7 @@ def setting_markup(_):
             InlineKeyboardButton(text=_["ST_B_4"], callback_data="VM", **get_random_style()),
         ],
         [
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -73,7 +78,7 @@ def vote_mode_markup(_, current, mode: Union[bool, str] = None):
                 callback_data="settings_helper",
                 **get_random_style()
             ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -98,7 +103,7 @@ def auth_users_markup(_, status: Union[bool, str] = None):
                 callback_data="settings_helper",
                 **get_random_style()
             ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -141,7 +146,7 @@ def playmode_users_markup(
                 callback_data="settings_helper",
                 **get_random_style()
             ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons

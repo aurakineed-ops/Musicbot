@@ -65,6 +65,11 @@ def _get_style(style_val):
         return {"style": style_val}
     return {}
 
+def _get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 
 @app.on_message(
     filters.command(["settings", "setting"]) & filters.group & ~BANNED_USERS
@@ -386,7 +391,7 @@ async def authusers_mar(client, CallbackQuery, _):
                         ),
                         InlineKeyboardButton(
                             text=_["CLOSE_BUTTON"],
-                            callback_data=f"close", **_get_style(r2)
+                            callback_data=f"close", **_get_style(r2), **_get_close_icon()
                         ),
                     ]
                 ]

@@ -29,6 +29,11 @@ def _get_style(style_val):
         return {"style": style_val}
     return {}
 
+def _get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def queue_markup(
     _,
     DURATION,
@@ -48,7 +53,8 @@ def queue_markup(
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
                 callback_data="close",
-                **_get_style(r1)
+                **_get_style(r1),
+                **_get_close_icon()
             ),
         ]
     ]
@@ -69,7 +75,8 @@ def queue_markup(
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
                 callback_data="close",
-                **_get_style(r2)
+                **_get_style(r2),
+                **_get_close_icon()
             ),
         ],
     ]
@@ -90,7 +97,8 @@ def queue_back_markup(_, CPLAY):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **_get_style(r1)
+                    **_get_style(r1),
+                    **_get_close_icon()
                 ),
             ]
         ]
@@ -108,6 +116,6 @@ def aq_markup(_, chat_id):
             InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}", **_get_style(r2)),
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r2)),
         ],
-        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **_get_style(r4))],
+        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **_get_style(r4), **_get_close_icon())],
     ]
     return buttons

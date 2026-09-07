@@ -18,11 +18,18 @@ from random import choice
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from pyrogram.handlers import MessageHandler
 from SIMPLE_MUSIC import app
+import config
+
+def _close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def figle(text):
     x = pyfiglet.FigletFont.getFonts()
     font = choice(x)
     figled = str(pyfiglet.figlet_format(text,font=font))
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="ᴄʜᴀɴɢᴇ", callback_data="figlet"),InlineKeyboardButton(text="ᴄʟᴏsᴇ", callback_data="close_reply")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="ᴄʜᴀɴɢᴇ", callback_data="figlet"),InlineKeyboardButton(text="ᴄʟᴏsᴇ", callback_data="close_reply", **_close_icon())]])
     return figled, keyboard
 
 @app.on_message(filters.command("figlet"))

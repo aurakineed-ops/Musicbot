@@ -49,7 +49,8 @@ def help_pannel_page1(_, START: Union[bool, int] = None):
                 InlineKeyboardButton(
                     text="⌂  Hᴏᴍᴇ" if START else _["CLOSE_BUTTON"],
                     callback_data="home" if START else "close",
-                    **get_style(3)
+                    **get_style(3),
+                    **({} if START else {"icon_custom_emoji_id": "5424756476117807727"} if getattr(config, "BUTTON_ICON", False) else {})
                 ),
                 InlineKeyboardButton(text="→  Nᴇxᴛ", callback_data="help_page_2", **get_style(3)),
             ],
@@ -88,7 +89,8 @@ def help_pannel_page2(_, START: Union[bool, int] = None):
                 InlineKeyboardButton(
                     text="⌂  Hᴏᴍᴇ" if START else _["CLOSE_BUTTON"],
                     callback_data="home" if START else "close",
-                    **get_style(3)
+                    **get_style(3),
+                    **({} if START else {"icon_custom_emoji_id": "5424756476117807727"} if getattr(config, "BUTTON_ICON", False) else {})
                 ),
                 InlineKeyboardButton(text="→  Nᴇxᴛ", callback_data="help_page_3", **get_style(3)),
             ],
@@ -127,7 +129,8 @@ def help_pannel_page3(_, START: Union[bool, int] = None):
                 InlineKeyboardButton(
                     text="⌂  Hᴏᴍᴇ" if START else _["CLOSE_BUTTON"],
                     callback_data="home" if START else "close",
-                    **get_style(3)
+                    **get_style(3),
+                    **({} if START else {"icon_custom_emoji_id": "5424756476117807727"} if getattr(config, "BUTTON_ICON", False) else {})
                 ),
                 InlineKeyboardButton(text="→  Nᴇxᴛ", callback_data="help_page_4", **get_style(3)),
             ],
@@ -161,7 +164,8 @@ def help_pannel_page4(_, START: Union[bool, int] = None):
                 InlineKeyboardButton(
                     text="⌂  Hᴏᴍᴇ" if START else _["CLOSE_BUTTON"],
                     callback_data="home" if START else "close",
-                    **get_style(2)
+                    **get_style(2),
+                    **({} if START else {"icon_custom_emoji_id": "5424756476117807727"} if getattr(config, "BUTTON_ICON", False) else {})
                 ),
                 InlineKeyboardButton(text="→  Nᴇxᴛ", callback_data="help_page_1", **get_style(2)),
             ],

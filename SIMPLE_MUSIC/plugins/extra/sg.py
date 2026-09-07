@@ -31,6 +31,11 @@ def _get_style(style_val):
         return {"style": style_val}
     return {}
 
+def _get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 @app.on_message(filters.command("sg"))
 async def sg(client: Client, message: Message):
     if len(message.command) == 1 and not message.reply_to_message:
@@ -72,7 +77,7 @@ async def sg(client: Client, message: Message):
         r1 = random.choice(STYLES)
         await message.reply(
             f"<emoji id='5444856076954520455'>🧾</emoji> <b>ʜɪsᴛᴏʀʏ:</b>\n\n{msg.text}",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close", **_get_style(r1))]])
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close", **_get_style(r1), **_get_close_icon())]])
         )
         found = True
         break

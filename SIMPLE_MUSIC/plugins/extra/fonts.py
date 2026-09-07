@@ -15,6 +15,12 @@ from pyrogram import  filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from SIMPLE_MUSIC.utils.Simple_font import Fonts
 from SIMPLE_MUSIC import app
+import config
+
+def _close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
 
 @app.on_message(filters.command(["font", "fonts"]))
 async def style_buttons(c, m, cb=False):
@@ -55,7 +61,7 @@ async def style_buttons(c, m, cb=False):
             InlineKeyboardButton("H̆̈ă̈p̆̈p̆̈y̆̈", callback_data="style+happy"),
             InlineKeyboardButton("S̑̈ȃ̈d̑̈", callback_data="style+sad"),
         ],
-        [InlineKeyboardButton ("ᴄʟᴏsᴇ",callback_data="close_reply"),InlineKeyboardButton ("ɴᴇxᴛ ➻", callback_data="nxt")],
+        [InlineKeyboardButton ("ᴄʟᴏsᴇ",callback_data="close_reply", **_close_icon()),InlineKeyboardButton ("ɴᴇxᴛ ➻", callback_data="nxt")],
     ]
     if not cb:
         await m.reply_text(
@@ -108,7 +114,7 @@ async def nxt(c, m):
                 InlineKeyboardButton("S̶t̶r̶i̶k̶e̶", callback_data="style+strike"),
                 InlineKeyboardButton("F༙r༙o༙z༙e༙n༙", callback_data="style+frozen"),
             ],
-            [InlineKeyboardButton ("ᴄʟᴏsᴇ",callback_data="close_reply"),InlineKeyboardButton ("ʙᴀᴄᴋ", callback_data="nxt+0")],
+            [InlineKeyboardButton ("ᴄʟᴏsᴇ",callback_data="close_reply", **_close_icon()),InlineKeyboardButton ("ʙᴀᴄᴋ", callback_data="nxt+0")],
         ]
         await m.answer()
         await m.message.edit_reply_markup(InlineKeyboardMarkup(buttons))

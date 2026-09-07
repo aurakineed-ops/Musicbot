@@ -2,6 +2,12 @@ from SIMPLE_MUSIC import app
 from pyrogram import Client, filters
 from pyrogram.enums import ParseMode
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import config
+
+def _close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
 
 @app.on_message(filters.command('id'))
 async def getid(client, message):
@@ -42,10 +48,10 @@ async def getid(client, message):
         text += f"● ɪᴅ ᴏғ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴄʜᴀᴛ/ᴄʜᴀɴɴᴇʟ, ɪs `{reply.sender_chat.id}`"
 
     await message.reply_text(
-        text,
+        f"<blockquote>{text}</blockquote>",
         disable_web_page_preview=True,
         parse_mode=ParseMode.DEFAULT,
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]]
+            [[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close", **_close_icon())]]
         )
     )

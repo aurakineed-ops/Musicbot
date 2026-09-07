@@ -175,6 +175,7 @@ SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/s0eczv.jpg"
 # ❖ ʙ ᴜ ᴛ ᴛ ᴏ ɴ   ᴄ ᴏ ʟ ᴏ ᴜ ʀ ❖
 # ━━━━━━━━━━━━━━━━━━━━━━━
 BUTTON_COLOUR = True
+BUTTON_ICON = True
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

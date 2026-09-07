@@ -391,13 +391,13 @@ class Call(PyTgCalls):
                     original_chat_id = popped["chat_id"] if popped else chat_id
                     await app.send_message(
                         original_chat_id,
-                        "<emoji id='6325715141643997191'>❤️</emoji> ╭── [ ǫᴜꫀᴜꫀ ꫀꪑᴘᴛʏ ]\n"
+                        "<blockquote><emoji id='6325715141643997191'>❤️</emoji> ╭── [ ǫᴜꫀᴜꫀ ꫀꪑᴘᴛʏ ]\n"
                         "│\n"
                         "├── <emoji id='5422559269633421747'>💐</emoji> ⇛ ʙꫝʙʏ ɢꫝꫝꪀꫀ ᴋʜꫝᴛꫝꪑ ʜꪮ ɢꫝʏꫀ ʜꫝɪꪀ!\n"
                         "│\n"
                         "├── <emoji id='5278477152805729495'>🐇</emoji> ⇛ ꫝᴜʀ ꜱᴜꪀꪀꫝ ʜꫝɪ ᴛꪮ ꪀɪᥴʜꫀ ᥴʟɪᥴᴋ ᴋꫝʀꪮ...\n"
                         "│\n"
-                        "<emoji id='5422609769858889724'>💖</emoji> ╰── ᴘꪮᴡꫀʀꫀᴅ ʙʏ : ˹Yꪮʀᴜ ꪛ Mᴜꜱɪᴄ !! 🌿",
+                        "<emoji id='5422609769858889724'>💖</emoji> ╰── ᴘꪮᴡꫀʀꫀᴅ ʙʏ : ˹Yꪮʀᴜ ꪛ Mᴜꜱɪᴄ !! 🌿</blockquote>",
                         parse_mode=ParseMode.HTML,
                     )
                 except Exception:

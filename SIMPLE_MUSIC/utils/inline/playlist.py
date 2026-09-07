@@ -27,6 +27,11 @@ def get_random_style():
         return {"style": random.choice(STYLES)}
     return {}
 
+def get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def botplaylist_markup(_):
     buttons = [
         [
@@ -37,7 +42,7 @@ def botplaylist_markup(_):
             ),
         ],
         [
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -50,7 +55,7 @@ def top_play_markup(_):
         [InlineKeyboardButton(text=_["PL_B_11"], callback_data="SERVERTOP user", **get_random_style())],
         [
             InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="get_playmarkup", **get_random_style()),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -64,7 +69,7 @@ def get_playlist_markup(_):
         ],
         [
             InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="home_play", **get_random_style()),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -77,7 +82,7 @@ def top_play_markup(_):
         [InlineKeyboardButton(text=_["PL_B_11"], callback_data="SERVERTOP Personal", **get_random_style())],
         [
             InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="get_playmarkup", **get_random_style()),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -91,7 +96,7 @@ def failed_top_markup(_):
                 callback_data="get_top_playlists",
                 **get_random_style()
             ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -116,7 +121,8 @@ def warning_markup(_):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **get_random_style()
+                    **get_random_style(),
+                    **get_close_icon()
                 ),
             ],
         ]
@@ -131,7 +137,8 @@ def close_markup(_):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **get_random_style()
+                    **get_random_style(),
+                    **get_close_icon()
                 ),
             ]
         ]

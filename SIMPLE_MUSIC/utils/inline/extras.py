@@ -29,11 +29,16 @@ def get_random_style():
         return {"style": random.choice(STYLES)}
     return {}
 
+def get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def botplaylist_markup(_):
     buttons = [
         [
             InlineKeyboardButton(text=_["S_B_9"], url=SUPPORT_CHAT, **get_random_style()),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style()),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close", **get_random_style(), **get_close_icon()),
         ],
     ]
     return buttons
@@ -45,7 +50,8 @@ def close_markup(_):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **get_random_style()
+                    **get_random_style(),
+                    **get_close_icon()
                 ),
             ]
         ]

@@ -15,11 +15,18 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, Message
 
+import config
 from SIMPLE_MUSIC import app
 from SIMPLE_MUSIC.utils.database import get_lang, set_lang
 from SIMPLE_MUSIC.utils.decorators import ActualAdminCB, language, languageCB
 from config import BANNED_USERS
 from strings import get_string, languages_present
+
+
+def _get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
 
 
 def lanuages_keyboard(_):
@@ -40,7 +47,7 @@ def lanuages_keyboard(_):
             text=_["BACK_BUTTON"],
             callback_data=f"settingsback_helper",
         ),
-        InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data=f"close"),
+        InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data=f"close", **_get_close_icon()),
     )
     return keyboard
 

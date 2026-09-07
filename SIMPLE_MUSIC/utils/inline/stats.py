@@ -27,6 +27,11 @@ def get_random_style():
         return {"style": random.choice(STYLES)}
     return {}
 
+def get_close_icon():
+    if getattr(config, "BUTTON_ICON", False):
+        return {"icon_custom_emoji_id": "5424756476117807727"}
+    return {}
+
 def stats_buttons(_, status):
     not_sudo = [
         InlineKeyboardButton(
@@ -54,7 +59,8 @@ def stats_buttons(_, status):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **get_random_style()
+                    **get_random_style(),
+                    **get_close_icon()
                 ),
             ],
         ]
@@ -74,7 +80,8 @@ def back_stats_buttons(_):
                 InlineKeyboardButton(
                     text=_["CLOSE_BUTTON"],
                     callback_data="close",
-                    **get_random_style()
+                    **get_random_style(),
+                    **get_close_icon()
                 ),
             ],
         ]
