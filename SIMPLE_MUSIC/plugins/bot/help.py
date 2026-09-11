@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 # -----------------------------------------------
 
@@ -19,7 +19,8 @@ from SIMPLE_MUSIC.utils.inline.help import (
     help_back_markup,
     private_help_panel,
 )
-from config import BANNED_USERS, SUPPORT_CHAT, HELP_IMG_URL
+import config
+from config import BANNED_USERS, SUPPORT_CHAT
 from strings import get_string, helpers
 
 @app.on_message(filters.command(["help"]) & filters.private & ~BANNED_USERS)
@@ -49,7 +50,7 @@ async def helper_private(
         _ = get_string(language)
         keyboard = help_pannel_page1(_)
         await update.reply_photo(
-            HELP_IMG_URL,
+            config.HELP_IMG_URL,
             caption=_["help_1"].format(SUPPORT_CHAT),
             reply_markup=keyboard,
         )

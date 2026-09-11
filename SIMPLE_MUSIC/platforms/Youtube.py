@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 
 import asyncio
@@ -63,9 +63,12 @@ async def save_persisted_gameover(vidid: str, data: dict):
         pass
 
 
+import config
 from config import (API_URL, VIDEO_API_URL, API_KEY, YT_API_KEY, YTPROXY_URL,
                     VDA_API_URL, VDA_API_KEY, VDA_AUDIO_QUALITY, VDA_VIDEO_FORMAT,
-                    YT_SEARCH_API_URL, VDA_KEYS_URL, GAMEOVER_API_URL, GAMEOVER_API_KEY)
+                    YT_SEARCH_API_URL, VDA_KEYS_URL, GAMEOVER_API_URL, GAMEOVER_API_KEY,
+                    GAMEOVER_AUTOPLAY_URL, GAMEOVER_PLAYLIST_URL, GAMEOVER_AUTOPLAY_PLAYLIST,
+                    GAMEOVER_AUTOPLAY_BATCH_SIZE)
 
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
@@ -75,6 +78,8 @@ VDA_KEYS_CACHE = None
 SEARCH_CACHE = {}
 DETAILS_CACHE = {}
 VIDEO_INFO_CACHE = {}
+RELATED_CACHE = {}
+RELATED_CACHE_TTL_SECONDS = 600
 GAMEOVER_CACHE = {}
 CACHE_TTL_SECONDS = 120
 
@@ -190,6 +195,73 @@ async def resolve_gameover(query: str):
     except Exception:
         pass
     return None
+
+
+async def resolve_gameover_by_url(resolve_url: str):
+    """Same as resolve_gameover but hits an already fully-built resolve URL
+    (as returned inside GameOver autoplay's track list — resolve_url_title)."""
+    if not resolve_url:
+        return None
+    try:
+        session = await get_session()
+        async with session.get(
+            resolve_url,
+            timeout=aiohttp.ClientTimeout(total=10, sock_connect=4, sock_read=6),
+        ) as response:
+            if response.status != 200:
+                return None
+            data = await response.json(content_type=None)
+        if isinstance(data, dict) and data.get("status") == "success" and data.get("stream_url"):
+            return data
+    except Exception:
+        pass
+    return None
+
+
+async def gameover_autoplay(song_query: str):
+    """GameOver's own Autoplay Vibe Engine — given the currently playing song's
+    title, returns a curated 'up next' list (title/artist/duration/thumbnail +
+    a ready resolve_url_title for each), used to drive /autoplay end-to-end."""
+    if not song_query:
+        return []
+    try:
+        session = await get_session()
+        async with session.get(
+            GAMEOVER_AUTOPLAY_URL,
+            params={"key": GAMEOVER_API_KEY, "song": song_query},
+            timeout=aiohttp.ClientTimeout(total=12, sock_connect=4, sock_read=8),
+        ) as response:
+            if response.status != 200:
+                return []
+            data = await response.json(content_type=None)
+        if isinstance(data, dict) and data.get("status") == "success":
+            return data.get("tracks") or []
+    except Exception:
+        pass
+    return []
+
+
+async def gameover_playlist(playlist_url: str, limit: int):
+    """Pulls a batch of tracks (real video_id + resolve_url each) straight
+    from a curated YouTube playlist via GameOver's Ultra Engine. Used as the
+    endless supply for /autoplay — raising `limit` just returns more tracks
+    from the same underlying playlist, so this can never 'run dry': call it
+    again with a bigger limit whenever the pool is running low."""
+    try:
+        session = await get_session()
+        async with session.get(
+            GAMEOVER_PLAYLIST_URL,
+            params={"key": GAMEOVER_API_KEY, "url": playlist_url, "limit": str(limit)},
+            timeout=aiohttp.ClientTimeout(total=15, sock_connect=4, sock_read=10),
+        ) as response:
+            if response.status != 200:
+                return []
+            data = await response.json(content_type=None)
+        if isinstance(data, dict) and data.get("status") == "success":
+            return data.get("tracks") or []
+    except Exception:
+        pass
+    return []
 
 
 async def _prefetch_gameover(vidid: str, title: str):
@@ -463,6 +535,59 @@ async def get_exact_video_info(video_id: str):
             VIDEO_INFO_CACHE[video_id] = (time.monotonic(), result)
             return result
     return None
+
+
+async def get_related_videos(video_id: str, limit: int = 10):
+    """
+    Real 'up next' songs for a video — pulled from YouTube's own auto-generated
+    Mix/Radio playlist (the same list YouTube itself uses for autoplay), not a
+    generic title search (which mostly just returns re-uploads/covers of the
+    same track). Returns a list of {"videoId", "title"} dicts, freshest first.
+    """
+    video_id = str(video_id or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{6,}", video_id):
+        return []
+
+    cached = RELATED_CACHE.get(video_id)
+    now = time.monotonic()
+    if cached and now - cached[0] < RELATED_CACHE_TTL_SECONDS:
+        return cached[1]
+
+    mix_url = f"https://www.youtube.com/watch?v={video_id}&list=RD{video_id}"
+    loop = asyncio.get_running_loop()
+
+    def extract_mix():
+        options = {
+            "quiet": True,
+            "no_warnings": True,
+            "skip_download": True,
+            "extract_flat": True,
+            "noplaylist": False,
+            "playlistend": limit + 1,
+            "nocheckcertificate": True,
+            "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+        }
+        with yt_dlp.YoutubeDL(options) as ydl:
+            return ydl.extract_info(mix_url, download=False)
+
+    try:
+        data = await loop.run_in_executor(None, extract_mix)
+    except Exception:
+        data = None
+
+    entries = []
+    if data and data.get("entries"):
+        for entry in data["entries"]:
+            if not entry:
+                continue
+            vid = entry.get("id")
+            if not vid or vid == video_id:
+                continue  # skip the seed song itself
+            entries.append({"videoId": vid, "title": entry.get("title") or "Unknown"})
+
+    RELATED_CACHE[video_id] = (now, entries)
+    return entries
+
 
 
 class YouTubeAPI:

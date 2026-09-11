@@ -1,4 +1,4 @@
-# Aaliya Music Bot - fixed GitHub cookies source
+# Yoru Music Bot - fixed GitHub cookies source
 # ------------------------------------------------
 import json
 import os

@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# Aaliya Music Bot — YouTube search command
+# Yoru Music Bot — YouTube search command
 # -----------------------------------------------
 from pyrogram.types import Message
 from pyrogram import filters

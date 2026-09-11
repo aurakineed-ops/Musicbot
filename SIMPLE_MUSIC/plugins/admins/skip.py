@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,16 +9,17 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
+import asyncio
 import config
 from SIMPLE_MUSIC import YouTube, app
-from SIMPLE_MUSIC.core.call import SIMPLE
+from SIMPLE_MUSIC.core.call import SIMPLE, _clear_
 from SIMPLE_MUSIC.misc import db
-from SIMPLE_MUSIC.utils.database import get_loop
+from SIMPLE_MUSIC.utils.database import get_loop, is_autoplay
 from SIMPLE_MUSIC.utils.decorators import AdminRightsCheck
 from SIMPLE_MUSIC.utils.inline import close_markup, stream_markup
 from SIMPLE_MUSIC.utils.stream.autoclear import auto_clean
@@ -53,18 +54,11 @@ async def skip(cli, message: Message, _, chat_id):
                             if popped:
                                 await auto_clean(popped)
                             if not check:
-                                try:
-                                    await message.reply_text(
-                                        text=_["admin_6"].format(
-                                            message.from_user.mention,
-                                            message.chat.title,
-                                        ),
-                                        reply_markup=close_markup(_),
-                                    )
-                                    await SIMPLE.stop_stream(chat_id)
-                                except:
+                                if await SIMPLE.try_autoplay_on_empty(chat_id, popped):
                                     return
-                                break
+                                await _clear_(chat_id)
+                                await SIMPLE.show_no_more_songs_card(chat_id, popped)
+                                return
                     else:
                         return await message.reply_text(_["admin_11"].format(count))
                 else:
@@ -81,16 +75,11 @@ async def skip(cli, message: Message, _, chat_id):
             if popped:
                 await auto_clean(popped)
             if not check:
-                await message.reply_text(
-                    text=_["admin_6"].format(
-                        message.from_user.mention, message.chat.title
-                    ),
-                    reply_markup=close_markup(_),
-                )
-                try:
-                    return await SIMPLE.stop_stream(chat_id)
-                except:
+                if await SIMPLE.try_autoplay_on_empty(chat_id, popped):
                     return
+                await _clear_(chat_id)
+                await SIMPLE.show_no_more_songs_card(chat_id, popped)
+                return
         except:
             try:
                 await message.reply_text(
@@ -103,6 +92,11 @@ async def skip(cli, message: Message, _, chat_id):
             except:
                 return
     queued = check[0]["file"]
+    SIMPLE._autoplay_reserved[chat_id] = False
+    if len(check) == 1 and await is_autoplay(chat_id):
+        asyncio.create_task(
+            SIMPLE.reserve_next_autoplay(chat_id, check[0]["chat_id"], check[0]["title"], "Autoplay", check[0].get("vidid"))
+        )
     title = (check[0]["title"]).title()
     user = check[0]["by"]
     streamtype = check[0]["streamtype"]
@@ -127,7 +121,7 @@ async def skip(cli, message: Message, _, chat_id):
             await SIMPLE.skip_stream(chat_id, link, video=status, image=image)
         except:
             return await message.reply_text(_["call_6"])
-        button = stream_markup(_, chat_id)
+        button = await stream_markup(_, chat_id)
         img = await get_thumb(videoid)
         run = await message.reply_photo(
             photo=img,
@@ -160,7 +154,7 @@ async def skip(cli, message: Message, _, chat_id):
             await SIMPLE.skip_stream(chat_id, file_path, video=status, image=image)
         except:
             return await mystic.edit_text(_["call_6"])
-        button = stream_markup(_, chat_id)
+        button = await stream_markup(_, chat_id)
         img = await get_thumb(videoid)
         run = await message.reply_photo(
             photo=img,
@@ -180,7 +174,7 @@ async def skip(cli, message: Message, _, chat_id):
             await SIMPLE.skip_stream(chat_id, videoid, video=status)
         except:
             return await message.reply_text(_["call_6"])
-        button = stream_markup(_, chat_id)
+        button = await stream_markup(_, chat_id)
         run = await message.reply_photo(
             photo=config.STREAM_IMG_URL,
             caption=_["stream_2"].format(user),
@@ -203,7 +197,7 @@ async def skip(cli, message: Message, _, chat_id):
         except:
             return await message.reply_text(_["call_6"])
         if videoid == "telegram":
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             queue_image = check[0].get("image")
             run = await message.reply_photo(
                 photo=queue_image
@@ -221,7 +215,7 @@ async def skip(cli, message: Message, _, chat_id):
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
         elif videoid == "soundcloud":
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await message.reply_photo(
                 photo=config.SOUNCLOUD_IMG_URL
                 if str(streamtype) == "audio"
@@ -234,7 +228,7 @@ async def skip(cli, message: Message, _, chat_id):
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
         else:
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             img = await get_thumb(videoid)
             run = await message.reply_photo(
                 photo=img,

@@ -1,6 +1,6 @@
-# Aaliya Music Bot
+# Yoru Music Bot
 
-Private backup of the Aaliya Music Bot source. The project includes Telegram music playback, YouTube search and download paths, API-first audio resolving, stream controls, and the simple Aaliya AI command module.
+Private backup of the Yoru Music Bot source. The project includes Telegram music playback, YouTube search and download paths, API-first audio resolving, stream controls, and the simple Yoru AI command module.
 
 ## Backup safety
 
@@ -10,7 +10,7 @@ Audio playback uses the configured GameOver resolver API directly and does not f
 
 ## Simple AI commands
 
-The simple AI module supports `/ask`, `/chatgpt`, and `/aaliya`. It uses the configured Aaliya personality and does not register a broad group-message listener.
+The simple AI module supports `/ask`, `/chatgpt`, and `/yoru`. It uses the configured Yoru personality and does not register a broad group-message listener.
 
 ## Restore overview
 

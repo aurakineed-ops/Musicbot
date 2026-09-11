@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,15 +9,16 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyrogram.enums import ChatType
 import config
 from SIMPLE_MUSIC import app
 from SIMPLE_MUSIC.core.call import SIMPLE, autoend
-from SIMPLE_MUSIC.utils.database import get_client, is_active_chat, is_autoend
+from SIMPLE_MUSIC.misc import db
+from SIMPLE_MUSIC.utils.database import get_client, group_assistant, is_active_chat, is_autoend
 
 
 async def auto_leave():
@@ -65,7 +66,7 @@ async def auto_end():
     while not await asyncio.sleep(5):
         if not await is_autoend():
             continue
-        for chat_id in autoend:
+        for chat_id in list(autoend.keys()):
             timer = autoend.get(chat_id)
             if not timer:
                 continue
@@ -88,3 +89,29 @@ async def auto_end():
 
 
 asyncio.create_task(auto_end())
+
+
+async def monitor_alone_vc():
+    """Unlike the one-time check at join, this keeps watching every 20s for
+    as long as music is playing — if everyone leaves the videochat partway
+    through a song, it starts the same 1-minute leave-countdown that
+    /autoend already uses; if someone comes back in time, it's cancelled."""
+    while not await asyncio.sleep(20):
+        if not await is_autoend():
+            continue
+        for chat_id in list(db.keys()):
+            try:
+                if not await is_active_chat(chat_id):
+                    continue
+                assistant = await group_assistant(SIMPLE, chat_id)
+                users = len(await assistant.get_participants(chat_id))
+            except Exception:
+                continue
+            if users <= 1:  # only the assistant itself is left
+                if not autoend.get(chat_id):
+                    autoend[chat_id] = datetime.now() + timedelta(minutes=1)
+            else:
+                autoend[chat_id] = {}
+
+
+asyncio.create_task(monitor_alone_vc())

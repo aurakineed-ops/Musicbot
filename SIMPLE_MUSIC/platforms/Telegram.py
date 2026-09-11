@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import asyncio
 import os
@@ -141,7 +141,7 @@ class TeleAPI:
         if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
             return output_path
 
-        cover_path = os.path.join(os.path.realpath("downloads"), "aaliya_vplay_cover.jpg")
+        cover_path = os.path.join(os.path.realpath("downloads"), "yoru_vplay_cover.jpg")
         if not os.path.exists(cover_path) or os.path.getsize(cover_path) == 0:
             import aiohttp
             timeout = aiohttp.ClientTimeout(total=20)

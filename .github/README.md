@@ -2,7 +2,7 @@
     ─「 Ａᴀʟɪʏᴀ χ Mᴜsɪᴄ ʀ Bᴏᴛ ✨ 」─
 </h2>
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com/?lines=ㅤ+𝚆𝙴𝙻𝙲𝙾𝙼𝙴+𝚃𝙾+𝚂𝙸𝙼𝙿𝙻𝙴+𝙼𝚄𝚂𝙸𝙲+𝚁𝙴𝙿𝙾+;ㅤ+𝚃𝙷𝙸𝗦+𝙸𝗦+𝙰+𝙰𝙳𝚅𝙰𝙽𝙲𝙴+𝙼𝚄𝚂𝙸𝙲+𝙱𝙾𝚃;𝙿𝙾𝚆𝙴𝚁𝙴𝙳+𝙱𝚈+☞+𝗧𝗛𝗘+𝗧𝗘𝗔𝗠+𝗦𝗜𝗠𝗣𝗟𝗘)](/Aaliya Music Bot)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?lines=ㅤ+𝚆𝙴𝙻𝙲𝙾𝙼𝙴+𝚃𝙾+𝚂𝙸𝙼𝙿𝙻𝙴+𝙼𝚄𝚂𝙸𝙲+𝚁𝙴𝙿𝙾+;ㅤ+𝚃𝙷𝙸𝗦+𝙸𝗦+𝙰+𝙰𝙳𝚅𝙰𝙽𝙲𝙴+𝙼𝚄𝚂𝙸𝙲+𝙱𝙾𝚃;𝙿𝙾𝚆𝙴𝚁𝙴𝙳+𝙱𝚈+☞+𝗧𝗛𝗘+𝗧𝗘𝗔𝗠+𝗦𝗜𝗠𝗣𝗟𝗘)](/Yoru Music Bot)
 
 <p align="center">
   <img src="https://files.catbox.moe/s0eczv.jpg">
@@ -36,7 +36,7 @@ Either you could locally host or deploy on [Heroku](https://heroku.com)
 ### 💜 Heroku
 
 <p align="center">
-<a href="https://dashboard.heroku.com/new?template=/Aaliya Music Bot">
+<a href="https://dashboard.heroku.com/new?template=/Yoru Music Bot">
 <img src="https://www.herokucdn.com/deploy/button.svg">
 </a>
 </p>
@@ -79,8 +79,8 @@ curl -fssL https://deb.nodesource.com/setup_19.x | sudo -E bash -
 sudo apt-get install nodejs -y
 npm i -g npm
 
-git clone /Aaliya Music Bot
-cd Aaliya Music Bot
+git clone /Yoru Music Bot
+cd Yoru Music Bot
 
 pip3 install -U -r requirements.txt
 
@@ -178,6 +178,6 @@ Bot also Supported with Channels. Just add bot and assistant to the Channel as A
 
 ## ❤️ Credits :
 
-- [Aaliya Music Bot]()
+- [Yoru Music Bot]()
 - [Telegram]()
 - Everyone In This Journey !

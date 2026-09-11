@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# Aaliya Music Bot — local source protection
+# Yoru Music Bot — local source protection
 # -----------------------------------------------
 """Disable upstream self-updates so uploaded source is never overwritten."""
 
@@ -30,6 +30,6 @@ def install_req(cmd: str) -> Tuple[str, str, int, int]:
 
 
 def git():
-    """Keep the uploaded Aaliya Music Bot source unchanged."""
+    """Keep the uploaded Yoru Music Bot source unchanged."""
     LOGGER(__name__).info("GitHub upstream updates disabled; using uploaded source.")
     return

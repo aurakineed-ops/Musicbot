@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import math
 import random
@@ -17,6 +17,7 @@ import config
 from pyrogram import enums
 from pyrogram.types import InlineKeyboardButton
 from SIMPLE_MUSIC import app
+from SIMPLE_MUSIC.utils.database import is_autoplay
 from SIMPLE_MUSIC.utils.formatters import time_to_seconds
 
 STYLES = [
@@ -45,12 +46,10 @@ def _get_icon(emoji_id: str):
 
 def stream_caption(title, duration, requester):
     return (
-        "<b><emoji id='5388992682875958399'>🎬</emoji> sᴛʀᴇᴀᴍ ʜᴀs sᴛᴀʀᴛᴇᴅ. ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ |</b>\n"
+        "<blockquote><b><emoji id='5388992682875958399'>🎬</emoji> sᴛʀᴇᴀᴍ ʜᴀs sᴛᴀʀᴛᴇᴅ. ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ |</b>\n"
         f"<b><emoji id='5989830505615331276'>🎵</emoji> ᴛɪᴛʟᴇ :</b> {title}\n"
         f"<b><emoji id='5258419835922030550'>🕔</emoji> ʟᴇɴɢᴛʜ :</b> {duration} ᴍɪɴs\n"
-        f"<b><emoji id='5256143829672672750'>👤</emoji>ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}\n\n"
-        "<emoji id='6127214603765027855'>⬅️</emoji>10s   <emoji id='6127514998072680291'>➡️</emoji>10s   "
-        "<emoji id='5269763170968297861'>❤️</emoji>"
+        f"<b><emoji id='5256143829672672750'>👤</emoji>ʀᴇǫᴜᴇsᴛᴇʀ :</b> {requester}</blockquote>"
     )
 
 
@@ -73,7 +72,19 @@ def track_markup(_, videoid, user_id, channel, fplay):
     return buttons
 
 
-def stream_markup_timer(_, chat_id, played, dur):
+async def _autoplay_button_data(chat_id):
+    """Returns (label_text, icon_emoji_id). Telegram buttons only support ONE
+    custom-emoji icon slot, so the icon itself swaps between the ✔️/❌ premium
+    emoji depending on state — that's the part that actually needs to look
+    'premium', the text stays plain since button labels can't render
+    per-character custom emoji."""
+    if await is_autoplay(chat_id):
+        return "Aᴜᴛᴏᴩʟᴀʏ : ᴏɴ", "6219844953711844584"
+    return "Aᴜᴛᴏᴩʟᴀʏ : ᴏꜰꜰ", "6237830550170640402"
+
+
+async def stream_markup_timer(_, chat_id, played, dur):
+    autoplay_label, autoplay_icon = await _autoplay_button_data(chat_id)
     played_sec = time_to_seconds(played)
     duration_sec = time_to_seconds(dur)
 
@@ -127,18 +138,27 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r2)),
         ],
         [
-            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r2), **_get_icon("6127214603765027855")),
-            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r2), **_get_icon("6127514998072680291")),
+            InlineKeyboardButton(
+                text=autoplay_label,
+                callback_data=f"autoplay_toggle {chat_id}",
+                **_get_style(r2),
+                **_get_icon(autoplay_icon),
+            ),
         ],
         [
-            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("5269763170968297861"))
+            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r2), **_get_icon("5456187398977247949")),
+            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r2), **_get_icon("5456327792868220208")),
+        ],
+        [
+            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("6026256492619895014"))
         ],
     ]
     return buttons
 
 
-def stream_markup(_, chat_id):
+async def stream_markup(_, chat_id):
     r1, r2, r3 = random.choices(STYLES, k=3)
+    autoplay_label, autoplay_icon = await _autoplay_button_data(chat_id)
     buttons = [
         [
             InlineKeyboardButton(text="ʟᴏᴀᴅɪɴɢ…", url=_group_add_url(), **_get_style(r1)),
@@ -151,11 +171,19 @@ def stream_markup(_, chat_id):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", **_get_style(r1)),
         ],
         [
-            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r1), **_get_icon("6127214603765027855")),
-            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r1), **_get_icon("6127514998072680291")),
+            InlineKeyboardButton(
+                text=autoplay_label,
+                callback_data=f"autoplay_toggle {chat_id}",
+                **_get_style(r2),
+                **_get_icon(autoplay_icon),
+            ),
         ],
         [
-            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("5269763170968297861"))
+            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Back10|{chat_id}", **_get_style(r1), **_get_icon("5456187398977247949")),
+            InlineKeyboardButton(text="10s", callback_data=f"ADMIN Fwd10|{chat_id}", **_get_style(r1), **_get_icon("5456327792868220208")),
+        ],
+        [
+            InlineKeyboardButton(text="Close", callback_data=f"STREAM_CLOSE|{chat_id}", **_get_style(r3), **_get_icon("6026256492619895014"))
         ],
     ]
     return buttons

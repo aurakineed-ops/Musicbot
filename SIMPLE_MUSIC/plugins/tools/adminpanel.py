@@ -128,22 +128,25 @@ async def adm_media_view_cb(_, query: CallbackQuery):
         await query.message.delete()
     except Exception:
         pass
-    sender = {
-        "photo": app.send_photo,
-        "video": app.send_video,
-        "sticker": app.send_sticker,
-    }.get(mtype)
     sent = False
-    if current and sender:
-        try:
-            if mtype == "sticker":
-                await sender(query.message.chat.id, current)
+    if current and mtype in ("photo", "video", "sticker"):
+        # Photo slots also accept video/animation now, so try photo → video → animation → sticker
+        # in an order that matches what the slot is meant for, falling back gracefully.
+        if mtype == "sticker":
+            try:
+                await app.send_sticker(query.message.chat.id, current)
                 await app.send_message(query.message.chat.id, text, reply_markup=_media_detail_markup(i))
-            else:
-                await sender(query.message.chat.id, current, caption=text, reply_markup=_media_detail_markup(i))
-            sent = True
-        except Exception:
-            sent = False
+                sent = True
+            except Exception:
+                sent = False
+        else:
+            for send_fn in (app.send_photo, app.send_video, app.send_animation):
+                try:
+                    await send_fn(query.message.chat.id, current, caption=text, reply_markup=_media_detail_markup(i))
+                    sent = True
+                    break
+                except Exception:
+                    continue
     if not sent:
         await app.send_message(query.message.chat.id, text, reply_markup=_media_detail_markup(i))
 
@@ -157,8 +160,8 @@ async def adm_media_change_cb(_, query: CallbackQuery):
     label, mtype, _default = MEDIA_SETTINGS[key]
     _pending[query.from_user.id] = key
     hint = {
-        "photo": "ᴇᴋ ᴘʜᴏᴛᴏ ʙʜᴇᴊᴏ ʏᴀ ᴜsᴋᴀ ᴅɪʀᴇᴄᴛ URL.",
-        "video": "ᴇᴋ ᴠɪᴅᴇᴏ ʙʜᴇᴊᴏ ʏᴀ ᴜsᴋᴀ ᴅɪʀᴇᴄᴛ URL.",
+        "photo": "ᴇᴋ ᴘʜᴏᴛᴏ, ᴠɪᴅᴇᴏ, GIF ʙʜᴇᴊᴏ ʏᴀ ᴜsᴋᴀ ᴅɪʀᴇᴄᴛ URL.",
+        "video": "ᴇᴋ ᴠɪᴅᴇᴏ, GIF, ʏᴀ ᴘʜᴏᴛᴏ ʙʜᴇᴊᴏ ʏᴀ ᴜsᴋᴀ ᴅɪʀᴇᴄᴛ URL.",
         "sticker": "ᴡᴏ sᴛɪᴄᴋᴇʀ ʏᴀʜᴀɴ ʙʜᴇᴊᴏ ᴊᴏ sᴇᴛ ᴋᴀʀɴᴀ ʜᴀɪ.",
     }.get(mtype, "ɴᴀʏᴀ ᴠᴀʟᴜᴇ ʙʜᴇᴊᴏ.")
     await query.answer()
@@ -177,10 +180,13 @@ async def adm_capture_media(_, message: Message):
     label, mtype, _default = MEDIA_SETTINGS.get(key, (key, "text", None))
 
     value = None
-    if mtype == "photo" and message.photo:
-        value = message.photo.file_id
-    elif mtype == "video" and message.video:
-        value = message.video.file_id
+    if mtype in ("photo", "video"):
+        if message.photo:
+            value = message.photo.file_id
+        elif message.video:
+            value = message.video.file_id
+        elif message.animation:
+            value = message.animation.file_id
     elif mtype == "sticker" and message.sticker:
         value = message.sticker.file_id
     elif message.text and message.text.strip().startswith("http"):

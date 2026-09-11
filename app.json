@@ -1,12 +1,12 @@
 {
-  "name": "Aaliya Music Bot",
+  "name": "Yoru Music Bot",
   "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
   "logo": "https://files.catbox.moe/z1h6ow.jpg",
   "keywords": [
     "python3",
     "telegram",
     "bot",
-    "Aaliya Music Bot",
+    "Yoru Music Bot",
     "MusicBot",
     "telegram-bot",
     "pyrogram"
@@ -44,7 +44,7 @@
     },
     "UPSTREAM_REPO": {
       "description": "Your Github repository link for updates.",
-      "value": "/Aaliya Music Bot.git",
+      "value": "/Yoru Music Bot.git",
       "required": false
     },
     "YT_API_KEY": {

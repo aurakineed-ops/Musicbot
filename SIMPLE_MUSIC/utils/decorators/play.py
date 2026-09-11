@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import asyncio
 from pyrogram.enums import ChatMemberStatus
@@ -33,7 +33,8 @@ from SIMPLE_MUSIC.utils.database import (
     is_maintenance,
 )
 from SIMPLE_MUSIC.utils.inline import botplaylist_markup
-from config import PLAYLIST_IMG_URL, SUPPORT_CHAT, adminlist
+import config
+from config import SUPPORT_CHAT, adminlist
 from strings import get_string
 
 links = {}
@@ -85,7 +86,7 @@ def PlayWrapper(command):
                     return await message.reply_text(_["str_1"])
                 buttons = botplaylist_markup(_)
                 return await message.reply_photo(
-                    photo=PLAYLIST_IMG_URL,
+                    photo=config.PLAYLIST_IMG_URL,
                     caption=_["play_18"],
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )

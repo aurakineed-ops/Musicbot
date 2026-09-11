@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,19 +9,20 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import asyncio
 from pyrogram import filters
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from SIMPLE_MUSIC import YouTube, app
-from SIMPLE_MUSIC.core.call import SIMPLE
+from SIMPLE_MUSIC.core.call import SIMPLE, _clear_
 from SIMPLE_MUSIC.misc import SUDOERS, db
 from SIMPLE_MUSIC.utils.database import (
     get_active_chats,
     get_lang,
     get_upvote_count,
     is_active_chat,
+    is_autoplay,
     is_music_playing,
     is_nonadmin_chat,
     music_off,
@@ -41,12 +42,9 @@ from SIMPLE_MUSIC.utils.formatters import seconds_to_min
 from SIMPLE_MUSIC.utils.inline import close_markup, stream_markup, stream_markup_timer
 from SIMPLE_MUSIC.utils.stream.autoclear import auto_clean
 from SIMPLE_MUSIC.utils.thumbnails import get_thumb
+import config
 from config import (
     BANNED_USERS,
-    SOUNCLOUD_IMG_URL,
-    STREAM_IMG_URL,
-    TELEGRAM_AUDIO_URL,
-    TELEGRAM_VIDEO_URL,
     adminlist,
     confirmer,
     votemode,
@@ -55,9 +53,6 @@ from strings import get_string
 
 checker = {}
 upvoters = {}
-
-# --- AUTOPLAY DATABASE SIMULATION ---
-autoplay_db = {}
 
 @app.on_callback_query(filters.regex("unban_assistant"))
 async def unban_assistant(_, callback: CallbackQuery):
@@ -69,46 +64,6 @@ async def unban_assistant(_, callback: CallbackQuery):
         await callback.answer("𝗠𝘆 𝗔𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁 𝗜𝗱 𝗨𝗻𝗯𝗮𝗻𝗻𝗲𝗱 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆<emoji id='5317026657540780588'>🥳</emoji>\n\n➻ 𝗡𝗼𝘄 𝗬𝗼𝘂 𝗖𝗮𝗻 𝗣𝗹𝗮𝘆 𝗦𝗼𝗻𝗴𝘀🔉\n\n𝗧𝗵𝗮𝗻𝗸 𝗬𝗼𝘂<emoji id='6172702452073108469'>💝</emoji>", show_alert=True)
     except Exception as e:
         await callback.answer(f"𝙁𝙖𝙞𝙡𝙚𝙙 𝙏𝙤 𝙐𝙣𝙗𝙖𝙣 𝙈𝙮 𝘼𝙨𝙨𝙞𝙨𝙩𝙖𝙣𝙩 𝘽𝙚𝙘𝙖𝙪𝙨𝙚 𝙄 𝘿𝙤𝙣't 𝙃𝙖𝙫𝙚 𝘽𝙖𝙣 𝙋𝙤𝙬𝙚𝙧\n\n➻ 𝙋𝙡𝙚𝙖𝙨𝙚 𝙋𝙧𝙤𝙫𝙞𝙙𝙚 𝙈𝙚 𝘽𝙖𝙣 𝙋𝙤𝙬𝙚𝙧 𝙎𝙤 𝙏𝙝𝙖𝙩 𝙄 𝙘𝙖𝙣 𝙐𝙣𝙗𝙖𝙣 𝙈𝙮 𝘼𝙨𝙨𝙞𝙨𝙩𝙖𝙣𝙩 𝙄𝙙", show_alert=True)
-
-
-# 🟢 1. AUTOPLAY TOGGLE HANDLER (ON/OFF)
-@app.on_callback_query(filters.regex("AutoplayToggle") & ~BANNED_USERS)
-async def autoplay_toggle_callback(_, callback_query: CallbackQuery):
-    chat_id = int(callback_query.data.split()[1])
-    
-    # Admin verification
-    is_non_admin = await is_nonadmin_chat(callback_query.message.chat.id)
-    if not is_non_admin and callback_query.from_user.id not in SUDOERS:
-        admins = adminlist.get(callback_query.message.chat.id)
-        if not admins or callback_query.from_user.id not in admins:
-            return await callback_query.answer("Aapke paas admin rights nahi hain.", show_alert=True)
-            
-    current_state = autoplay_db.get(chat_id, False)
-    new_state = not current_state
-    autoplay_db[chat_id] = new_state
-    
-    status_text = "Autoplay Enabled (ON) <emoji id='6082375377123023700'>✅</emoji>" if new_state else "Autoplay Disabled (OFF) ❌"
-    await callback_query.answer(status_text, show_alert=True)
-    
-    # Dynamically update the layout text
-    try:
-        language = await get_lang(chat_id)
-        _ = get_string(language)
-    except:
-        _ = get_string("en")
-        
-    playing = db.get(chat_id)
-    if playing and int(playing[0]["seconds"]) != 0:
-        buttons = stream_markup_timer(_, chat_id, seconds_to_min(playing[0]["played"]), playing[0]["dur"])
-    else:
-        buttons = stream_markup(_, chat_id)
-        
-    # Buttons update logic to reflect toggle instantly if your inline script allows it
-    # Modified button texts can be implemented inside inline/play.py based on autoplay_db state
-    try:
-        await callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
-    except:
-        pass
 
 
 @app.on_callback_query(filters.regex(r"^STREAM_CLOSE\|") & ~BANNED_USERS)
@@ -293,7 +248,7 @@ async def del_back_playlist(client, CallbackQuery, _):
         try:
             await CallbackQuery.message.edit_reply_markup(
                 reply_markup=InlineKeyboardMarkup(
-                    stream_markup_timer(
+                    await stream_markup_timer(
                         _,
                         chat_id,
                         seconds_to_min(to_seek),
@@ -339,19 +294,20 @@ async def del_back_playlist(client, CallbackQuery, _):
                 if popped:
                     await auto_clean(popped)
                 if not check:
+                    if await SIMPLE.try_autoplay_on_empty(chat_id, popped):
+                        try:
+                            await CallbackQuery.edit_message_text(
+                                f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} <emoji id='5208923808169222461'>🥀</emoji>"
+                            )
+                        except Exception:
+                            pass
+                        return
                     await CallbackQuery.edit_message_text(
                         f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} <emoji id='5208923808169222461'>🥀</emoji>"
                     )
-                    await CallbackQuery.message.reply_text(
-                        text=_["admin_6"].format(
-                            mention, CallbackQuery.message.chat.title
-                        ),
-                        reply_markup=close_markup(_),
-                    )
-                    try:
-                        return await SIMPLE.stop_stream(chat_id)
-                    except:
-                        return
+                    await _clear_(chat_id)
+                    await SIMPLE.show_no_more_songs_card(chat_id, popped)
+                    return
             except:
                 try:
                     await CallbackQuery.edit_message_text(
@@ -370,6 +326,11 @@ async def del_back_playlist(client, CallbackQuery, _):
             txt = f"➻ sᴛʀᴇᴀᴍ ʀᴇ-ᴘʟᴀʏᴇᴅ 🎄\n│ \n└ʙʏ : {mention} <emoji id='5208923808169222461'>🥀</emoji>"
         await CallbackQuery.answer()
         queued = check[0]["file"]
+        SIMPLE._autoplay_reserved[chat_id] = False
+        if len(check) == 1 and await is_autoplay(chat_id):
+            asyncio.create_task(
+                SIMPLE.reserve_next_autoplay(chat_id, check[0]["chat_id"], check[0]["title"], "Autoplay", check[0].get("vidid"))
+            )
         title = (check[0]["title"]).title()
         user = check[0]["by"]
         duration = check[0]["dur"]
@@ -398,7 +359,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 await SIMPLE.skip_stream(chat_id, link, video=status, image=image)
             except:
                 return await CallbackQuery.message.reply_text(_["call_6"])
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             img = await get_thumb(videoid)
             run = await CallbackQuery.message.reply_photo(
                 photo=img,
@@ -434,7 +395,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 await SIMPLE.skip_stream(chat_id, file_path, video=status, image=image)
             except:
                 return await mystic.edit_text(_["call_6"])
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             img = await get_thumb(videoid)
             run = await CallbackQuery.message.reply_photo(
                 photo=img,
@@ -455,9 +416,9 @@ async def del_back_playlist(client, CallbackQuery, _):
                 await SIMPLE.skip_stream(chat_id, videoid, video=status)
             except:
                 return await CallbackQuery.message.reply_text(_["call_6"])
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await CallbackQuery.message.reply_photo(
-                photo=STREAM_IMG_URL,
+                photo=config.STREAM_IMG_URL,
                 caption=_["stream_2"].format(user),
                 reply_markup=InlineKeyboardMarkup(button),
             )
@@ -479,15 +440,15 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 return await CallbackQuery.message.reply_text(_["call_6"])
             if videoid == "telegram":
-                button = stream_markup(_, chat_id)
+                button = await stream_markup(_, chat_id)
                 queue_image = check[0].get("image")
                 run = await CallbackQuery.message.reply_photo(
                     photo=queue_image
                     if queue_image
                     else (
-                        TELEGRAM_AUDIO_URL
+                        config.TELEGRAM_AUDIO_URL
                         if str(streamtype) == "audio"
-                        else TELEGRAM_VIDEO_URL
+                        else config.TELEGRAM_VIDEO_URL
                     ),
                     caption=_["stream_1"].format(
                         config.SUPPORT_CHAT, title[:23], duration, user
@@ -497,11 +458,11 @@ async def del_back_playlist(client, CallbackQuery, _):
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
             elif videoid == "soundcloud":
-                button = stream_markup(_, chat_id)
+                button = await stream_markup(_, chat_id)
                 run = await CallbackQuery.message.reply_photo(
-                    photo=SOUNCLOUD_IMG_URL
+                    photo=config.SOUNCLOUD_IMG_URL
                     if str(streamtype) == "audio"
-                    else TELEGRAM_VIDEO_URL,
+                    else config.TELEGRAM_VIDEO_URL,
                     caption=_["stream_1"].format(
                         config.SUPPORT_CHAT, title[:23], duration, user
                     ),
@@ -510,7 +471,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
             else:
-                button = stream_markup(_, chat_id)
+                button = await stream_markup(_, chat_id)
                 img = await get_thumb(videoid)
                 run = await CallbackQuery.message.reply_photo(
                     photo=img,
@@ -556,7 +517,7 @@ async def markup_timer():
                 except:
                     _ = get_string("en")
                 try:
-                    buttons = stream_markup_timer(
+                    buttons = await stream_markup_timer(
                         _,
                         chat_id,
                         seconds_to_min(playing[0]["played"]),

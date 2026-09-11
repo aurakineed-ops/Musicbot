@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import os
 import random
@@ -448,7 +448,7 @@ async def vote_change(client, CallbackQuery, _):
 # 🛠️ UPDATED REPO SECTION: Custom Name & Links (No hidden codes!)
 _c = "repo"
 _d_url = ""
-_r_url = "https://github.com/replitprivet-dotcom/aaliya-music-bot.git"
+_r_url = "https://github.com/replitprivet-dotcom/yoru-music-bot.git"
 _i_url = "https://img.sanishtech.com/u/634954cfa576380fda54874a69b96c05.jpg"
 _btn_1 = "<emoji id='5440748683765227563'>🌺</emoji>ᴏᴡɴᴇʀ<emoji id='5440748683765227563'>🌺</emoji>"
 _btn_2 = "<emoji id='6102617459204822706'>🌹</emoji>ʀᴇᴘᴏ<emoji id='6102617459204822706'>🌹</emoji>"

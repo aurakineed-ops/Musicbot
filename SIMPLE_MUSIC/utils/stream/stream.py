@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import os
 from random import randint
@@ -25,6 +25,17 @@ from SIMPLE_MUSIC.utils.inline import aq_markup, close_markup, stream_markup, st
 from SIMPLE_MUSIC.utils.pastebin import SIMPLEBin
 from SIMPLE_MUSIC.utils.stream.queue import put_queue, put_queue_index
 from SIMPLE_MUSIC.utils.thumbnails import get_thumb
+
+
+def _evict_pending_autoplay(chat_id):
+    """If autoplay had already reserved a track that hasn't started playing
+    yet (sitting at the back of the queue), drop it so a real user request
+    plays next instead — autoplay will simply reserve a fresh one again once
+    the queue thins back out."""
+    check = db.get(chat_id)
+    if check and len(check) > 1 and check[-1].get("by") == "Autoplay":
+        check.pop()
+        SIMPLE._autoplay_reserved[chat_id] = False
 
 
 async def stream(
@@ -65,6 +76,7 @@ async def stream(
             if duration_sec > config.DURATION_LIMIT:
                 continue
             if await is_active_chat(chat_id):
+                _evict_pending_autoplay(chat_id)
                 await put_queue(
                     chat_id,
                     original_chat_id,
@@ -112,9 +124,10 @@ async def stream(
                     forceplay=forceplay,
                 )
                 img = await get_thumb(vidid, title=title, duration=duration_min, thumbnail_url=thumbnail)
-                button = stream_markup(_, chat_id)
+                button = await stream_markup(_, chat_id)
                 run = await app.send_photo(
                     original_chat_id,
+                    has_spoiler=True,
                     photo=img,
                     caption=stream_caption(title[:23], duration_min, user_name),
                     reply_markup=InlineKeyboardMarkup(button),
@@ -134,6 +147,7 @@ async def stream(
             upl = close_markup(_)
             return await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=carbon,
                 caption=_["play_21"].format(position, link),
                 reply_markup=upl,
@@ -152,6 +166,7 @@ async def stream(
         except:
             raise AssistantErr(_["play_14"])
         if await is_active_chat(chat_id):
+            _evict_pending_autoplay(chat_id)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -195,9 +210,10 @@ async def stream(
                 forceplay=forceplay,
             )
             img = await get_thumb(vidid, title=title, duration=duration_min, thumbnail_url=thumbnail)
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=img,
                 caption=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{vidid}",
@@ -214,6 +230,7 @@ async def stream(
         title = result["title"]
         duration_min = result["duration_min"]
         if await is_active_chat(chat_id):
+            _evict_pending_autoplay(chat_id)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -250,9 +267,10 @@ async def stream(
                 "audio",
                 forceplay=forceplay,
             )
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=config.SOUNCLOUD_IMG_URL,
                 caption=stream_caption(title[:23], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
@@ -267,6 +285,7 @@ async def stream(
         cover_image = result.get("image")
         status = True if video else None
         if await is_active_chat(chat_id):
+            _evict_pending_autoplay(chat_id)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -307,9 +326,10 @@ async def stream(
             )
             if video:
                 await add_active_video_chat(chat_id)
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=cover_image if (video and cover_image) else (config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL),
                 caption=stream_caption(title[:23], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
@@ -324,6 +344,7 @@ async def stream(
         duration_min = "Live Track"
         status = True if video else None
         if await is_active_chat(chat_id):
+            _evict_pending_autoplay(chat_id)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -370,9 +391,10 @@ async def stream(
                 forceplay=forceplay,
             )
             img = await get_thumb(vidid, title=title, duration=duration_min, thumbnail_url=thumbnail)
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=img,
                 caption=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{vidid}",
@@ -389,6 +411,7 @@ async def stream(
         title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
         duration_min = "00:00"
         if await is_active_chat(chat_id):
+            _evict_pending_autoplay(chat_id)
             await put_queue_index(
                 chat_id,
                 original_chat_id,
@@ -425,9 +448,10 @@ async def stream(
                 "video" if video else "audio",
                 forceplay=forceplay,
             )
-            button = stream_markup(_, chat_id)
+            button = await stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
+                has_spoiler=True,
                 photo=config.STREAM_IMG_URL,
                 caption=_["stream_2"].format(user_name),
                 reply_markup=InlineKeyboardMarkup(button),

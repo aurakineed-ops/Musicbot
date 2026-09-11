@@ -1,6 +1,6 @@
 # -----------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # -----------------------------------------------
 import asyncio
 from pyrogram import filters
@@ -24,7 +24,8 @@ from SIMPLE_MUSIC.utils.database import (
     get_served_chats,
     get_served_users,
 )
-from SIMPLE_MUSIC.utils.decorators.language import language
+from SIMPLE_MUSIC.utils.database import get_lang
+from strings import get_string
 from SIMPLE_MUSIC.utils.formatters import alpha_to_int
 from config import adminlist
 
@@ -32,33 +33,46 @@ IS_BROADCASTING = False
 
 
 @app.on_message(filters.command("broadcast") & SUDOERS)
-@language
-async def braodcast_message(client, message, _):
+async def braodcast_message(client, message, _r=None):
+    try:
+        language_code = await get_lang(message.chat.id)
+        _ = get_string(language_code)
+    except Exception:
+        _ = get_string("en")
+
     global IS_BROADCASTING
     if message.reply_to_message:
         x = message.reply_to_message.id
         y = message.chat.id
+        query = None
     else:
         if len(message.command) < 2:
             return await message.reply_text(_["broad_2"])
         query = message.text.split(None, 1)[1]
+        if "-pinloud" in query:
+            query = query.replace("-pinloud", "")
         if "-pin" in query:
             query = query.replace("-pin", "")
         if "-nobot" in query:
             query = query.replace("-nobot", "")
-        if "-pinloud" in query:
-            query = query.replace("-pinloud", "")
         if "-assistant" in query:
             query = query.replace("-assistant", "")
         if "-user" in query:
             query = query.replace("-user", "")
+        query = query.strip()
         if query == "":
             return await message.reply_text(_["broad_8"])
 
-    IS_BROADCASTING = True
-    await message.reply_text(_["broad_1"])
+    flags_text = message.text
+    try:
+        await message.delete()
+    except Exception:
+        pass
 
-    if "-nobot" not in message.text:
+    IS_BROADCASTING = True
+    await client.send_message(message.chat.id, _["broad_1"])
+
+    if "-nobot" not in flags_text:
         sent = 0
         pin = 0
         chats = []
@@ -72,15 +86,15 @@ async def braodcast_message(client, message, _):
                     if message.reply_to_message
                     else await app.send_message(i, text=query)
                 )
-                if "-pin" in message.text:
+                if "-pinloud" in flags_text:
                     try:
-                        await m.pin(disable_notification=True)
+                        await m.pin(disable_notification=False)
                         pin += 1
                     except:
                         continue
-                elif "-pinloud" in message.text:
+                elif "-pin" in flags_text:
                     try:
-                        await m.pin(disable_notification=False)
+                        await m.pin(disable_notification=True)
                         pin += 1
                     except:
                         continue
@@ -94,11 +108,11 @@ async def braodcast_message(client, message, _):
             except:
                 continue
         try:
-            await message.reply_text(_["broad_3"].format(sent, pin))
+            await client.send_message(message.chat.id, _["broad_3"].format(sent, pin))
         except:
             pass
 
-    if "-user" in message.text:
+    if "-user" in flags_text:
         susr = 0
         served_users = []
         susers = await get_served_users()
@@ -121,23 +135,23 @@ async def braodcast_message(client, message, _):
             except:
                 pass
         try:
-            await message.reply_text(_["broad_4"].format(susr))
+            await client.send_message(message.chat.id, _["broad_4"].format(susr))
         except:
             pass
 
-    if "-assistant" in message.text:
-        aw = await message.reply_text(_["broad_5"])
+    if "-assistant" in flags_text:
+        aw = await client.send_message(message.chat.id, _["broad_5"])
         text = _["broad_6"]
         from SIMPLE_MUSIC.core.userbot import assistants
 
         for num in assistants:
             sent = 0
-            client = await get_client(num)
-            async for dialog in client.get_dialogs():
+            client2 = await get_client(num)
+            async for dialog in client2.get_dialogs():
                 try:
-                    await client.forward_messages(
+                    await client2.forward_messages(
                         dialog.chat.id, y, x
-                    ) if message.reply_to_message else await client.send_message(
+                    ) if message.reply_to_message else await client2.send_message(
                         dialog.chat.id, text=query
                     )
                     sent += 1

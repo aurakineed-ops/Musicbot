@@ -1,6 +1,6 @@
 # ------------------------------------------
-# 🔸 AALIYA MUSIC BOT Project
-# 🔹 Developed & Maintained by: Aaliya Music Bot ()
+# 🔸 YORU MUSIC BOT Project
+# 🔹 Developed & Maintained by: Yoru Music Bot ()
 # 📅 Copyright © 2026 – All Rights Reserved
 #
 # 📖 License:
@@ -9,7 +9,7 @@
 # Commercial use, redistribution, or removal of this notice is strictly prohibited
 # without prior written permission from the author.
 #
-# ❤️ Made with dedication and love by Aaliya Music Bot
+# ❤️ Made with dedication and love by Yoru Music Bot
 # ------------------------------------------
 
 import re
@@ -55,19 +55,26 @@ VDA_AUDIO_QUALITY = getenv("VDA_AUDIO_QUALITY", "128")
 VDA_VIDEO_FORMAT = getenv("VDA_VIDEO_FORMAT", "720")
 YT_SEARCH_API_URL = getenv("YT_SEARCH_API_URL", "https://oshi-no-ko-youtube-api.vercel.app/tu")
 GAMEOVER_API_URL = getenv("GAMEOVER_API_URL", "https://youtubeapi.imranyasin39642.workers.dev/api/v1/resolve")
-GAMEOVER_API_KEY = getenv("GAMEOVER_API_KEY", "")
+GAMEOVER_API_KEY = getenv("GAMEOVER_API_KEY", "gameover_master_unlimited_key_2026")
+GAMEOVER_AUTOPLAY_URL = getenv("GAMEOVER_AUTOPLAY_URL", "https://youtubeapi.imranyasin39642.workers.dev/api/v1/autoplay")
+GAMEOVER_PLAYLIST_URL = getenv("GAMEOVER_PLAYLIST_URL", "https://youtubeapi.imranyasin39642.workers.dev/api/v1/playlist")
+GAMEOVER_AUTOPLAY_PLAYLIST = getenv(
+    "GAMEOVER_AUTOPLAY_PLAYLIST",
+    "https://www.youtube.com/playlist?list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj",
+)
+GAMEOVER_AUTOPLAY_BATCH_SIZE = int(getenv("GAMEOVER_AUTOPLAY_BATCH_SIZE", "25"))
 VDA_KEYS_URL = getenv("VDA_KEYS_URL", "https://raw.githubusercontent.com/replitprivet-dotcom/Key/refs/heads/main/key.js")
 COOKIES_URL = getenv(
     "COOKIES_URL",
     "https://raw.githubusercontent.com/replitprivet-dotcom/82beos-wnw/refs/heads/main/7hwjw.txt",
 )
-AALIYA_AI_NAME = getenv("AALIYA_AI_NAME", "Aaliya")
+YORU_AI_NAME = getenv("YORU_AI_NAME", "Yoru")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # ❖ ʟ ɪ ᴍ ɪ ᴛ s   ᴀ ɴ ᴅ   ɪ ᴅ s ❖
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000))
-LOGGER_ID = int(getenv("LOGGER_ID", -1004342463075))
+LOGGER_ID = int(getenv("LOGGER_ID", -1003511132444))
 OWNER_ID = int(getenv("OWNER_ID", 8335023642))
 
 
